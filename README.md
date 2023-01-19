@@ -1,5 +1,9 @@
 # SoftwareEngineeringProject
 Repository begleitend zum Modul Software Engineering Project
+
+### Branches
+werden nach Feature aufgeteilt
+
 ### Members
 1. **Konzeption und Marketing**: Tim Ehlen
 2. **Projektmanagement**: Marvin Wendorff
