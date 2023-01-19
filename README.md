@@ -1,11 +1,5 @@
 # Project-Checkbox - A high-functional ToDo App
 ## Software Engineering Project
-Repository begleitend zum Modul Software Engineering Project
-
-### Branches
-werden nach Feature aufgeteilt
-Mit der Zeit steht hier eine Auflistung der Branches mit ihrem aktuellem Stand 
-
 ### Members
 1. **Konzeption und Marketing**: Tim Ehlen
 2. **Projektmanagement**: Projektmanagement
@@ -19,3 +13,13 @@ REACT-App:
 - **Infrastructure**: Firebase-Backend (NoSQL)
   - API: ExpressJS
 - **Design**: IONIC
+
+### Init
+```bash
+npm install -g @ionic/cli @capacitor/cli
+```
+
+### Start & Debug Application
+```bash
+ionic serve
+```

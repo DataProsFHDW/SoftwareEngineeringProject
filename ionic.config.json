@@ -1,0 +1,7 @@
+{
+  "name": "Checkbox",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
