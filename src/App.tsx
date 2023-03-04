@@ -23,6 +23,8 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import { LandingPage } from './pages/LandingPage';
+import { ToDoPage } from './pages/ToDoPage';
+
 
 setupIonicReact();
 
@@ -31,17 +33,22 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <IonSplitPane contentId="main">
-          {/* <Menu /> */}
+          <Menu />
           <IonRouterOutlet id="main">
-
+          {/*
             <Route path="/page/:name" exact={true}>
-              <Page />
-
+              <ToDoPage />
             </Route>
+          */}
+          
+            <Route path="/ToDo" exact={true}>
+              <ToDoPage />
+            </Route>
+            
 
             {/* Default Landing Page */}
             <Route path="/" exact={false}>
-              <LandingPage/> 
+              <ToDoPage/> 
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>

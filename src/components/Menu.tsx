@@ -26,14 +26,14 @@ interface AppPage {
 
 const appPages: AppPage[] = [
   {
-    title: 'Inbox',
-    url: '/page/Inbox',
+    title: 'Dashboard',
+    url: '/page/Dashboard',
     iosIcon: mailOutline,
     mdIcon: mailSharp
   },
   {
-    title: 'Outbox',
-    url: '/page/Outbox',
+    title: 'To-Dos',
+    url: '/page/ToDoPage',
     iosIcon: paperPlaneOutline,
     mdIcon: paperPlaneSharp
   },
