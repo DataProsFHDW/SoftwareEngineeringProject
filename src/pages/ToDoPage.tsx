@@ -19,7 +19,7 @@ import { ToDoComponent } from "../components/ToDoComponent";
 import "./Page.css";
 
 export const ToDoPage: React.FC = () => {
-  const [todoList, setTodoList] = useState(["Test Todod"]);
+  const [todoList, setTodoList] = useState(["Test Todo"]);
 
   let toDoRender = todoList.map((step, move) => {
     return(
@@ -48,8 +48,7 @@ export const ToDoPage: React.FC = () => {
             <IonFabButton
               onClick={() => {
                 console.log("Daniel stinkt");
-                todoList.push("Hallo");
-                setTodoList(todoList);
+                setTodoList([ ...todoList, "Test Todo"]);
               }}
             >
               <IonIcon icon={add}></IonIcon>
