@@ -1,7 +1,12 @@
-export const ToDoComponent: React.FC = () => {
+interface ToDoComponentProps {
+    id: string;
+    title: string;
+  }
+
+export const ToDoComponent: React.FC<ToDoComponentProps> = ({id, title}) => {
     return (
-        <div>
-            <p>Ich bin ein Todo</p>
+        <div id={id}>
+            <p>{title}</p>
         </div>
     );
   };
