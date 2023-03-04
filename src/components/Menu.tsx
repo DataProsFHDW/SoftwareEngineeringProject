@@ -1,5 +1,6 @@
 import {
   IonContent,
+  IonHeader,
   IonIcon,
   IonItem,
   IonLabel,
@@ -8,6 +9,8 @@ import {
   IonMenu,
   IonMenuToggle,
   IonNote,
+  IonTitle,
+  IonToolbar,
 } from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
