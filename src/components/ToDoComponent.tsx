@@ -19,20 +19,21 @@ interface ToDoComponentProps {
 }
 */
 
-export const ToDoComponent: React.FC<Todo> = ({todoType, todoTitle, todoDescription }) => {
+export const ToDoComponent: React.FC<Todo> = ({
+  todoType,
+  todoTitle,
+  todoDescription,
+}) => {
   return (
-    <IonItem>
+    <IonReorder slot="end">
       <IonCard>
         <IonCardHeader>
           <IonCardTitle>{todoTitle}</IonCardTitle>
           <IonCardSubtitle>{todoType.toString()}</IonCardSubtitle>
         </IonCardHeader>
 
-        <IonCardContent>
-          {todoDescription}
-        </IonCardContent>
+        <IonCardContent>{todoDescription}</IonCardContent>
       </IonCard>
-      <IonReorder slot="end"></IonReorder>
-    </IonItem>
+    </IonReorder>
   );
 };
