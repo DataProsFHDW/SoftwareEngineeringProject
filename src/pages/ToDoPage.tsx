@@ -27,16 +27,17 @@ import { TodoType } from "../models/TodoType";
 import "./Page.css";
 
 export const ToDoPage: React.FC = () => {
-
-  const todoReducer = useTodoSelector((state) => state.todoReducer)
+  const todoReducer = useTodoSelector((state) => state.todoReducer);
   var dispatch = useTodoDispatch();
 
   useEffect(() => {
-    dispatch(fetchTodoList({
-      accessToken: "demo",
-      idToken: "for_you_to_see_<3"
-    }));
-  }, []) // [] => do on initial render of todoPageComponent
+    dispatch(
+      fetchTodoList({
+        accessToken: "demo",
+        idToken: "for_you_to_see_<3",
+      })
+    );
+  }, []); // [] => do on initial render of todoPageComponent
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
 
@@ -44,10 +45,11 @@ export const ToDoPage: React.FC = () => {
     return (
       <ToDoComponent
         key={"ToDo-" + index}
-        id={"ToDo-" + index}
-        title={todo.todoTitle}
+        todoTitle={todo.todoTitle}
+        todoType={todo.todoType}
+        todoDescription={todo.todoDescription}
       />
-    )
+    );
   });
 
   function handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
@@ -87,9 +89,15 @@ export const ToDoPage: React.FC = () => {
             <IonFabButton
               onClick={() => {
                 // setTodoList([...todoList, "Test Todo" + todoList.length]);
-                dispatch(postTodoList({
-                  todo: new Todo(TodoType.SINGLE, "Demo Add", "Demo Description"),
-                }));
+                dispatch(
+                  postTodoList({
+                    todo: new Todo(
+                      TodoType.SINGLE,
+                      "Demo Add",
+                      "Demo Description"
+                    ),
+                  })
+                );
               }}
             >
               <IonIcon icon={add}></IonIcon>

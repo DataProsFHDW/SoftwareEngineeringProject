@@ -7,24 +7,29 @@ import {
   IonReorder,
   IonItem,
 } from "@ionic/react";
+import { Todo } from "../models/Todo";
+import { TodoType } from "../models/TodoType";
 
+/*
 interface ToDoComponentProps {
   id: string;
   title: string;
+  type: TodoType
+  description: ToDoDescr
 }
+*/
 
-export const ToDoComponent: React.FC<ToDoComponentProps> = ({ id, title }) => {
+export const ToDoComponent: React.FC<Todo> = ({todoType, todoTitle, todoDescription }) => {
   return (
     <IonItem>
       <IonCard>
         <IonCardHeader>
-          <IonCardTitle>{title}</IonCardTitle>
-          <IonCardSubtitle>{id}</IonCardSubtitle>
+          <IonCardTitle>{todoTitle}</IonCardTitle>
+          <IonCardSubtitle>{todoType}</IonCardSubtitle>
         </IonCardHeader>
 
         <IonCardContent>
-          Here's a small text description for the card content. Nothing more,
-          nothing less.
+          {todoDescription}
         </IonCardContent>
       </IonCard>
       <IonReorder slot="end"></IonReorder>
