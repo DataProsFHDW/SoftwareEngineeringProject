@@ -8,9 +8,12 @@ export const LandingPage: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader >
-        <IonToolbar >
-          <IonTitle className='ion-text-center'>Checkbox</IonTitle>
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonMenuButton />
+          </IonButtons>
+          <IonTitle className="ion-text-center">Checkbox Landing Page</IonTitle>
         </IonToolbar>
       </IonHeader>
 
