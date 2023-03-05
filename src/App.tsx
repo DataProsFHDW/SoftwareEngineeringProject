@@ -24,6 +24,14 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import { LandingPage } from './pages/LandingPage';
 import { ToDoPage } from './pages/ToDoPage';
+import { Provider } from 'react-redux';
+import { combinedStoreTodo } from './dataStores/Stores';
+import { useTodoDispatch, useTodoSelector } from './dataStores/todo/TodoSlice';
+import { useEffect } from 'react';
+import { fetchTodoList } from './dataStores/todo/FetchTodos';
+import { postTodoList } from './dataStores/todo/PostTodos';
+import { Todo } from './models/Todo';
+import { TodoType } from './models/TodoType';
 
 
 setupIonicReact();
@@ -35,20 +43,20 @@ const App: React.FC = () => {
         <IonSplitPane contentId="main">
           <Menu />
           <IonRouterOutlet id="main">
-          {/*
+            {/*
             <Route path="/page/:name" exact={true}>
               <ToDoPage />
             </Route>
           */}
-          
+
             <Route path="/ToDo" exact={true}>
               <ToDoPage />
             </Route>
-            
+
 
             {/* Default Landing Page */}
             <Route path="/" exact={false}>
-              <ToDoPage/> 
+              <ToDoPage />
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>
