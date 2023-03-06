@@ -1,39 +1,29 @@
 import {
   IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
   IonContent,
   IonFab,
   IonFabButton,
   IonHeader,
   IonIcon,
-  IonImg,
-  IonLabel,
   IonList,
   IonListHeader,
   IonMenuButton,
   IonPage,
-  IonReorder,
   IonReorderGroup,
-  IonText,
   IonTitle,
   IonToolbar,
   ItemReorderEventDetail,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
-import { stringify } from "querystring";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useEffect } from "react";
 import { ToDoComponent } from "../components/ToDoComponent";
 import { fetchTodoList } from "../dataStores/todo/FetchTodos";
 import { postTodoList } from "../dataStores/todo/PostTodos";
 import { useTodoDispatch, useTodoSelector } from "../dataStores/todo/TodoSlice";
 import { Todo } from "../models/Todo";
 import { TodoType } from "../models/TodoType";
-//import "./ToDoPage.css";
+import "./ToDoPage.css";
+import React, { useState } from "react";
 
 export const ToDoPage: React.FC = () => {
   const todoReducer = useTodoSelector((state) => state.todoReducer);
@@ -49,7 +39,20 @@ export const ToDoPage: React.FC = () => {
   }, []); // [] => do on initial render of todoPageComponent
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
-  //const [selectedToDo, setSelectedToDo] = useTodoSelector((state) => state.todoReducer.todoList)
+  const [toDoList, setToDoList] = useState([
+    new Todo(TodoType.SINGLE, "ToDo Item 1", "Description of ToDo Item 1"),
+    new Todo(TodoType.SINGLE, "ToDo Item 2", "Description of ToDo Item 2"),
+    new Todo(TodoType.GROUP, "ToDo Item 3", "Description of ToDo Item 3"),
+  ]);
+  const [selectedToDo, setSelectedToDo] = useState<Todo>();
+
+  const handleToDoCardClick = (toDo: Todo) => {
+    //setSelectedToDo(toDo);
+    console.log(toDo);
+    console.log("Hiho")
+  };
+  //let toDoRender = todoReducer.todoList.map((todo, index) => {
+
   let toDoRender = todoReducer.todoList.map((todo, index) => {
     return (
       <ToDoComponent
@@ -57,10 +60,11 @@ export const ToDoPage: React.FC = () => {
         todoTitle={todo.todoTitle}
         todoType={todo.todoType}
         todoDescription={todo.todoDescription}
+        onTodoCardClick={() => handleToDoCardClick(todo)}
       />
-
     );
   });
+
   function handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
@@ -97,7 +101,7 @@ export const ToDoPage: React.FC = () => {
           <IonFab slot="fixed" vertical="bottom" horizontal="end">
             <IonFabButton
               onClick={() => {
-                // setTodoList([...todoList, "Test Todo" + todoList.length]);
+                //setToDoList([...toDoList, "Test Todo" + toDoList.length]);
                 dispatch(
                   postTodoList({
                     todo: new Todo(
@@ -112,10 +116,7 @@ export const ToDoPage: React.FC = () => {
               <IonIcon icon={add}></IonIcon>
             </IonFabButton>
           </IonFab>
-          {/*<div className="popup-container">
-
-          </div>
-            */}
+          {selectedToDo && <div className="popup-container"></div>}
         </div>
       </IonContent>
     </IonPage>

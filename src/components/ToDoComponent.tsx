@@ -8,32 +8,35 @@ import {
   IonItem,
 } from "@ionic/react";
 import { Todo } from "../models/Todo";
+import { TodoInterface } from "../models/TodoInterface";
 import { TodoType } from "../models/TodoType";
+import "./ToDoComponent.css"
 
-/*
-interface ToDoComponentProps {
-  id: string;
-  title: string;
-  type: TodoType
-  description: ToDoDescr
+
+interface ToDoComponentProps extends TodoInterface{
+  onTodoCardClick: any;
 }
-*/
 
-export const ToDoComponent: React.FC<Todo> = ({
+
+export const ToDoComponent: React.FC<ToDoComponentProps> = ({
   todoType,
   todoTitle,
   todoDescription,
+  onTodoCardClick
 }) => {
   return (
-    <IonReorder slot="end">
-      <IonCard>
+    <IonItem>
+      <IonCard onClick={onTodoCardClick}>
+        <div className="card-content">
         <IonCardHeader>
           <IonCardTitle>{todoTitle}</IonCardTitle>
           <IonCardSubtitle>{todoType.toString()}</IonCardSubtitle>
         </IonCardHeader>
 
         <IonCardContent>{todoDescription}</IonCardContent>
+        </div>
       </IonCard>
-    </IonReorder>
+      <IonReorder slot="end"></IonReorder>
+    </IonItem>
   );
 };
