@@ -1,13 +1,22 @@
 import {
   IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
   IonContent,
   IonFab,
   IonFabButton,
   IonHeader,
   IonIcon,
+  IonImg,
+  IonLabel,
   IonList,
+  IonListHeader,
   IonMenuButton,
   IonPage,
+  IonReorder,
   IonReorderGroup,
   IonText,
   IonTitle,
@@ -24,7 +33,7 @@ import { postTodoList } from "../dataStores/todo/PostTodos";
 import { useTodoDispatch, useTodoSelector } from "../dataStores/todo/TodoSlice";
 import { Todo } from "../models/Todo";
 import { TodoType } from "../models/TodoType";
-import "./Page.css";
+//import "./ToDoPage.css";
 
 export const ToDoPage: React.FC = () => {
   const todoReducer = useTodoSelector((state) => state.todoReducer);
@@ -40,7 +49,7 @@ export const ToDoPage: React.FC = () => {
   }, []); // [] => do on initial render of todoPageComponent
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
-
+  //const [selectedToDo, setSelectedToDo] = useTodoSelector((state) => state.todoReducer.todoList)
   let toDoRender = todoReducer.todoList.map((todo, index) => {
     return (
       <ToDoComponent
@@ -49,9 +58,9 @@ export const ToDoPage: React.FC = () => {
         todoType={todo.todoType}
         todoDescription={todo.todoDescription}
       />
+
     );
   });
-
   function handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
@@ -75,11 +84,11 @@ export const ToDoPage: React.FC = () => {
       </IonHeader>
 
       <IonContent className="ion-padding" fullscreen>
-        <>
-          <IonText>Your trustworthy ToDo App</IonText>
-          <br />
-          <br />
+        <div className="content-container">
           <IonList>
+            <IonListHeader>
+              <IonHeader>ToDos</IonHeader>
+            </IonListHeader>
             {/* The reorder gesture is disabled by default, enable it to drag and drop items */}
             <IonReorderGroup disabled={false} onIonItemReorder={handleReorder}>
               {toDoRender}
@@ -103,7 +112,11 @@ export const ToDoPage: React.FC = () => {
               <IonIcon icon={add}></IonIcon>
             </IonFabButton>
           </IonFab>
-        </>
+          {/*<div className="popup-container">
+
+          </div>
+            */}
+        </div>
       </IonContent>
     </IonPage>
   );
