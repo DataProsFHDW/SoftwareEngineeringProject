@@ -9,6 +9,7 @@ import {
 } from "@ionic/react";
 import { Todo } from "../models/Todo";
 import { TodoType } from "../models/TodoType";
+import "./ToDoComponent.css"
 
 /*
 interface ToDoComponentProps {
@@ -25,15 +26,18 @@ export const ToDoComponent: React.FC<Todo> = ({
   todoDescription,
 }) => {
   return (
-    <IonReorder slot="end">
-      <IonCard>
+    <IonItem>
+      <IonCard button onClick={() => console.log("CardClicked!")}>
+        <div className="card-content">
         <IonCardHeader>
           <IonCardTitle>{todoTitle}</IonCardTitle>
           <IonCardSubtitle>{todoType.toString()}</IonCardSubtitle>
         </IonCardHeader>
 
         <IonCardContent>{todoDescription}</IonCardContent>
+        </div>
       </IonCard>
-    </IonReorder>
+      <IonReorder slot="end"></IonReorder>
+    </IonItem>
   );
 };

@@ -33,7 +33,7 @@ import { postTodoList } from "../dataStores/todo/PostTodos";
 import { useTodoDispatch, useTodoSelector } from "../dataStores/todo/TodoSlice";
 import { Todo } from "../models/Todo";
 import { TodoType } from "../models/TodoType";
-//import "./ToDoPage.css";
+import "./ToDoPage.css";
 
 export const ToDoPage: React.FC = () => {
   const todoReducer = useTodoSelector((state) => state.todoReducer);
