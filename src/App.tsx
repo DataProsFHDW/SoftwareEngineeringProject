@@ -38,7 +38,7 @@ import { postTodoList } from "./dataStores/todo/PostTodos";
 import { Todo } from "./models/Todo";
 import { TodoType } from "./models/TodoType";
 
-setupIonicReact();
+setupIonicReact(); 
 
 const App: React.FC = () => {
   return (
