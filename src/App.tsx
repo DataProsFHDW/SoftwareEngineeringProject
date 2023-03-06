@@ -37,15 +37,18 @@ import { fetchTodoList } from "./dataStores/todo/FetchTodos";
 import { postTodoList } from "./dataStores/todo/PostTodos";
 import { Todo } from "./models/Todo";
 import { TodoType } from "./models/TodoType";
+import { LoginComponent } from "./pages/Login";
+import { componentOnReady } from "@ionic/core";
 
 setupIonicReact(); 
 
-const App: React.FC = () => {
+const App: React.FC = () => { 
+
   return (
     <IonApp>
       <IonReactRouter>
         <IonSplitPane contentId="main">
-          <Menu />
+          <Menu /> 
           <IonRouterOutlet id="main">
             {/* Default Landing Page */}
             <Redirect exact from="/" to="/dashboard" />
@@ -54,6 +57,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/todo" exact={false}>
               <ToDoPage />
+            </Route>
+            <Route path="/login" exact={false}>
+              <LoginComponent/>
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>
