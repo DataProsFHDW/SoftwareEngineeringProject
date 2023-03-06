@@ -9,8 +9,8 @@ import { todoSlice } from "./TodoSlice";
 export const fetchTodoList = createAsyncThunk("checkbox/todo/fetchTaskList",
     async (obj: { accessToken: string, idToken: string }) => {
         return [
-            new Todo(TodoType.SINGLE, "First Demo Todo", "Sheesh this good diese"),
-            new Todo(TodoType.GROUP, "Group Todo", "Try to design this ;)")
+            new Todo(TodoType.SINGLE, "First Demo Todo", "Sheesh this good diese",),
+            new Todo(TodoType.GROUP, "Group Todo", "Try to design this ;)",)
         ];
 
         /* Demo logic */
