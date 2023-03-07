@@ -3,9 +3,12 @@ import { createUserWithEmailAndPassword, EmailAuthProvider, FacebookAuthProvider
 import { auth } from "..";
 import * as firebaseui from 'firebaseui'
 import React, { useState } from "react";
+import { useHistory } from "react-router";
 
 export const LoginPage = () => {
   const [isEmailHidden, setEmailHidden] = useState(true)
+
+  var history = useHistory();
 
   return (
     <IonPage>
@@ -19,6 +22,7 @@ export const LoginPage = () => {
         <IonButton expand="block" onClick={async () => {
           try {
             const res = await signInWithPopup(auth, new GoogleAuthProvider());
+            // history.push("/");
           } catch (err) {
             console.error(err);
           }
@@ -41,7 +45,10 @@ export const LoginPage = () => {
         }}>E-Mail Login</IonButton>
         <br />
         <br />
-        <IonCard hidden={isEmailHidden} id="firebaseui-auth-mail">
+        <IonCard hidden={isEmailHidden}>
+          <IonCardContent>
+            <div id="firebaseui-auth-mail"></div>
+          </IonCardContent>
         </IonCard>
       </IonContent>
     </IonPage>);

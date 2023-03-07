@@ -5,7 +5,7 @@ import {
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, useHistory } from "react-router-dom";
 import Menu from "./components/Menu";
 import Page from "./pages/Page";
 
@@ -39,29 +39,65 @@ import { Todo } from "./models/Todo";
 import { TodoType } from "./models/TodoType";
 import { componentOnReady } from "@ionic/core";
 import { LoginPage } from "./pages/Login";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from ".";
+import { Logout } from "./pages/Logout";
 
-setupIonicReact(); 
+setupIonicReact();
 
-const App: React.FC = () => { 
+const App: React.FC = () => {
+
+  const [user, loading, error] = useAuthState(auth);
+
+  useEffect(() => {
+    console.log("Auth State Changed", user);
+  }, [user]);
+
+  const history = useHistory();
+
+  var routerJsx;
+
+  if (user != null) {
+    console.log("Update");
+    routerJsx = (
+      <>
+        <Menu />
+        <IonRouterOutlet id="main">
+          {/* Default Landing Page */}
+          <Redirect exact from="/" to="/dashboard" />
+          <Redirect from="/login" to="/dashboard" />
+          <Route path="/dashboard">
+            <LandingPage />
+          </Route>
+          <Route path="/todo" exact={false}>
+            <ToDoPage />
+          </Route>
+
+          <Route path="/logout" exact={false}>
+            <Logout />
+          </Route>
+        </IonRouterOutlet>
+      </>)
+
+  } else {
+    /* Not logged in */
+    routerJsx = (
+      <>
+        <IonRouterOutlet id="main">
+          {/* Default Landing Page */}
+          <Redirect exact from="/" to="/login" />
+          <Route path="/login">
+            <LoginPage />
+          </Route>
+        </IonRouterOutlet>
+      </>)
+  }
 
   return (
     <IonApp>
       <IonReactRouter>
         <IonSplitPane contentId="main">
-          <Menu /> 
-          <IonRouterOutlet id="main">
-            {/* Default Landing Page */}
-            <Redirect exact from="/" to="/dashboard" />
-            <Route path="/dashboard">
-              <LandingPage />
-            </Route>
-            <Route path="/todo" exact={false}>
-              <ToDoPage />
-            </Route>
-            <Route path="/login" exact={false}>
-              <LoginPage />
-            </Route>
-          </IonRouterOutlet>
+          {routerJsx}
         </IonSplitPane>
       </IonReactRouter>
     </IonApp>

@@ -60,6 +60,12 @@ const appPages: AppPage[] = [
     url: '/page/Spam',
     iosIcon: warningOutline,
     mdIcon: warningSharp
+  },
+  {
+    title: 'Logout',
+    url: '/logout',
+    iosIcon: warningOutline,
+    mdIcon: warningSharp
   }
 ];
 

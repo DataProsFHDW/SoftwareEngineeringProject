@@ -33,9 +33,6 @@ export const LandingPage: React.FC = () => {
           todoDescription={"Hallo"}
           onTodoCardClick={""}
         />
-
-        <IonButton expand='block' onClick={() => {
-        }}>Login</IonButton>
       </IonContent>
     </IonPage>
   );
