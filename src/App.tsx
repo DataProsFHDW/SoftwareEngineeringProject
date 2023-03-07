@@ -37,8 +37,8 @@ import { fetchTodoList } from "./dataStores/todo/FetchTodos";
 import { postTodoList } from "./dataStores/todo/PostTodos";
 import { Todo } from "./models/Todo";
 import { TodoType } from "./models/TodoType";
-import { LoginComponent } from "./pages/Login";
 import { componentOnReady } from "@ionic/core";
+import { LoginPage } from "./pages/Login";
 
 setupIonicReact(); 
 
@@ -59,7 +59,7 @@ const App: React.FC = () => {
               <ToDoPage />
             </Route>
             <Route path="/login" exact={false}>
-              <LoginComponent/>
+              <LoginPage />
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>

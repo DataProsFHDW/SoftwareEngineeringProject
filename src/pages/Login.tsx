@@ -1,57 +1,48 @@
-import { EmailAuthProvider, FacebookAuthProvider, GoogleAuthProvider, TwitterAuthProvider } from "@firebase/auth";
-import * as firebaseui from "firebaseui";
-import React, { useEffect } from "react";
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonContent, IonHeader, IonMenuButton, IonPage, IonText, IonTitle, IonToolbar } from "@ionic/react";
+import { createUserWithEmailAndPassword, EmailAuthProvider, FacebookAuthProvider, GithubAuthProvider, GoogleAuthProvider, PhoneAuthProvider, signInWithEmailAndPassword, signInWithPopup, TwitterAuthProvider } from "firebase/auth";
 import { auth } from "..";
+import * as firebaseui from 'firebaseui'
+import React, { useState } from "react";
 
-require("firebase/auth");
+export const LoginPage = () => {
+  const [isEmailHidden, setEmailHidden] = useState(true)
 
+  return (
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle className="ion-text-center">Login</IonTitle>
+        </IonToolbar>
+      </IonHeader>
 
-// FirebaseUI config.
-const uiConfig = {
-    signInSuccessUrl: '#create-account', // the root of the URL is auto-appended
-    signInOptions: [
-        // Leave the lines as is for the providers you want to offer your users.
-        GoogleAuthProvider.PROVIDER_ID,
-        FacebookAuthProvider.PROVIDER_ID,
-        TwitterAuthProvider.PROVIDER_ID,
-        // firebase.auth.GithubAuthProvider.PROVIDER_ID,
-        EmailAuthProvider.PROVIDER_ID,
-        // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-        // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
-    ],
-    // Terms of service url.
-    tosUrl: '<your-tos-url>',
-    // Privacy policy url.
-    privacyPolicyUrl: '<your-privacy-policy-url>'
-};
-
-export class LoginComponent extends React.Component {
-
-    componentDidMount() {
-      // Initialize the FirebaseUI Widget using Firebase.
-      const firebase_ui_widget = new firebaseui.auth.AuthUI(auth);
-    
-      // The start method will wait until the DOM is loaded.
-      firebase_ui_widget.start('#firebaseui-auth-container', uiConfig);
-    }
-  
-    render() {
-      console.log('Render lifecycle')
-      return <React.Fragment>
-      <div id="firebaseui-auth-container" style={{ marginTop: '5vh' }}></div>
-  </React.Fragment>;
-    }
-  }
-
-export const LoginComponent2 = () => {
-
-
-    useEffect(() => {
-    
-    }, [])
-
-    return (
-        <React.Fragment>
-            <div id="firebaseui-auth-container" style={{ marginTop: '5vh' }}></div>
-        </React.Fragment>);
+      <IonContent className="ion-padding">
+        <IonButton expand="block" onClick={async () => {
+          try {
+            const res = await signInWithPopup(auth, new GoogleAuthProvider());
+          } catch (err) {
+            console.error(err);
+          }
+        }}>Google Login</IonButton>
+        <IonButton expand="block" onClick={async () => {
+          setEmailHidden(false);
+          var ui = new firebaseui.auth.AuthUI(auth);
+          ui.start('#firebaseui-auth-mail', {
+            signInSuccessUrl: 'localhost:3000/',
+            signInFlow: 'popup',
+            signInOptions: [
+              EmailAuthProvider.PROVIDER_ID,
+            ], // Terms of service url/callback.
+            tosUrl: '<your-tos-url>',
+            // Privacy policy url/callback. 
+            privacyPolicyUrl: function () {
+              window.location.assign('<your-privacy-policy-url>');
+            }
+          });
+        }}>E-Mail Login</IonButton>
+        <br />
+        <br />
+        <IonCard hidden={isEmailHidden} id="firebaseui-auth-mail">
+        </IonCard>
+      </IonContent>
+    </IonPage>);
 }
