@@ -10,6 +10,7 @@ import {
   IonMenuButton,
   IonPage,
   IonReorderGroup,
+  IonText,
   IonTitle,
   IonToolbar,
   ItemReorderEventDetail,
@@ -36,7 +37,7 @@ export const ToDoPage: React.FC = () => {
         idToken: "for_you_to_see_<3",
       })
     );
-  }, []); // [] => do on initial render of todoPageComponent 
+  }, []); // [] => do on initial render of todoPageComponent
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
   const [toDoList, setToDoList] = useState([
@@ -44,12 +45,13 @@ export const ToDoPage: React.FC = () => {
     new Todo(TodoType.SINGLE, "ToDo Item 2", "Description of ToDo Item 2"),
     new Todo(TodoType.GROUP, "ToDo Item 3", "Description of ToDo Item 3"),
   ]);
-  const [selectedToDo, setSelectedToDo] = useState<Todo>();
+  const [selectedToDo, setSelectedToDo] = useState<Todo | undefined>(undefined);
 
   const handleToDoCardClick = (toDo: Todo) => {
     //setSelectedToDo(toDo);
     console.log(toDo);
-    console.log("Hiho")
+    console.log("Hiho");
+    setSelectedToDo(toDo);
   };
 
   let toDoRender = toDoList.map((todo, index) => {
@@ -100,14 +102,32 @@ export const ToDoPage: React.FC = () => {
           <IonFab slot="fixed" vertical="bottom" horizontal="end">
             <IonFabButton
               onClick={() => {
-
-                setToDoList([...toDoList, new Todo(TodoType.SINGLE, `ToDo Item ${toDoList.length}`, "Description of ToDo Item 1")])
+                setToDoList([
+                  ...toDoList,
+                  new Todo(
+                    TodoType.SINGLE,
+                    `ToDo Item ${toDoList.length + 1}`,
+                    "Description of ToDo Item 1"
+                  ),
+                ]);
               }}
             >
               <IonIcon icon={add}></IonIcon>
             </IonFabButton>
           </IonFab>
-          {selectedToDo && <div className="popup-container"></div>}
+          {selectedToDo && (
+            <div
+              className="popup-container"
+              onClick={() => setSelectedToDo(undefined)}
+            >
+              
+                <IonContent>
+                  <IonText>{selectedToDo.todoTitle}</IonText>
+                  <IonText>{selectedToDo.todoDescription}</IonText>
+                </IonContent>
+              
+            </div>
+          )}
         </div>
       </IonContent>
     </IonPage>

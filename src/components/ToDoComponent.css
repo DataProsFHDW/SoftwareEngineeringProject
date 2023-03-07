@@ -6,4 +6,9 @@ ion-item {
 ion-card {
     margin: 5px 10px;
     width: 100%;
+    --ion-item-background:#fff;
+}
+
+ion-card-title{
+    color:red
 }

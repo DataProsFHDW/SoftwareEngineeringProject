@@ -19,5 +19,6 @@ ion-list {
     height: 100%;
     grid-row: 1/2;
     grid-column: 1/2;
-    overflow-y: 20;
+    overflow-y: auto;
+    z-index: 20;
 }
