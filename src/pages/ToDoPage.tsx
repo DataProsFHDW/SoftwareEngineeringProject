@@ -25,7 +25,6 @@ import { TodoType } from "../models/TodoType";
 import "./ToDoPage.css";
 import React, { useState } from "react";
 
-
 export const ToDoPage: React.FC = () => {
   const todoReducer = useTodoSelector((state) => state.todoReducer);
   var dispatch = useTodoDispatch();
@@ -37,7 +36,7 @@ export const ToDoPage: React.FC = () => {
         idToken: "for_you_to_see_<3",
       })
     );
-  }, []); // [] => do on initial render of todoPageComponent
+  }, []); // [] => do on initial render of todoPageComponent 
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
   const [toDoList, setToDoList] = useState([
@@ -52,7 +51,6 @@ export const ToDoPage: React.FC = () => {
     console.log(toDo);
     console.log("Hiho")
   };
-  //let toDoRender = todoReducer.todoList.map((todo, index) => {
 
   let toDoRender = todoReducer.todoList.map((todo, index) => {
     return (
@@ -103,15 +101,7 @@ export const ToDoPage: React.FC = () => {
             <IonFabButton
               onClick={() => {
                 //setToDoList([...toDoList, "Test Todo" + toDoList.length]);
-                dispatch(
-                  postTodoList({
-                    todo: new Todo(
-                      TodoType.SINGLE,
-                      "Demo Add",
-                      "Demo Description"
-                    ),
-                  })
-                );
+
               }}
             >
               <IonIcon icon={add}></IonIcon>
