@@ -52,7 +52,7 @@ export const ToDoPage: React.FC = () => {
     console.log("Hiho")
   };
 
-  let toDoRender = todoReducer.todoList.map((todo, index) => {
+  let toDoRender = toDoList.map((todo, index) => {
     return (
       <ToDoComponent
         key={"ToDo-" + index}
@@ -100,8 +100,8 @@ export const ToDoPage: React.FC = () => {
           <IonFab slot="fixed" vertical="bottom" horizontal="end">
             <IonFabButton
               onClick={() => {
-                //setToDoList([...toDoList, "Test Todo" + toDoList.length]);
 
+                setToDoList([...toDoList, new Todo(TodoType.SINGLE, `ToDo Item ${toDoList.length}`, "Description of ToDo Item 1")])
               }}
             >
               <IonIcon icon={add}></IonIcon>
