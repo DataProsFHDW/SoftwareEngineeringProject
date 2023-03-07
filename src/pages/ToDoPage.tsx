@@ -50,7 +50,7 @@ export const ToDoPage: React.FC = () => {
   const handleToDoCardClick = (toDo: Todo) => {
     //setSelectedToDo(toDo);
     console.log(toDo);
-    console.log("Hiho");
+    console.log("Heho");
     setSelectedToDo(toDo);
   };
 
