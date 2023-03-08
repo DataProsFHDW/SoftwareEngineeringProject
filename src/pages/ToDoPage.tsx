@@ -10,6 +10,7 @@ import {
   IonList,
   IonListHeader,
   IonMenuButton,
+  IonModal,
   IonPage,
   IonReorderGroup,
   IonText,
@@ -27,6 +28,7 @@ import { Todo } from "../models/Todo";
 import { TodoType } from "../models/TodoType";
 import "./ToDoPage.css";
 import React, { useState } from "react";
+import TodoDetails from "../components/TodoDetails";
 
 export const ToDoPage: React.FC = () => {
   const todoReducer = useTodoSelector((state) => state.todoReducer);
@@ -48,12 +50,13 @@ export const ToDoPage: React.FC = () => {
     new Todo(TodoType.GROUP, "ToDo Item 3", "Description of ToDo Item 3"),
   ]);
   const [selectedToDo, setSelectedToDo] = useState<Todo | undefined>(undefined);
+  const [showModal, setShowModal] = useState(false);
 
   const handleToDoCardClick = (toDo: Todo) => {
     //setSelectedToDo(toDo);
     console.log(toDo);
     console.log("Heyho");
-    setSelectedToDo(toDo);
+    setShowModal(true);
   };
 
   let toDoRender = toDoList.map((todo, index) => {
@@ -117,21 +120,11 @@ export const ToDoPage: React.FC = () => {
               <IonIcon icon={add}></IonIcon>
             </IonFabButton>
           </IonFab>
-          {selectedToDo && (
-            <div
-              className="popup-container"
-              
-            >
-              
-                <IonContent>
-                  <IonInput>{selectedToDo.todoTitle}</IonInput>
-                  <IonInput>{selectedToDo.todoDescription}</IonInput>
-                  <IonButton type="submit" onClick={() => setSelectedToDo(undefined)}>Submit your shit</IonButton>
-                </IonContent>
-              
-            </div>
-          )}
         </div>
+        <IonModal isOpen={showModal}>
+          <TodoDetails></TodoDetails>
+          <IonButton onClick={() => setShowModal(false)}>Close Modal</IonButton>
+        </IonModal>
       </IonContent>
     </IonPage>
   );
