@@ -7,6 +7,8 @@ import {
   IonHeader,
   IonIcon,
   IonInput,
+  IonItem,
+  IonLabel,
   IonList,
   IonListHeader,
   IonMenuButton,
@@ -19,7 +21,7 @@ import {
   ItemReorderEventDetail,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ToDoComponent } from "../components/ToDoComponent";
 import { fetchTodoList } from "../dataStores/todo/FetchTodos";
 import { postTodoList } from "../dataStores/todo/PostTodos";
@@ -29,6 +31,9 @@ import { TodoType } from "../models/TodoType";
 import "./ToDoPage.css";
 import React, { useState } from "react";
 import TodoDetails from "../components/TodoDetails";
+import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
+
+// Zu Erledigen: [] Ausgliederung Modal zu ToDo-Details (siehe Link Arbeitsrechner)
 
 export const ToDoPage: React.FC = () => {
   const todoReducer = useTodoSelector((state) => state.todoReducer);
@@ -49,14 +54,14 @@ export const ToDoPage: React.FC = () => {
     new Todo(TodoType.SINGLE, "ToDo Item 2", "Description of ToDo Item 2"),
     new Todo(TodoType.GROUP, "ToDo Item 3", "Description of ToDo Item 3"),
   ]);
-  const [selectedToDo, setSelectedToDo] = useState<Todo | undefined>(undefined);
-  const [showModal, setShowModal] = useState(false);
+  //Old Try manuelles PopUp: const [selectedToDo, setSelectedToDo] = useState<Todo | undefined>(undefined);
+  //Zu Old Try TodoDetails: const [showModal, setShowModal] = useState(false);
 
   const handleToDoCardClick = (toDo: Todo) => {
     //setSelectedToDo(toDo);
     console.log(toDo);
     console.log("Heyho");
-    setShowModal(true);
+    //setShowModal(true);
   };
 
   let toDoRender = toDoList.map((todo, index) => {
@@ -82,6 +87,24 @@ export const ToDoPage: React.FC = () => {
     event.detail.complete();
   }
 
+  // Following lines are "Geklaut von Docu" => Hübschen
+  const modal = useRef<HTMLIonModalElement>(null);
+  const input = useRef<HTMLIonInputElement>(null);
+
+  const [message, setMessage] = useState(
+    "This modal example uses triggers to automatically open a modal when the button is clicked."
+  );
+
+  function confirm() {
+    modal.current?.dismiss(input.current?.value, "confirm");
+  }
+
+  function onWillDismiss(ev: CustomEvent<OverlayEventDetail>) {
+    if (ev.detail.role === "confirm") {
+      setMessage(`Hello, ${ev.detail.data}!`);
+    }
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -99,6 +122,14 @@ export const ToDoPage: React.FC = () => {
             <IonListHeader>
               <IonHeader>ToDos</IonHeader>
             </IonListHeader>
+
+            {/*Beginn Test Modal */}
+            <IonButton id="open-modal" expand="block">
+              Open
+            </IonButton>
+            <p>{message}</p>
+
+            {/* End Test Modal */}
             {/* The reorder gesture is disabled by default, enable it to drag and drop items */}
             <IonReorderGroup disabled={false} onIonItemReorder={handleReorder}>
               {toDoRender}
@@ -121,9 +152,39 @@ export const ToDoPage: React.FC = () => {
             </IonFabButton>
           </IonFab>
         </div>
-        <IonModal isOpen={showModal}>
+        {/* OLD Try: mit ToDo Details:
+          <IonModal isOpen={showModal}>
           <TodoDetails></TodoDetails>
           <IonButton onClick={() => setShowModal(false)}>Close Modal</IonButton>
+        </IonModal>
+        */}
+        {/* Here is a hard coded version, of PopUp Feature => Unfähig Hooks und verschiedene Komponenten zu nutzen*/}
+        <IonModal
+          ref={modal}
+          trigger="open-modal"
+          onWillDismiss={(ev) => onWillDismiss(ev)}
+        >
+          <IonHeader>
+            <IonToolbar>
+              <IonButtons slot="start">
+                <IonButton onClick={() => modal.current?.dismiss()}>
+                  Cancel
+                </IonButton>
+              </IonButtons>
+              <IonTitle>Welcome</IonTitle>
+              <IonButtons slot="end">
+                <IonButton strong={true} onClick={() => confirm()}>
+                  Confirm
+                </IonButton>
+              </IonButtons>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent className="ion-padding">
+            <IonItem>
+              <IonLabel position="stacked">Enter your name</IonLabel>
+              <IonInput ref={input} type="text" placeholder="Your name" />
+            </IonItem>
+          </IonContent>
         </IonModal>
       </IonContent>
     </IonPage>
