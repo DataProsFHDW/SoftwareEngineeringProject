@@ -1,10 +1,12 @@
 import {
+  IonButton,
   IonButtons,
   IonContent,
   IonFab,
   IonFabButton,
   IonHeader,
   IonIcon,
+  IonInput,
   IonList,
   IonListHeader,
   IonMenuButton,
@@ -118,12 +120,13 @@ export const ToDoPage: React.FC = () => {
           {selectedToDo && (
             <div
               className="popup-container"
-              onClick={() => setSelectedToDo(undefined)}
+              
             >
               
                 <IonContent>
-                  <IonText>{selectedToDo.todoTitle}</IonText>
-                  <IonText>{selectedToDo.todoDescription}</IonText>
+                  <IonInput>{selectedToDo.todoTitle}</IonInput>
+                  <IonInput>{selectedToDo.todoDescription}</IonInput>
+                  <IonButton type="submit" onClick={() => setSelectedToDo(undefined)}>Submit your shit</IonButton>
                 </IonContent>
               
             </div>
