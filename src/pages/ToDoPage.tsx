@@ -143,7 +143,7 @@ export const ToDoPage: React.FC = () => {
                   new Todo(
                     TodoType.SINGLE,
                     `ToDo Item ${toDoList.length + 1}`,
-                    "Description of ToDo Item 1"
+                    `Description of Todo Item ${toDoList.length + 1}`
                   ),
                 ]);
               }}
