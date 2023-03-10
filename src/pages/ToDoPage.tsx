@@ -62,7 +62,7 @@ export const ToDoPage: React.FC = () => {
   //Old Try manuelles PopUp: const [selectedToDo, setSelectedToDo] = useState<Todo | undefined>(undefined);
   //Zu Old Try TodoDetails: const [showModal, setShowModal] = useState(false);
 
-  const handleToDoCardClick = (toDo: Todo) => {
+  const handleToDoCardClick = () => {
     //setSelectedToDo(toDo);
     //console.log(selectedToDo);
     console.log("Heyho");
@@ -70,7 +70,8 @@ export const ToDoPage: React.FC = () => {
   };
 
   function deleteTodo(index: number) {
-    const todoItemsClone = Object.create(todoItems);
+    console.log("Delete pressed");
+    const todoItemsClone = todoItems.slice(0, todoItems.length);
 
     todoItemsClone.splice(index, 1);
     updateTodoItems(todoItemsClone);
@@ -86,7 +87,6 @@ export const ToDoPage: React.FC = () => {
     setModalIsOpen(false);
   }
 
-  
   function handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
@@ -116,7 +116,7 @@ export const ToDoPage: React.FC = () => {
         todoTitle={todo.todoTitle}
         todoType={todo.todoType}
         todoDescription={todo.todoDescription}
-        onTodoCardClick={() => handleToDoCardClick(todo)}
+        onTodoCardClick={() => handleToDoCardClick()}
         onDeleteClick={() => deleteTodo(index)}
       />
     );
@@ -135,32 +135,31 @@ export const ToDoPage: React.FC = () => {
 
       <IonContent className="ion-padding" fullscreen>
         {/**String Todo Placeholder for Testing */}
-          <IonList>
-            <IonListHeader>
-              <IonHeader>ToDos</IonHeader>
-            </IonListHeader>
-            {/* The reorder gesture is disabled by default, enable it to drag and drop items */}
-            <IonReorderGroup disabled={false} onIonItemReorder={handleReorder}>
-              {toDoRender}
-            
+        <IonList>
+          <IonListHeader>
+            <IonHeader>ToDos</IonHeader>
+          </IonListHeader>
+          {/* The reorder gesture is disabled by default, enable it to drag and drop items */}
+          <IonReorderGroup disabled={false} onIonItemReorder={handleReorder}>
+            {toDoRender}
           </IonReorderGroup>
-          </IonList>
-          <IonFab slot="fixed" vertical="bottom" horizontal="end">
-            <IonFabButton
-              onClick={() => {
-                setToDoList([
-                  ...toDoList,
-                  new Todo(
-                    TodoType.SINGLE,
-                    `ToDo Item ${toDoList.length + 1}`,
-                    `Description of Todo Item ${toDoList.length + 1}`
-                  ),
-                ]);
-              }}
-            >
-              <IonIcon icon={add}></IonIcon>
-            </IonFabButton>
-          </IonFab>
+        </IonList>
+        <IonFab slot="fixed" vertical="bottom" horizontal="end">
+          <IonFabButton
+            onClick={() => {
+              setToDoList([
+                ...toDoList,
+                new Todo(
+                  TodoType.SINGLE,
+                  `ToDo Item ${toDoList.length + 1}`,
+                  `Description of Todo Item ${toDoList.length + 1}`
+                ),
+              ]);
+            }}
+          >
+            <IonIcon icon={add}></IonIcon>
+          </IonFabButton>
+        </IonFab>
 
         {/* OLD Try: mit ToDo Details:
           <IonModal isOpen={showModal}>
