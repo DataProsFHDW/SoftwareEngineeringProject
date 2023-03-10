@@ -9,11 +9,10 @@ export class Todo implements TodoInterface {
     //creator: string = "";
     //inputOnClick:any;
 
-    constructor(todoType: TodoType, todoTitle: string, todoDescription: string ) {
+    constructor(todoType: TodoType, todoTitle: string, todoDescription: string) {
         this.todoType = todoType;
         this.todoTitle = todoTitle;
         this.todoDescription = todoDescription;
     }
-
 
 }
