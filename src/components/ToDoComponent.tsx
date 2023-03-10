@@ -13,7 +13,7 @@ import { TodoInterface } from "../models/TodoInterface";
 import "./ToDoComponent.css";
 
 interface ToDoComponentProps extends TodoInterface {
-  onTodoCardClick: any;
+  onEditClick: any;
   onDeleteClick: any;
 }
 
@@ -21,7 +21,7 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
   todoType,
   todoTitle,
   todoDescription,
-  onTodoCardClick,
+  onEditClick,
   onDeleteClick,
 }) => {
   return (
@@ -36,7 +36,7 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
           <IonCardContent>{todoDescription}</IonCardContent>
         </div>
         <IonButton fill="clear" onClick={onDeleteClick}>Delete</IonButton>
-        <IonButton fill="clear" onClick={onTodoCardClick}>Edit</IonButton>
+        <IonButton fill="clear" onClick={onEditClick}>Edit</IonButton>
       </IonCard>
       <IonReorder slot="end"></IonReorder>
     </IonItem>

@@ -18,6 +18,8 @@ import {
   IonPage,
   IonReorderGroup,
   IonRow,
+  IonSelect,
+  IonSelectOption,
   IonText,
   IonTitle,
   IonToolbar,
@@ -54,19 +56,34 @@ export const ToDoPage: React.FC = () => {
   }, []); // [] => do on initial render of todoPageComponent
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
-  const [toDoList, setToDoList] = useState<Todo[]>([
-    new Todo(TodoType.SINGLE, "ToDo Item 1", "Description of ToDo Item 1"),
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [newTodoTitle, updateNewTodoTitle] = useState<
+    string | undefined | null
+  >(null);
+  const [newTodoDesc, updateNewTodoDesc] = useState<string | undefined | null>(
+    null
+  );
+  const [newTodoType, updateNewTodoType] = useState<
+    TodoType | undefined | null
+  >(null);
+
+  const [selectedTodo, setSelectedTodo] = useState<Todo| null>(null)
+
+  const [todoItems, updateTodoItems] = useState<Todo[]>([
+    new Todo(TodoType.SINGLE, "ToDo Item 1 Hans", "Description of ToDo Item 1"),
     new Todo(TodoType.SINGLE, "ToDo Item 2", "Description of ToDo Item 2"),
     new Todo(TodoType.GROUP, "ToDo Item 3", "Description of ToDo Item 3"),
   ]);
   //Old Try manuelles PopUp: const [selectedToDo, setSelectedToDo] = useState<Todo | undefined>(undefined);
   //Zu Old Try TodoDetails: const [showModal, setShowModal] = useState(false);
 
-  const handleToDoCardClick = () => {
-    //setSelectedToDo(toDo);
-    //console.log(selectedToDo);
-    console.log("Heyho");
-    setModalIsOpen(true);
+  const handleEditClick = (index: number) => {
+    const todoItemClone = todoItems[index];
+    setSelectedTodo(todoItemClone)
+    updateNewTodoType(selectedTodo?.todoType)
+    updateNewTodoTitle(selectedTodo?.todoTitle)
+    updateNewTodoDesc(selectedTodo?.todoDescription);
+    setModalIsOpen(true)
   };
 
   function deleteTodo(index: number) {
@@ -79,11 +96,13 @@ export const ToDoPage: React.FC = () => {
 
   function submitTodo() {
     const listOfTodosClone = todoItems.slice(0, todoItems.length);
-    const newTodoItem = new Todo(TodoType.SINGLE, newTodo!, "Platzhalter text");
+    const newTodoItem = new Todo(newTodoType!, newTodoTitle!, newTodoDesc!);
 
     listOfTodosClone.push(newTodoItem);
     updateTodoItems(listOfTodosClone);
-    updateNewTodo("");
+    updateNewTodoTitle(null);
+    updateNewTodoType(null);
+    updateNewTodoDesc(null)
     setModalIsOpen(false);
   }
 
@@ -98,13 +117,6 @@ export const ToDoPage: React.FC = () => {
     event.detail.complete();
   }
   //Gehört noch zu Try von Docu mit dem Text aktualisieren, aber nutzbar
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [newTodo, updateNewTodo] = useState<string | undefined| null>(null);
-  const [todoItems, updateTodoItems] = useState<Todo[]>([
-    new Todo(TodoType.SINGLE, "ToDo Item 1 Hans", "Description of ToDo Item 1"),
-    new Todo(TodoType.SINGLE, "ToDo Item 2", "Description of ToDo Item 2"),
-    new Todo(TodoType.GROUP, "ToDo Item 3", "Description of ToDo Item 3"),
-  ]);
 
   let toDoRender = todoItems.map((todo, index) => {
     return (
@@ -113,7 +125,7 @@ export const ToDoPage: React.FC = () => {
         todoTitle={todo.todoTitle}
         todoType={todo.todoType}
         todoDescription={todo.todoDescription}
-        onTodoCardClick={() => handleToDoCardClick()}
+        onEditClick={() => handleEditClick(index)}
         onDeleteClick={() => deleteTodo(index)}
       />
     );
@@ -142,9 +154,7 @@ export const ToDoPage: React.FC = () => {
           </IonReorderGroup>
         </IonList>
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
-          <IonFabButton
-            onClick={() => setModalIsOpen(true)}
-          >
+          <IonFabButton onClick={() => setModalIsOpen(true)}>
             <IonIcon icon={add}></IonIcon>
           </IonFabButton>
         </IonFab>
@@ -166,7 +176,11 @@ export const ToDoPage: React.FC = () => {
               </IonButtons>
               <IonTitle>Welcome</IonTitle>
               <IonButtons slot="end">
-                <IonButton strong={true} color="primary" onClick={() => submitTodo()}>
+                <IonButton
+                  strong={true}
+                  color="primary"
+                  onClick={() => submitTodo()}
+                >
                   Add Todo
                 </IonButton>
               </IonButtons>
@@ -176,7 +190,29 @@ export const ToDoPage: React.FC = () => {
             <IonItem>
               <IonLabel position="stacked">Enter Todo Title</IonLabel>
               {/** updateNewTodo(e.detail.value)*/}
-              <IonInput type="text" placeholder="Your Todo" onIonChange={(e) =>  updateNewTodo(e.detail.value)} value={newTodo} />
+              <IonInput
+                type="text"
+                placeholder="e.g. Shopping"
+                onIonChange={(e) => updateNewTodoTitle(e.detail.value)}
+                value={newTodoTitle}
+              />
+              <IonLabel position="stacked">Enter Todo Description</IonLabel>
+              {/** updateNewTodo(e.detail.value)*/}
+              <IonInput
+                type="text"
+                placeholder="e.g. at the mall..."
+                onIonChange={(e) => updateNewTodoDesc(e.detail.value)}
+                value={newTodoDesc}
+              />
+              <IonSelect placeholder="Select TodoType" interface="popover" onIonChange={(e) => updateNewTodoType(e.detail.value)}>
+                <IonSelectOption value={TodoType.SINGLE}>
+                  Simple
+                </IonSelectOption>
+                <IonSelectOption value={TodoType.TIMEBOUND}>
+                  Timebound
+                </IonSelectOption>
+                <IonSelectOption value={TodoType.GROUP}>Group</IonSelectOption>
+              </IonSelect>
             </IonItem>
           </IonContent>
         </IonModal>
