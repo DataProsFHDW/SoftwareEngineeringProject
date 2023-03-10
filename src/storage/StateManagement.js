@@ -11,7 +11,7 @@ export default function useGlobalStorage() {
       }
       Preferences.get({ key }).then(lastData => {
         if (lastData.value) {
-          setState(lastData.value);
+          setState(JSON.parse(lastData.value));
           console.log("Retrieving from storage");
         }
       });
@@ -29,7 +29,7 @@ export default function useGlobalStorage() {
         newValue = newData
       }
       setState(newValue);
-      await Preferences.set({ key, value: newValue });
+      await Preferences.set({ key, value: JSON.stringify(newValue) });
       console.log("Saved Storage");
     }
 

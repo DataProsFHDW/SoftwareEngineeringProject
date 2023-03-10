@@ -14,7 +14,7 @@ import './Page.css';
 
 export const LandingPage: React.FC = () => {
   const useStorage = useGlobalStorage();
-  const [state, setState] = useStorage("todoStorage");
+  const [state, setState] = useStorage("todostorage");
 
   const todoStorage = useTodoStorage();
 
@@ -32,7 +32,9 @@ export const LandingPage: React.FC = () => {
           </IonButtons>
           <div className="Counter">
             <button type="button" onClick={() => {
-              console.log(todoStorage.setTodoList([new Todo(TodoType.GROUP, "Hallo", "Hallo")]));
+              todoStorage.setTodoList([new Todo(TodoType.GROUP, "Hallo", "Hallo")]).then((todo) => {
+                console.log("Set Todo", todo);
+              });
             }}>
               +1 to global
             </button>
