@@ -79,11 +79,11 @@ export const ToDoPage: React.FC = () => {
 
   function submitTodo() {
     const listOfTodosClone = todoItems.slice(0, todoItems.length);
-    const newTodoItem = new Todo(TodoType.SINGLE, newTodo?.todoTitle!, newTodo?.todoDescription!);
+    const newTodoItem = new Todo(TodoType.SINGLE, newTodo!, "Platzhalter text");
 
     listOfTodosClone.push(newTodoItem);
     updateTodoItems(listOfTodosClone);
-    updateNewTodo(null);
+    updateNewTodo("");
     setModalIsOpen(false);
   }
 
@@ -99,7 +99,7 @@ export const ToDoPage: React.FC = () => {
   }
   //Gehört noch zu Try von Docu mit dem Text aktualisieren, aber nutzbar
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [newTodo, updateNewTodo] = useState<Todo| undefined| null>(null);
+  const [newTodo, updateNewTodo] = useState<string | undefined| null>(null);
   const [todoItems, updateTodoItems] = useState<Todo[]>([
     new Todo(TodoType.SINGLE, "ToDo Item 1 Hans", "Description of ToDo Item 1"),
     new Todo(TodoType.SINGLE, "ToDo Item 2", "Description of ToDo Item 2"),
@@ -166,7 +166,7 @@ export const ToDoPage: React.FC = () => {
               </IonButtons>
               <IonTitle>Welcome</IonTitle>
               <IonButtons slot="end">
-                <IonButton strong={true} color="primary" onClick={() => submitTodo}>
+                <IonButton strong={true} color="primary" onClick={() => submitTodo()}>
                   Add Todo
                 </IonButton>
               </IonButtons>
@@ -176,7 +176,7 @@ export const ToDoPage: React.FC = () => {
             <IonItem>
               <IonLabel position="stacked">Enter Todo Title</IonLabel>
               {/** updateNewTodo(e.detail.value)*/}
-              <IonInput type="text" placeholder="Your Todo" onIonChange={(e) => console.log(e.detail.value)} value={newTodo?.todoTitle} />
+              <IonInput type="text" placeholder="Your Todo" onIonChange={(e) =>  updateNewTodo(e.detail.value)} value={newTodo} />
             </IonItem>
           </IonContent>
         </IonModal>
