@@ -14,14 +14,16 @@ export const useTodoStorage = () => {
     }
 
     const setTodoList = async (todolist: TodoInterface[]) => {
-        console.log("received", todolist)
         await setStorage(todolist);
-        return Object.values(storage);
+    }
+
+    const addTodo = async (todo: Todo) => {
+        await setStorage([...storage, todo]);
     }
 
     const clearStorage = async () => {
         await setStorage([]);
     }
 
-    return { getTodoList, setTodoList, clearStorage };
+    return { storage, getTodoList, setTodoList, clearStorage, addTodo };
 };

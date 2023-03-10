@@ -19,9 +19,9 @@ export const LandingPage: React.FC = () => {
   const todoStorage = useTodoStorage();
 
   useEffect(() => {
-    console.log("State changed", state);
-    console.log("Get Todo", todoStorage.getTodoList())
-  }, [state]);
+    /* Listen on storage value changes */
+    console.log("TodoStorage init value", todoStorage.getTodoList())
+  }, [todoStorage.storage]);
 
   return (
     <IonPage>
@@ -32,9 +32,7 @@ export const LandingPage: React.FC = () => {
           </IonButtons>
           <div className="Counter">
             <button type="button" onClick={() => {
-              todoStorage.setTodoList([new Todo(TodoType.GROUP, "Hallo", "Hallo")]).then((todo) => {
-                console.log("Set Todo", todo);
-              });
+              todoStorage.addTodo(new Todo(TodoType.GROUP, "Hallo", "Hallo"));
             }}>
               +1 to global
             </button>

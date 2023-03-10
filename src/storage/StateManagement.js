@@ -6,13 +6,13 @@ export default function useGlobalStorage() {
     const [data, setState] = useState(initialData);
 
     useEffect(() => {
-      function handleStorageChange(data) {
+      /*function handleStorageChange(data) {
         setState(data);
-      }
+      }*/
       Preferences.get({ key }).then(lastData => {
         if (lastData.value) {
-          setState(JSON.parse(lastData.value));
-          console.log("Retrieving from storage");
+          let value = JSON.parse(lastData.value);
+          setState(value);
         }
       });
 
@@ -21,6 +21,7 @@ export default function useGlobalStorage() {
         subscription.unsubscribe();
       };*/
     }, []);
+
     const setData = async (newData) => {
       let newValue;
       if (typeof newData === 'function') {
@@ -30,7 +31,6 @@ export default function useGlobalStorage() {
       }
       setState(newValue);
       await Preferences.set({ key, value: JSON.stringify(newValue) });
-      console.log("Saved Storage");
     }
 
     return [data, setData];
