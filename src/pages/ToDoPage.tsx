@@ -1,9 +1,11 @@
 import {
   IonButton,
   IonButtons,
+  IonCol,
   IonContent,
   IonFab,
   IonFabButton,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonInput,
@@ -15,6 +17,7 @@ import {
   IonModal,
   IonPage,
   IonReorderGroup,
+  IonRow,
   IonText,
   IonTitle,
   IonToolbar,
@@ -33,6 +36,7 @@ import React, { useState } from "react";
 import TodoDetails from "../components/TodoDetails";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 import { TodoInterface } from "../models/TodoInterface";
+import { Unsubscribe } from "firebase/auth";
 
 // Zu Erledigen: [] Ausgliederung Modal zu ToDo-Details (siehe Link Arbeitsrechner)
 
@@ -60,23 +64,29 @@ export const ToDoPage: React.FC = () => {
 
   const handleToDoCardClick = (toDo: Todo) => {
     //setSelectedToDo(toDo);
-    console.log(selectedToDo);
+    //console.log(selectedToDo);
     console.log("Heyho");
-    setModalIsOpen(true)
+    setModalIsOpen(true);
   };
 
-  let toDoRender = toDoList.map((todo, index) => {
-    return (
-      <ToDoComponent
-        key={"ToDo-" + index}
-        todoTitle={todo.todoTitle}
-        todoType={todo.todoType}
-        todoDescription={todo.todoDescription}
-        onTodoCardClick={() => handleToDoCardClick(todo)}
-      />
-    );
-  });
+  function deleteTodo(index: number) {
+    const todoItemsClone = Object.create(todoItems);
 
+    todoItemsClone.splice(index, 1);
+    updateTodoItems(todoItemsClone);
+  }
+
+  function submitTodo() {
+    const listOfTodosClone = Object.create(todoItems);
+    const newTodoItem = { title: newTodo };
+
+    listOfTodosClone.push(newTodoItem);
+    updateTodoItems(listOfTodosClone);
+    updateNewTodo("");
+    setModalIsOpen(false);
+  }
+
+  
   function handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
@@ -89,25 +99,28 @@ export const ToDoPage: React.FC = () => {
   }
 
   // Following lines are "Geklaut von Docu" => Hübschen
-  const modal = useRef<HTMLIonModalElement>(null);
-  const input = useRef<HTMLIonInputElement>(null);
-  const selectedToDo = useRef<Todo | undefined| null>(toDoList[1])
 
+  //Gehört noch zu Try von Docu mit dem Text aktualisieren, aber nutzbar
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [message, setMessage] = useState(
-    "This modal example uses triggers to automatically open a modal when the button is clicked."
-  );
+  const [newTodo, updateNewTodo] = useState<string | undefined | null>("");
+  const [todoItems, updateTodoItems] = useState<Todo[]>([
+    new Todo(TodoType.SINGLE, "ToDo Item 1 Hans", "Description of ToDo Item 1"),
+    new Todo(TodoType.SINGLE, "ToDo Item 2", "Description of ToDo Item 2"),
+    new Todo(TodoType.GROUP, "ToDo Item 3", "Description of ToDo Item 3"),
+  ]);
 
-  function confirm() {
-    modal.current?.dismiss(input.current?.value, "confirm");
-  }
-
-  function onWillDismiss(ev: CustomEvent<OverlayEventDetail>) {
-    if (ev.detail.role === "confirm") {
-      setMessage(`Hello, ${ev.detail.data}!`);
-    }
-    setModalIsOpen(false)
-  }
+  let toDoRender = todoItems.map((todo, index) => {
+    return (
+      <ToDoComponent
+        key={"ToDo-" + index}
+        todoTitle={todo.todoTitle}
+        todoType={todo.todoType}
+        todoDescription={todo.todoDescription}
+        onTodoCardClick={() => handleToDoCardClick(todo)}
+        onDeleteClick={() => deleteTodo(index)}
+      />
+    );
+  });
 
   return (
     <IonPage>
@@ -121,20 +134,16 @@ export const ToDoPage: React.FC = () => {
       </IonHeader>
 
       <IonContent className="ion-padding" fullscreen>
-        <div className="content-container">
+        {/**String Todo Placeholder for Testing */}
           <IonList>
             <IonListHeader>
               <IonHeader>ToDos</IonHeader>
             </IonListHeader>
-
-            {/*Beginn Test Modal */}
-            <p>{message}</p>
-
-            {/* End Test Modal */}
             {/* The reorder gesture is disabled by default, enable it to drag and drop items */}
             <IonReorderGroup disabled={false} onIonItemReorder={handleReorder}>
               {toDoRender}
-            </IonReorderGroup>
+            
+          </IonReorderGroup>
           </IonList>
           <IonFab slot="fixed" vertical="bottom" horizontal="end">
             <IonFabButton
@@ -144,15 +153,15 @@ export const ToDoPage: React.FC = () => {
                   new Todo(
                     TodoType.SINGLE,
                     `ToDo Item ${toDoList.length + 1}`,
-            `Description of Todo Item ${toDoList.length + 1}`,
-                  )
+                    `Description of Todo Item ${toDoList.length + 1}`
+                  ),
                 ]);
               }}
             >
               <IonIcon icon={add}></IonIcon>
             </IonFabButton>
           </IonFab>
-        </div>
+
         {/* OLD Try: mit ToDo Details:
           <IonModal isOpen={showModal}>
             <TodoDetails></TodoDetails>
@@ -160,21 +169,17 @@ export const ToDoPage: React.FC = () => {
           </IonModal>
         */}
         {/* Here is a hard coded version, of PopUp Feature => Unfähig Hooks und verschiedene Komponenten zu nutzen*/}
-        <IonModal
-          ref={modal}
-          onWillDismiss={(ev) => onWillDismiss(ev)}
-          isOpen={modalIsOpen}
-        >
+        <IonModal isOpen={modalIsOpen}>
           <IonHeader>
             <IonToolbar>
               <IonButtons slot="start">
-                <IonButton onClick={() => modal.current?.dismiss()}>
+                <IonButton onClick={() => setModalIsOpen(false)}>
                   Cancel
                 </IonButton>
               </IonButtons>
               <IonTitle>Welcome</IonTitle>
               <IonButtons slot="end">
-                <IonButton strong={true} onClick={() => confirm()}>
+                <IonButton strong={true} onClick={() => submitTodo()}>
                   Confirm
                 </IonButton>
               </IonButtons>
@@ -183,7 +188,7 @@ export const ToDoPage: React.FC = () => {
           <IonContent className="ion-padding">
             <IonItem>
               <IonLabel position="stacked">Enter your name</IonLabel>
-              <IonInput ref={input} type="text" placeholder="Your name" value={input.current?.value}/>
+              <IonInput type="text" placeholder="Your name" />
             </IonItem>
           </IonContent>
         </IonModal>

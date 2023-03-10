@@ -1,9 +1,4 @@
-import { EmailAuthProvider } from '@firebase/auth';
-import { IonButton, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
-import { useParams } from 'react-router';
-import { auth } from '..';
-import ExploreContainer from '../components/ExploreContainer';
-import Menu from '../components/Menu';
+import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
 import { ToDoComponent } from '../components/ToDoComponent';
 import { TodoType } from '../models/TodoType';
 import './Page.css';
@@ -31,7 +26,8 @@ export const LandingPage: React.FC = () => {
           todoTitle={"Hello Title"}
           todoType={TodoType.GROUP}
           todoDescription={"Hallo"}
-          onTodoCardClick={""}
+          onTodoCardClick={() => console.log("Trololol")}
+          onDeleteClick={() => console.log("Trololol")}
         />
       </IonContent>
     </IonPage>
