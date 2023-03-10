@@ -26,7 +26,7 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
 }) => {
   return (
     <IonItem>
-      <IonCard onClick={onTodoCardClick}>
+      <IonCard >
         <div className="card-content">
           <IonCardHeader>
             <IonCardTitle>{todoTitle}</IonCardTitle>
@@ -36,6 +36,7 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
           <IonCardContent>{todoDescription}</IonCardContent>
         </div>
         <IonButton fill="clear" onClick={onDeleteClick}>Delete</IonButton>
+        <IonButton fill="clear" onClick={onTodoCardClick}>Edit</IonButton>
       </IonCard>
       <IonReorder slot="end"></IonReorder>
     </IonItem>
