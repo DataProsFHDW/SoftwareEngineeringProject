@@ -78,12 +78,12 @@ export const ToDoPage: React.FC = () => {
   }
 
   function submitTodo() {
-    const listOfTodosClone = Object.create(todoItems);
-    const newTodoItem = { title: newTodo };
+    const listOfTodosClone = todoItems.slice(0, todoItems.length);
+    const newTodoItem = new Todo(TodoType.SINGLE, newTodo?.todoTitle!, newTodo?.todoDescription!);
 
     listOfTodosClone.push(newTodoItem);
     updateTodoItems(listOfTodosClone);
-    updateNewTodo("");
+    updateNewTodo(null);
     setModalIsOpen(false);
   }
 
@@ -97,12 +97,9 @@ export const ToDoPage: React.FC = () => {
     // by the reorder group
     event.detail.complete();
   }
-
-  // Following lines are "Geklaut von Docu" => Hübschen
-
   //Gehört noch zu Try von Docu mit dem Text aktualisieren, aber nutzbar
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [newTodo, updateNewTodo] = useState<string | undefined | null>("");
+  const [newTodo, updateNewTodo] = useState<Todo| undefined| null>(null);
   const [todoItems, updateTodoItems] = useState<Todo[]>([
     new Todo(TodoType.SINGLE, "ToDo Item 1 Hans", "Description of ToDo Item 1"),
     new Todo(TodoType.SINGLE, "ToDo Item 2", "Description of ToDo Item 2"),
@@ -146,16 +143,7 @@ export const ToDoPage: React.FC = () => {
         </IonList>
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
           <IonFabButton
-            onClick={() => {
-              setToDoList([
-                ...toDoList,
-                new Todo(
-                  TodoType.SINGLE,
-                  `ToDo Item ${toDoList.length + 1}`,
-                  `Description of Todo Item ${toDoList.length + 1}`
-                ),
-              ]);
-            }}
+            onClick={() => setModalIsOpen(true)}
           >
             <IonIcon icon={add}></IonIcon>
           </IonFabButton>
@@ -178,16 +166,17 @@ export const ToDoPage: React.FC = () => {
               </IonButtons>
               <IonTitle>Welcome</IonTitle>
               <IonButtons slot="end">
-                <IonButton strong={true} onClick={() => submitTodo()}>
-                  Confirm
+                <IonButton strong={true} color="primary" onClick={() => submitTodo}>
+                  Add Todo
                 </IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
           <IonContent className="ion-padding">
             <IonItem>
-              <IonLabel position="stacked">Enter your name</IonLabel>
-              <IonInput type="text" placeholder="Your name" />
+              <IonLabel position="stacked">Enter Todo Title</IonLabel>
+              {/** updateNewTodo(e.detail.value)*/}
+              <IonInput type="text" placeholder="Your Todo" onIonChange={(e) => console.log(e.detail.value)} value={newTodo?.todoTitle} />
             </IonItem>
           </IonContent>
         </IonModal>
