@@ -57,7 +57,7 @@ const App: React.FC = () => {
 
   var routerJsx;
 
-  if (user != null) {
+  if (user != null || (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')) {
     console.log("Update");
     routerJsx = (
       <>
