@@ -6,35 +6,37 @@ import {
   IonCardContent,
   IonReorder,
   IonItem,
+  IonButton,
+  IonButtons,
 } from "@ionic/react";
-import { Todo } from "../models/Todo";
 import { TodoInterface } from "../models/TodoInterface";
-import { TodoType } from "../models/TodoType";
-import "./ToDoComponent.css"
+import "./ToDoComponent.css";
 
-
-interface ToDoComponentProps extends TodoInterface{
-  onTodoCardClick: any;
+interface ToDoComponentProps extends TodoInterface {
+  onEditClick: any;
+  onDeleteClick: any;
 }
-
 
 export const ToDoComponent: React.FC<ToDoComponentProps> = ({
   todoType,
   todoTitle,
   todoDescription,
-  onTodoCardClick
+  onEditClick,
+  onDeleteClick,
 }) => {
   return (
     <IonItem>
-      <IonCard onClick={onTodoCardClick}>
+      <IonCard >
         <div className="card-content">
-        <IonCardHeader>
-          <IonCardTitle>{todoTitle}</IonCardTitle>
-          <IonCardSubtitle>{todoType.toString()}</IonCardSubtitle>
-        </IonCardHeader>
+          <IonCardHeader>
+            <IonCardTitle>{todoTitle}</IonCardTitle>
+            <IonCardSubtitle>{todoType.toString()}</IonCardSubtitle>
+          </IonCardHeader>
 
-        <IonCardContent>{todoDescription}</IonCardContent>
+          <IonCardContent>{todoDescription}</IonCardContent>
         </div>
+        <IonButton fill="clear" onClick={onDeleteClick}>Delete</IonButton>
+        <IonButton fill="clear" onClick={onEditClick}>Edit</IonButton>
       </IonCard>
       <IonReorder slot="end"></IonReorder>
     </IonItem>

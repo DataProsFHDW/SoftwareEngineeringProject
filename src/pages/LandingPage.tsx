@@ -53,7 +53,8 @@ export const LandingPage: React.FC = () => {
           todoTitle={"Hello Title"}
           todoType={TodoType.GROUP}
           todoDescription={"Hallo"}
-          onTodoCardClick={""}
+          onEditClick={() => console.log("Trololol")}
+          onDeleteClick={() => console.log("Trololol")}
         />
       </IonContent>
     </IonPage>
