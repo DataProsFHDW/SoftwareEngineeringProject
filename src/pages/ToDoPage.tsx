@@ -67,7 +67,7 @@ export const ToDoPage: React.FC = () => {
     TodoType | undefined | null
   >(null);
 
-  const [selectedTodo, setSelectedTodo] = useState<Todo| null>(null)
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
 
   const [todoItems, updateTodoItems] = useState<Todo[]>([
     new Todo(TodoType.SINGLE, "ToDo Item 1 Hans", "Description of ToDo Item 1"),
@@ -121,10 +121,8 @@ export const ToDoPage: React.FC = () => {
   let toDoRender = todoItems.map((todo, index) => {
     return (
       <ToDoComponent
-        key={"ToDo-" + index}
-        todoTitle={todo.todoTitle}
-        todoType={todo.todoType}
-        todoDescription={todo.todoDescription}
+        /*key={"ToDo-" + index}*/
+        todo={todo}
         onEditClick={() => handleEditClick(index)}
         onDeleteClick={() => deleteTodo(index)}
       />

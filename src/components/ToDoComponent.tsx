@@ -12,28 +12,27 @@ import {
 import { TodoInterface } from "../models/TodoInterface";
 import "./ToDoComponent.css";
 
-interface ToDoComponentProps extends TodoInterface {
+interface ToDoComponentProps {
   onEditClick: any;
   onDeleteClick: any;
+  todo: TodoInterface,
 }
 
 export const ToDoComponent: React.FC<ToDoComponentProps> = ({
-  todoType,
-  todoTitle,
-  todoDescription,
+  todo,
   onEditClick,
   onDeleteClick,
 }) => {
   return (
-    <IonItem>
+    <IonItem key={`todoItem-${todo.id}`}>
       <IonCard >
         <div className="card-content">
           <IonCardHeader>
-            <IonCardTitle>{todoTitle}</IonCardTitle>
-            <IonCardSubtitle>{todoType.toString()}</IonCardSubtitle>
+            <IonCardTitle>{todo.todoTitle}</IonCardTitle>
+            <IonCardSubtitle>{todo.todoType.toString()}</IonCardSubtitle>
           </IonCardHeader>
 
-          <IonCardContent>{todoDescription}</IonCardContent>
+          <IonCardContent>{todo.todoDescription}</IonCardContent>
         </div>
         <IonButton fill="clear" onClick={onDeleteClick}>Delete</IonButton>
         <IonButton fill="clear" onClick={onEditClick}>Edit</IonButton>

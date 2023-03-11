@@ -48,11 +48,9 @@ export const LandingPage: React.FC = () => {
         <br />
 
         <ToDoComponent
-          id={"Trash 23"}
-          key={"ToDo-" + 1}
-          todoTitle={"Hello Title"}
-          todoType={TodoType.GROUP}
-          todoDescription={"Hallo"}
+          /*id={"Trash 23"}
+          key={"ToDo-" + 1}*/
+          todo={new Todo(TodoType.GROUP, "Hallo", "Hallo")}
           onEditClick={() => console.log("Trololol")}
           onDeleteClick={() => console.log("Trololol")}
         />
