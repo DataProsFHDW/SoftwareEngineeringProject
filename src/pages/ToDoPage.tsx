@@ -57,6 +57,7 @@ export const ToDoPage: React.FC = () => {
   let toDoRender = toDoList.map((todo, index) => {
     return (
       <ToDoComponent
+        id={todo.id}
         key={"ToDo-" + index}
         todoTitle={todo.todoTitle}
         todoType={todo.todoType}
@@ -120,12 +121,12 @@ export const ToDoPage: React.FC = () => {
               className="popup-container"
               onClick={() => setSelectedToDo(undefined)}
             >
-              
-                <IonContent>
-                  <IonText>{selectedToDo.todoTitle}</IonText>
-                  <IonText>{selectedToDo.todoDescription}</IonText>
-                </IonContent>
-              
+
+              <IonContent>
+                <IonText>{selectedToDo.todoTitle}</IonText>
+                <IonText>{selectedToDo.todoDescription}</IonText>
+              </IonContent>
+
             </div>
           )}
         </div>

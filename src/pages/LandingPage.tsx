@@ -48,6 +48,7 @@ export const LandingPage: React.FC = () => {
         <br />
 
         <ToDoComponent
+          id={"Trash 23"}
           key={"ToDo-" + 1}
           todoTitle={"Hello Title"}
           todoType={TodoType.GROUP}
