@@ -28,9 +28,6 @@ import {
 import { add } from "ionicons/icons";
 import { useEffect, useRef } from "react";
 import { ToDoComponent } from "../components/ToDoComponent";
-import { fetchTodoList } from "../dataStores/todo/FetchTodos";
-import { postTodoList } from "../dataStores/todo/PostTodos";
-import { useTodoDispatch, useTodoSelector } from "../dataStores/todo/TodoSlice";
 import { Todo } from "../models/Todo";
 import { TodoType } from "../models/TodoType";
 import "./ToDoPage.css";
@@ -39,21 +36,15 @@ import TodoDetails from "../components/TodoDetails";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 import { TodoInterface } from "../models/TodoInterface";
 import { Unsubscribe } from "firebase/auth";
+import { useTodoStorage } from "../storage/StateManagementWrapper";
 
 // Zu Erledigen: [] Ausgliederung Modal zu ToDo-Details (siehe Link Arbeitsrechner)
 
 export const ToDoPage: React.FC = () => {
-  const todoReducer = useTodoSelector((state) => state.todoReducer);
-  var dispatch = useTodoDispatch();
-
+  const todoStorage = useTodoStorage();
   useEffect(() => {
-    dispatch(
-      fetchTodoList({
-        accessToken: "demo",
-        idToken: "for_you_to_see_<3",
-      })
-    );
-  }, []); // [] => do on initial render of todoPageComponent
+    console.log("TodoList Changed", todoStorage.getTodoList())
+  }, [todoStorage]); // [] => do on initial render of todoPageComponent
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -67,18 +58,19 @@ export const ToDoPage: React.FC = () => {
     TodoType | undefined | null
   >(null);
 
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
+  const [selectedTodo, setSelectedTodo] = useState<TodoInterface | null>(null)
 
-  const [todoItems, updateTodoItems] = useState<Todo[]>([
+
+  /*const [todoItems, updateTodoItems] = useState<Todo[]>([
     new Todo(TodoType.SINGLE, "ToDo Item 1 Hans", "Description of ToDo Item 1"),
     new Todo(TodoType.SINGLE, "ToDo Item 2", "Description of ToDo Item 2"),
     new Todo(TodoType.GROUP, "ToDo Item 3", "Description of ToDo Item 3"),
-  ]);
+  ]);*/
   //Old Try manuelles PopUp: const [selectedToDo, setSelectedToDo] = useState<Todo | undefined>(undefined);
   //Zu Old Try TodoDetails: const [showModal, setShowModal] = useState(false);
 
   const handleEditClick = (index: number) => {
-    const todoItemClone = todoItems[index];
+    const todoItemClone = todoStorage.getTodoList()[index];
     setSelectedTodo(todoItemClone)
     updateNewTodoType(selectedTodo?.todoType)
     updateNewTodoTitle(selectedTodo?.todoTitle)
@@ -88,18 +80,16 @@ export const ToDoPage: React.FC = () => {
 
   function deleteTodo(index: number) {
     console.log("Delete pressed");
-    const todoItemsClone = todoItems.slice(0, todoItems.length);
-
-    todoItemsClone.splice(index, 1);
-    updateTodoItems(todoItemsClone);
+    let todo = todoStorage.getTodoList()[index];
+    todoStorage.removeTodo(todo);
   }
 
   function submitTodo() {
-    const listOfTodosClone = todoItems.slice(0, todoItems.length);
-    const newTodoItem = new Todo(newTodoType!, newTodoTitle!, newTodoDesc!);
-
-    listOfTodosClone.push(newTodoItem);
-    updateTodoItems(listOfTodosClone);
+    todoStorage.addTodo(
+      new Todo(
+        newTodoType ?? TodoType.SINGLE,
+        newTodoTitle ?? "Title",
+        newTodoDesc ?? "Description"));
     updateNewTodoTitle(null);
     updateNewTodoType(null);
     updateNewTodoDesc(null)
@@ -107,18 +97,11 @@ export const ToDoPage: React.FC = () => {
   }
 
   function handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
-    // The `from` and `to` properties contain the index of the item
-    // when the drag started and ended, respectively
     console.log("Dragged from index", event.detail.from, "to", event.detail.to);
-
-    // Finish the reorder and position the item in the DOM based on
-    // where the gesture ended. This method can also be called directly
-    // by the reorder group
     event.detail.complete();
   }
-  //Gehört noch zu Try von Docu mit dem Text aktualisieren, aber nutzbar
 
-  let toDoRender = todoItems.map((todo, index) => {
+  let toDoRender = todoStorage.getTodoList().map((todo, index) => {
     return (
       <ToDoComponent
         /*key={"ToDo-" + index}*/

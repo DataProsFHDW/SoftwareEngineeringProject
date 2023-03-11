@@ -3,8 +3,6 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
-import { combinedStoreTodo } from './dataStores/Stores';
 
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from './utils/firebase/firebase-config';
@@ -23,10 +21,7 @@ const container = document.getElementById('root');
 const root = createRoot(container!);
 root.render(
   <React.StrictMode>
-
-    <Provider store={combinedStoreTodo}>
-      <App />
-    </Provider>
+    <App />
   </React.StrictMode>
 );
 

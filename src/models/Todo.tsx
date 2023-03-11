@@ -12,7 +12,7 @@ export class Todo implements TodoInterface {
     //inputOnClick:any; 
 
     constructor(todoType: TodoType, todoTitle: string, todoDescription: string) {
-        this.id = uuidv4();
+        this.id = uuidv4(); // TODO change id to Firebase doc id
         this.todoType = todoType;
         this.todoTitle = todoTitle;
         this.todoDescription = todoDescription;
