@@ -9,21 +9,19 @@ export const useTodoStorage = () => {
     const useStorage = useGlobalStorage();
     const [storage, setStorage] = useStorage("todoStorage");
 
-    const getTodoList = (): TodoInterface[] => {
-        return storage;
+    const getTodoList = (): TodoInterface[] => storage;
+
+    const setTodoList = async (todolist: TodoInterface[]) => await setStorage(todolist);
+
+    const addTodo = async (todo: Todo) => await setStorage([...storage, todo]);
+
+    const removeTodo = async (todo: Todo) => {
+        let todoList: TodoInterface[] = storage;
+        todoList = todoList.filter((item: TodoInterface) => item.id !== todo.id);
+        setTodoList(todoList);
     }
 
-    const setTodoList = async (todolist: TodoInterface[]) => {
-        await setStorage(todolist);
-    }
-
-    const addTodo = async (todo: Todo) => {
-        await setStorage([...storage, todo]);
-    }
-
-    const clearStorage = async () => {
-        await setStorage([]);
-    }
+    const clearStorage = async () => await setStorage([]);
 
     return { storage, getTodoList, setTodoList, clearStorage, addTodo };
 };

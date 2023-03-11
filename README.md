@@ -16,7 +16,7 @@ REACT-App:
 
 ### Init
 ```bash
-npm install -g @ionic/cli @capacitor/cli
+npm install -g @ionic/cli @capacitor/cli firebase-cli firebase-tools
 ```
 
 ### Start & Debug Application
