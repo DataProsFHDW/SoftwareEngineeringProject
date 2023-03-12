@@ -11,11 +11,11 @@ export class Todo implements TodoInterface {
     //creator: string = "";
     //inputOnClick:any; 
 
-    constructor(todoType: TodoType, todoTitle: string, todoDescription: string) {
-        this.id = uuidv4(); // TODO change id to Firebase doc id
-        this.todoType = todoType;
-        this.todoTitle = todoTitle;
-        this.todoDescription = todoDescription;
+    constructor(todoType: TodoType | null | undefined, todoTitle: string | null | undefined, todoDescription: string | undefined | null, id: string = uuidv4()) { // TODO change id to Firebase doc id
+        this.id = id;
+        this.todoType = todoType ?? TodoType.SINGLE;
+        this.todoTitle = todoTitle ?? "Title";
+        this.todoDescription = todoDescription ?? "";
     }
 
 }

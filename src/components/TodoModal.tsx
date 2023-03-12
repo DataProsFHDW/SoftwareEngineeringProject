@@ -12,31 +12,51 @@ import {
   IonModal,
   IonSelect,
 } from "@ionic/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Todo } from "../models/Todo";
 import { TodoInterface } from "../models/TodoInterface";
 import { TodoType } from "../models/TodoType";
+import { useTodoStorage } from "../storage/StateManagementWrapper";
 
-const TodoModal: React.FC<Todo| null> = ({
-  todo: Todo| null,
+interface ToDoComponentProps {
+  isOpen: boolean,
 }
 
-) => {
+export const TodoModal: React.FC<ToDoComponentProps> = ({
+  isOpen
+}) => {
+  const todoStorage = useTodoStorage();
+
+  const [title, setTitle] = useState<string | undefined | null>(todoStorage.getSelectedTodo()?.todoTitle);
+  const [description, setDescription] = useState<string | undefined | null>(todoStorage.getSelectedTodo()?.todoDescription);
+  const [todoType, setTodoType] = useState<TodoType | undefined | null>(todoStorage.getSelectedTodo()?.todoType)
+
   return (
-    <IonModal isOpen={todo?true:false}>
+    <IonModal isOpen={isOpen ? true : false}>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton onClick={() => setModalIsOpen(false)}>Cancel</IonButton>
+            <IonButton onClick={() => {
+              console.log("Todo Object", todoStorage.getSelectedTodo())
+              todoStorage.setSelectedTodo(null);
+            }}>Cancel</IonButton>
           </IonButtons>
           <IonTitle>Welcome</IonTitle>
           <IonButtons slot="end">
             <IonButton
               strong={true}
               color="primary"
-              onClick={() => submitTodo()}
+              onClick={() => {
+                /* Submit */
+                /*todoStorage.updateTodo(new Todo(
+                  todoType,
+                  title,
+                  description,
+                  todo?.id,
+                ));*/
+              }}
             >
-              Add Todo
+              Submit
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -48,22 +68,21 @@ const TodoModal: React.FC<Todo| null> = ({
           <IonInput
             type="text"
             placeholder="e.g. Shopping"
-            onIonChange={(e) => updateNewTodoTitle(e.detail.value)}
-            value={newTodoTitle}
+            onIonChange={(e) => setTitle(e.detail.value)}
+            value={title}
           />
           <IonLabel position="stacked">Enter Todo Description</IonLabel>
           {/** updateNewTodo(e.detail.value)*/}
           <IonInput
             type="text"
             placeholder="e.g. at the mall..."
-            onIonChange={(e) => updateNewTodoDesc(e.detail.value)}
-            value={newTodoDesc}
+            onIonChange={(e) => setDescription(e.detail.value)}
+            value={description}
           />
           <IonSelect
             placeholder="Select TodoType"
             interface="popover"
-            onIonChange={(e) => updateNewTodoType(e.detail.value)}
-          >
+            onIonChange={(e) => setTodoType(e.detail.value)}          >
             <IonSelectOption value={TodoType.SINGLE}>Simple</IonSelectOption>
             <IonSelectOption value={TodoType.TIMEBOUND}>
               Timebound
@@ -75,4 +94,3 @@ const TodoModal: React.FC<Todo| null> = ({
     </IonModal>
   );
 };
-export default TodoModal;

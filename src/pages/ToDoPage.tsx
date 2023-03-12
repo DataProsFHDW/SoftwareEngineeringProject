@@ -32,11 +32,11 @@ import { Todo } from "../models/Todo";
 import { TodoType } from "../models/TodoType";
 import "./ToDoPage.css";
 import React, { useState } from "react";
-import TodoModal from "../components/TodoModal";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 import { TodoInterface } from "../models/TodoInterface";
 import { Unsubscribe } from "firebase/auth";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
+import { TodoModal } from "../components/TodoModal";
 
 // Zu Erledigen: [] Ausgliederung Modal zu ToDo-Details (siehe Link Arbeitsrechner)
 
@@ -44,6 +44,9 @@ export const ToDoPage: React.FC = () => {
   const todoStorage = useTodoStorage();
   useEffect(() => {
     console.log("TodoList Changed", todoStorage.getTodoList())
+    if (todoStorage.getSelectedTodo() !== null) {
+      setModalIsOpen(false)
+    }
   }, [todoStorage]); // [] => do on initial render of todoPageComponent
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
@@ -58,7 +61,7 @@ export const ToDoPage: React.FC = () => {
     TodoType | undefined | null
   >(null);
 
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
+  const [selectedTodo, setSelectedTodo] = useState<TodoInterface | null>(null)
 
 
   /*const [todoItems, updateTodoItems] = useState<Todo[]>([
@@ -71,11 +74,17 @@ export const ToDoPage: React.FC = () => {
 
   const handleEditClick = (index: number) => {
     const todoItemClone = todoStorage.getTodoList()[index];
-    setSelectedTodo(todoItemClone)
+    // setSelectedTodo(todoItemClone)
+    todoStorage.setSelectedTodo(todoItemClone);
+    if (todoItemClone == null) {
+      todoStorage.setSelectedTodo(new Todo(null, null, null))
+    }
+    setModalIsOpen(true)
+    /*setSelectedTodo(todoItemClone)
     updateNewTodoType(selectedTodo?.todoType)
     updateNewTodoTitle(selectedTodo?.todoTitle)
     updateNewTodoDesc(selectedTodo?.todoDescription);
-    setModalIsOpen(true)
+    setModalIsOpen(true)*/
   };
 
   function deleteTodo(index: number) {
@@ -87,9 +96,9 @@ export const ToDoPage: React.FC = () => {
   function submitTodo() {
     todoStorage.addTodo(
       new Todo(
-        newTodoType ?? TodoType.SINGLE,
-        newTodoTitle ?? "Title",
-        newTodoDesc ?? "Description"));
+        newTodoType,
+        newTodoTitle,
+        newTodoDesc));
     updateNewTodoTitle(null);
     updateNewTodoType(null);
     updateNewTodoDesc(null)
@@ -148,8 +157,8 @@ export const ToDoPage: React.FC = () => {
         */}
         {/* Here is a hard coded version, of PopUp Feature => Unfähig Hooks und verschiedene Komponenten zu nutzen*/}
         <TodoModal
-          todo={selectedTodo}
-          ></TodoModal>
+          isOpen={modalIsOpen}
+        ></TodoModal>
       </IonContent>
     </IonPage>
   );
