@@ -32,7 +32,7 @@ import { Todo } from "../models/Todo";
 import { TodoType } from "../models/TodoType";
 import "./ToDoPage.css";
 import React, { useState } from "react";
-import TodoDetails from "../components/TodoDetails";
+import TodoModal from "../components/TodoModal";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 import { TodoInterface } from "../models/TodoInterface";
 import { Unsubscribe } from "firebase/auth";
@@ -58,7 +58,7 @@ export const ToDoPage: React.FC = () => {
     TodoType | undefined | null
   >(null);
 
-  const [selectedTodo, setSelectedTodo] = useState<TodoInterface | null>(null)
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
 
 
   /*const [todoItems, updateTodoItems] = useState<Todo[]>([
@@ -147,56 +147,9 @@ export const ToDoPage: React.FC = () => {
           </IonModal>
         */}
         {/* Here is a hard coded version, of PopUp Feature => Unfähig Hooks und verschiedene Komponenten zu nutzen*/}
-        <IonModal isOpen={modalIsOpen}>
-          <IonHeader>
-            <IonToolbar>
-              <IonButtons slot="start">
-                <IonButton onClick={() => setModalIsOpen(false)}>
-                  Cancel
-                </IonButton>
-              </IonButtons>
-              <IonTitle>Welcome</IonTitle>
-              <IonButtons slot="end">
-                <IonButton
-                  strong={true}
-                  color="primary"
-                  onClick={() => submitTodo()}
-                >
-                  Add Todo
-                </IonButton>
-              </IonButtons>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent className="ion-padding">
-            <IonItem>
-              <IonLabel position="stacked">Enter Todo Title</IonLabel>
-              {/** updateNewTodo(e.detail.value)*/}
-              <IonInput
-                type="text"
-                placeholder="e.g. Shopping"
-                onIonChange={(e) => updateNewTodoTitle(e.detail.value)}
-                value={newTodoTitle}
-              />
-              <IonLabel position="stacked">Enter Todo Description</IonLabel>
-              {/** updateNewTodo(e.detail.value)*/}
-              <IonInput
-                type="text"
-                placeholder="e.g. at the mall..."
-                onIonChange={(e) => updateNewTodoDesc(e.detail.value)}
-                value={newTodoDesc}
-              />
-              <IonSelect placeholder="Select TodoType" interface="popover" onIonChange={(e) => updateNewTodoType(e.detail.value)}>
-                <IonSelectOption value={TodoType.SINGLE}>
-                  Simple
-                </IonSelectOption>
-                <IonSelectOption value={TodoType.TIMEBOUND}>
-                  Timebound
-                </IonSelectOption>
-                <IonSelectOption value={TodoType.GROUP}>Group</IonSelectOption>
-              </IonSelect>
-            </IonItem>
-          </IonContent>
-        </IonModal>
+        <TodoModal
+          todo={selectedTodo}
+          ></TodoModal>
       </IonContent>
     </IonPage>
   );
