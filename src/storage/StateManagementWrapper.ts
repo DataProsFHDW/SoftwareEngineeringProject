@@ -7,23 +7,34 @@ import { TodoInterface } from "../models/TodoInterface";
 // https://medium.com/ringcentral-developers/use-react-hooks-with-storage-as-global-state-management-f2945492aade
 export const useTodoStorage = () => {
     const useStorage = useGlobalStorage();
-    const [storage, setStorage] = useStorage("todoStorage", []);
+    const [storage, setStorage] = useStorage("todoStorage", { todoList: [], selectedTodo: null });
 
     const getTodoList = (): TodoInterface[] => {
-        if (storage as TodoInterface) {
-            return storage as TodoInterface[]
+        if (storage.todoList as TodoInterface) {
+            return storage.todoList as TodoInterface[]
         }
         return [];
     }
 
-    const setTodoList = async (todolist: TodoInterface[]) => await setStorage(todolist);
+    const getSelectedTodo = (): TodoInterface | null => {
+        if (storage.selectedTodo as TodoInterface) {
+            return storage.selectedTodo as TodoInterface
+        }
+        return null;
+    }
 
-    const addTodo = async (todo: TodoInterface) => await setStorage([...storage, todo]);
+    const setTodoList = async (todolist: TodoInterface[]) => await setStorage({ selectedTodo: storage.selectedTodo, todoList: todolist });
+
+    const setSelectedTodo = async (todo: TodoInterface | null) => await setStorage({ selectedTodo: todo, todoList: storage.todoList });
+
+    const addTodo = async (todo: TodoInterface) => {
+        await setStorage({ selectedTodo: storage.selectedTodo, todoList: [...storage.todoList, todo] });
+    }
 
     const removeTodo = async (todo: TodoInterface) => removeTodoById(todo.id);
 
     const removeTodoById = async (id: string) => {
-        let todoList: TodoInterface[] = storage;
+        let todoList: TodoInterface[] = storage.todoList;
         todoList = todoList.filter((item: TodoInterface) => item.id !== id);
         setTodoList(todoList);
     }
@@ -42,5 +53,5 @@ export const useTodoStorage = () => {
 
     const clearStorage = async () => await setStorage([]);
 
-    return { storage, getTodoList, setTodoList, clearStorage, addTodo, removeTodo, removeTodoById, updateTodo };
+    return { storage, getSelectedTodo, getTodoList, setSelectedTodo, setTodoList, clearStorage, addTodo, removeTodo, removeTodoById, updateTodo };
 };

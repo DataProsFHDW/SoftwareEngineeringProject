@@ -32,11 +32,11 @@ import { Todo } from "../models/Todo";
 import { TodoType } from "../models/TodoType";
 import "./ToDoPage.css";
 import React, { useState } from "react";
-import TodoDetails from "../components/TodoDetails";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 import { TodoInterface } from "../models/TodoInterface";
 import { Unsubscribe } from "firebase/auth";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
+import { TodoModal } from "../components/TodoModal";
 
 // Zu Erledigen: [] Ausgliederung Modal zu ToDo-Details (siehe Link Arbeitsrechner)
 
@@ -44,6 +44,9 @@ export const ToDoPage: React.FC = () => {
   const todoStorage = useTodoStorage();
   useEffect(() => {
     console.log("TodoList Changed", todoStorage.getTodoList())
+    if (todoStorage.getSelectedTodo() !== null) {
+      setModalIsOpen(false)
+    }
   }, [todoStorage]); // [] => do on initial render of todoPageComponent
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
@@ -71,11 +74,17 @@ export const ToDoPage: React.FC = () => {
 
   const handleEditClick = (index: number) => {
     const todoItemClone = todoStorage.getTodoList()[index];
-    setSelectedTodo(todoItemClone)
+    // setSelectedTodo(todoItemClone)
+    todoStorage.setSelectedTodo(todoItemClone);
+    if (todoItemClone == null) {
+      todoStorage.setSelectedTodo(new Todo(null, null, null))
+    }
+    setModalIsOpen(true)
+    /*setSelectedTodo(todoItemClone)
     updateNewTodoType(selectedTodo?.todoType)
     updateNewTodoTitle(selectedTodo?.todoTitle)
     updateNewTodoDesc(selectedTodo?.todoDescription);
-    setModalIsOpen(true)
+    setModalIsOpen(true)*/
   };
 
   function deleteTodo(index: number) {
@@ -147,56 +156,9 @@ export const ToDoPage: React.FC = () => {
           </IonModal>
         */}
         {/* Here is a hard coded version, of PopUp Feature => Unfähig Hooks und verschiedene Komponenten zu nutzen*/}
-        <IonModal isOpen={modalIsOpen}>
-          <IonHeader>
-            <IonToolbar>
-              <IonButtons slot="start">
-                <IonButton onClick={() => setModalIsOpen(false)}>
-                  Cancel
-                </IonButton>
-              </IonButtons>
-              <IonTitle>Welcome</IonTitle>
-              <IonButtons slot="end">
-                <IonButton
-                  strong={true}
-                  color="primary"
-                  onClick={() => submitTodo()}
-                >
-                  Add Todo
-                </IonButton>
-              </IonButtons>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent className="ion-padding">
-            <IonItem>
-              <IonLabel position="stacked">Enter Todo Title</IonLabel>
-              {/** updateNewTodo(e.detail.value)*/}
-              <IonInput
-                type="text"
-                placeholder="e.g. Shopping"
-                onIonChange={(e) => updateNewTodoTitle(e.detail.value)}
-                value={newTodoTitle}
-              />
-              <IonLabel position="stacked">Enter Todo Description</IonLabel>
-              {/** updateNewTodo(e.detail.value)*/}
-              <IonInput
-                type="text"
-                placeholder="e.g. at the mall..."
-                onIonChange={(e) => updateNewTodoDesc(e.detail.value)}
-                value={newTodoDesc}
-              />
-              <IonSelect placeholder="Select TodoType" interface="popover" onIonChange={(e) => updateNewTodoType(e.detail.value)}>
-                <IonSelectOption value={TodoType.SINGLE}>
-                  Simple
-                </IonSelectOption>
-                <IonSelectOption value={TodoType.TIMEBOUND}>
-                  Timebound
-                </IonSelectOption>
-                <IonSelectOption value={TodoType.GROUP}>Group</IonSelectOption>
-              </IonSelect>
-            </IonItem>
-          </IonContent>
-        </IonModal>
+        <TodoModal
+          isOpen={modalIsOpen}
+        ></TodoModal>
       </IonContent>
     </IonPage>
   );
