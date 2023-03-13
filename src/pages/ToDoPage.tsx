@@ -89,7 +89,7 @@ export const ToDoPage: React.FC = () => {
       new Todo(
         newTodoType ?? TodoType.SINGLE,
         newTodoTitle ?? "Title",
-        newTodoDesc ?? "Description"));
+        newTodoDesc ?? ""));
     updateNewTodoTitle(null);
     updateNewTodoType(null);
     updateNewTodoDesc(null)
