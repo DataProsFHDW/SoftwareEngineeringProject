@@ -49,6 +49,8 @@ const addUser = async (user: User) => {
     if (!navigator.onLine) {
       handleOfflineError('addUser');
     }
+
+    // TODO https://firebase.google.com/docs/firestore/quickstart#web-version-9
     let userDoc = await addDoc(collection(firestore, "USER_COLLECTION"), user);
     // TODO Ich würde die USER_COLLECTION als statischen String ausspeichern, so passieren keine Typos auch bei anderen Abfragen.  
 
