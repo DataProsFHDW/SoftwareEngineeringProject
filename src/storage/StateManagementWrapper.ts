@@ -14,18 +14,26 @@ export const useTodoStorage = () => {
             return storage as TodoInterface[]
         }
         return [];
+
+        // TODO get from firebase
     }
 
     const setTodoList = async (todolist: TodoInterface[]) => await setStorage(todolist);
 
-    const addTodo = async (todo: TodoInterface) => await setStorage([...storage, todo]);
+    const addTodo = async (todo: TodoInterface) {
+        await setStorage([...storage, todo]);
+        // TODO add in firebase
+    }
 
     const removeTodo = async (todo: TodoInterface) => removeTodoById(todo.id);
+
 
     const removeTodoById = async (id: string) => {
         let todoList: TodoInterface[] = storage;
         todoList = todoList.filter((item: TodoInterface) => item.id !== id);
         setTodoList(todoList);
+
+        // TODO remove in firebase
     }
 
     const updateTodo = async (todo: TodoInterface) => {
@@ -38,6 +46,8 @@ export const useTodoStorage = () => {
         }
         );
         setTodoList(todoList);
+
+        // TODO update in firebase
     }
 
     const clearStorage = async () => await setStorage([]);
