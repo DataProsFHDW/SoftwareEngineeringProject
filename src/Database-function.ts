@@ -1,19 +1,17 @@
-import {firebaseConfig} from "./firebase-config" ;
-import { Todo } from "models/";
-import * as firebase from "firebase/app";
-import 'firebase/database';
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from './utils/firebase/firebase-config';
 
+import { EmailAuthProvider, getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
-// Initialize Firebase app
-firebase.initializeApp({
-firebaseConfig
-});
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
 
-// Enable offline persistence
-firebase.database().setPersistence(firebase.database().Persistence.LOCAL);
+export const firestore = getFirestore(app);
+export const auth = getAuth();
 
-// Get a reference to the database
-const dbRef = firebase.database().ref();
+// TODO Scheiß auf persistence, wir machen es einfach in unserem localstorage ;)
 
 const handleOfflineError = (error: any) => {
   console.error('Unable to complete operation while offline:', error);
@@ -51,10 +49,15 @@ const addUser = async (user: User) => {
     if (!navigator.onLine) {
       handleOfflineError('addUser');
     }
-    const usersRef = dbRef.child('USER_COLLECTION');
+    let userDoc = await addDoc(collection(firestore, "USER_COLLECTION"), user);
+    // TODO Ich würde die USER_COLLECTION als statischen String ausspeichern, so passieren keine Typos auch bei anderen Abfragen.  
+
+    /* const usersRef = dbRef.child('USER_COLLECTION');
     const userRef = usersRef.push();
-    await userRef.set(user);
-    return userRef.key;
+    await userRef.set(user); */
+
+    // TODO id ist die documentID => Unique in jeder collection
+    return userDoc.id;
   } catch (error) {
     console.error('Error adding user:', error);
     throw error;
