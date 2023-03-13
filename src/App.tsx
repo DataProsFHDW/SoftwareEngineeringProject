@@ -29,15 +29,7 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import { LandingPage } from "./pages/LandingPage";
 import { ToDoPage } from "./pages/ToDoPage";
-import { Provider } from "react-redux";
-import { combinedStoreTodo } from "./dataStores/Stores";
-import { useTodoDispatch, useTodoSelector } from "./dataStores/todo/TodoSlice";
 import { useEffect } from "react";
-import { fetchTodoList } from "./dataStores/todo/FetchTodos";
-import { postTodoList } from "./dataStores/todo/PostTodos";
-import { Todo } from "./models/Todo";
-import { TodoType } from "./models/TodoType";
-import { componentOnReady } from "@ionic/core";
 import { LoginPage } from "./pages/Login";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from ".";
@@ -57,7 +49,7 @@ const App: React.FC = () => {
 
   var routerJsx;
 
-  if (user != null) {
+  if (user != null || (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')) {
     console.log("Update");
     routerJsx = (
       <>
