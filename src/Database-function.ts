@@ -52,6 +52,9 @@ const addUser = async (user: User) => {
 
     // TODO https://firebase.google.com/docs/firestore/quickstart#web-version-9
     let userDoc = await addDoc(collection(firestore, "USER_COLLECTION"), user);
+    /*addDoc(collection(firestore, "USER_COLLECTION"), user).then((docRef) => {
+      console.log("Document written with ID: ", docRef.id);
+    })*/
     // TODO Ich würde die USER_COLLECTION als statischen String ausspeichern, so passieren keine Typos auch bei anderen Abfragen.  
 
     /* const usersRef = dbRef.child('USER_COLLECTION');
