@@ -1,21 +1,16 @@
-import { TodoType } from "./TodoType";
-import { TodoInterface } from "./TodoInterface";
 import { uuidv4 } from "@firebase/util";
+import { User } from "./User";
 
-
-export class Todo implements TodoInterface {
+export class Group {
     id: string;
-    todoType: TodoType;
-    todoTitle: string;
-    todoDescription: string;
-    //creator: string = "";
-    //inputOnClick:any; 
+    GROUP_NAME: string;
+    GROUP_TODO_LIST: any[] | null;
+    USER_COLLECTION: Record<string, User> | null;
 
-    constructor(todoType: TodoType, todoTitle: string, todoDescription: string) {
-        this.id = uuidv4(); // TODO change id to Firebase doc id
-        this.todoType = todoType;
-        this.todoTitle = todoTitle;
-        this.todoDescription = todoDescription;
-    }
-
+  constructor(groupName: string) {
+    this.id = uuidv4();
+    this.GROUP_NAME = groupName;
+    this.GROUP_TODO_LIST = null;
+    this.USER_COLLECTION = null;
+  }
 }

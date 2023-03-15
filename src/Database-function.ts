@@ -1,5 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from './utils/firebase/firebase-config';
+import { Todo } from "./models/Todo";
+import { Group } from "./models/Group";
+import { User } from "./models/User";
 
 import { EmailAuthProvider, getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore, collection, addDoc, doc, deleteDoc, getDoc, setDoc } from "firebase/firestore";
@@ -20,33 +23,7 @@ const handleOfflineError = (error: any) => {
   throw new Error('Unable to complete operation while offline.');
 };
 
-
-interface User {
-  username: string;
-  name: string;
-  surname: string;
-  user_to_do_list: Array<string>;
-  group_list: Array<string>;
-}
-
-interface Todo {
-  Name: string;
-  Tag: string;
-  todos: Array<string>;
-  Prio: number;
-  description: string;
-  completed: boolean;
-  creator: string;
-  Date: number;
-  type: string;
-}
-
-interface Group {
-  name: string;
-  group_todo_list: string[];
-}
-
-    // https://firebase.google.com/docs/firestore/quickstart#web-version-9
+// https://firebase.google.com/docs/firestore/quickstart#web-version-9
 
 const addUser = async (user: User) => {
   try {
