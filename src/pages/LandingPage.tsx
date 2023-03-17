@@ -1,5 +1,5 @@
 import { EmailAuthProvider } from '@firebase/auth';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { auth } from '..';
 import ExploreContainer from '../components/ExploreContainer';
@@ -12,7 +12,7 @@ import { useTodoStorage } from '../storage/StateManagementWrapper';
 import './Page.css';
 
 // Import MUI components
-import { AppBar, Toolbar, IconButton, Typography, Button, Container } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, Button, Container, List, Drawer, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 export const LandingPage: React.FC = () => {
