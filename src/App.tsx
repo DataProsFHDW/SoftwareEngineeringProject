@@ -38,7 +38,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import FirestoreCollections from "./models/FirestoreCollections";
 import { doc, getDoc } from "firebase/firestore/lite";
-import { UsernamePage } from "./pages/UsernamePage";
+import { fetchUsername, UsernamePage } from "./pages/UsernamePage";
 
 
 setupIonicReact();
@@ -52,11 +52,9 @@ const App: React.FC = () => {
     console.log("Auth State Changed", /* user */);
 
     const fetchUserProfile = async () => {
-      if (auth.currentUser != null) { /* Logged in */
-        const refDocUser = doc(firestore, FirestoreCollections.USERS, auth.currentUser?.uid!);
-        var docUser = await getDoc(refDocUser);
-        setUsername(docUser.data()!.username); 
-        if (!docUser.exists() || docUser.data()!.username == null) { console.log("Username Not set") }
+      if (auth.currentUser != null) { 
+        /* Logged in */
+        setUsername(await fetchUsername()); 
       }
     } 
     fetchUserProfile();

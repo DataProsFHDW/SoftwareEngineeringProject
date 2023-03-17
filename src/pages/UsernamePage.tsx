@@ -1,11 +1,20 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonMenuButton, IonPage, IonText, IonTitle, IonToolbar, useIonToast } from '@ionic/react';
-import { doc, setDoc } from 'firebase/firestore/lite';
+import { doc, getDoc, setDoc } from 'firebase/firestore/lite';
 import { useEffect, useState } from 'react';
 import { auth, firestore } from '..';
 import FirestoreCollections from '../models/FirestoreCollections';
 import FirestoreCollectionFields from '../models/FirestoreCollectionFields';
 import './Page.css';
 import { useHistory } from 'react-router';
+
+export async function fetchUsername(): Promise<string | null | undefined> {
+    const refDocUser = doc(firestore, FirestoreCollections.USERS, auth.currentUser?.uid!);
+    var docUser = await getDoc(refDocUser);
+    if (!docUser.exists() || docUser.data()!.username == null) {
+         console.log("Username Not set")
+    }
+    return docUser.data()!.username;
+}
 
 export const UsernamePage: React.FC = () => {
     const [usernameInput, setUsernameInput] = useState<string | null | undefined>("second")
@@ -40,13 +49,13 @@ export const UsernamePage: React.FC = () => {
 
                 <IonButton fill="solid" onClick={async () => {
                     console.log("Username", usernameInput);
-                    if(usernameInput == null || usernameInput == undefined || usernameInput!.length < 3 ||usernameInput!.length > 20) {
+                    if (usernameInput == null || usernameInput == undefined || usernameInput!.length < 3 || usernameInput!.length > 20) {
                         present({
                             message: 'Username must be between 3 and 20 characters long',
                             duration: 1500,
                             position: "bottom"
-                          });
-                          return; 
+                        });
+                        return;
                     }
 
                     const refDocUser = doc(firestore, FirestoreCollections.USERS, auth.currentUser?.uid!);
@@ -58,16 +67,16 @@ export const UsernamePage: React.FC = () => {
                             message: 'Username saved successfully',
                             duration: 1500,
                             position: "bottom"
-                          });
-                          history.goBack();
-                        
+                        });
+                        history.goBack();
+
                     }).catch((error) => {
                         present({
                             message: 'Please try again soon',
                             color: "danger",
                             duration: 1500,
                             position: "bottom"
-                          });
+                        });
                     });
                 }}>
                     Save Username
