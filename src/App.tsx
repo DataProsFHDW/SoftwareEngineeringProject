@@ -56,9 +56,7 @@ const App: React.FC = () => {
         const refDocUser = doc(firestore, FirestoreCollections.USERS, auth.currentUser?.uid!);
         var docUser = await getDoc(refDocUser);
         setUsername(docUser.data()!.username); 
-        if (!docUser.exists() || docUser.data()!.username == null) {
-          console.log("Username Not set")
-        }
+        if (!docUser.exists() || docUser.data()!.username == null) { console.log("Username Not set") }
       }
     }
     fetchUserProfile();
@@ -96,6 +94,7 @@ const App: React.FC = () => {
           </IonRouterOutlet>
         </>)
     } else {
+      /* Logged in perfectly */
       routerJsx = (
         <>
           <Menu />
