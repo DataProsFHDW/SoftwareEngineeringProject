@@ -58,7 +58,7 @@ const App: React.FC = () => {
         setUsername(docUser.data()!.username); 
         if (!docUser.exists() || docUser.data()!.username == null) { console.log("Username Not set") }
       }
-    }
+    } 
     fetchUserProfile();
   }, [user]);
 
