@@ -1,5 +1,5 @@
 import { EmailAuthProvider } from '@firebase/auth';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { auth } from '..';
 import ExploreContainer from '../components/ExploreContainer';
@@ -10,14 +10,14 @@ import { TodoType } from '../models/TodoType';
 import useGlobalStorage from '../storage/StateManagement';
 import { useTodoStorage } from '../storage/StateManagementWrapper';
 import './Page.css';
+import { useState } from 'react';
+import { SwipeableDrawer } from '@mui/material';
 
 // Import MUI components
-import { AppBar, Toolbar, IconButton, Typography, Button, Container, List, Drawer, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, Button, Container } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 export const LandingPage: React.FC = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
   const useStorage = useGlobalStorage();
   const [state, setState] = useStorage("todostorage");
 
@@ -28,59 +28,54 @@ export const LandingPage: React.FC = () => {
     console.log("TodoStorage init value", todoStorage.getTodoList())
   }, [todoStorage.storage]);
 
-  const toggleDrawer = () => {
-    setDrawerOpen(!drawerOpen);
-  };
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  return (
-    <Container maxWidth="lg">
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" style={{ flexGrow: 1, textAlign: 'center' }}>
-            Checkbox Landing Page
-          </Typography>
-          <Button
-            color="inherit"
-            onClick={() => {
-              todoStorage.addTodo(new Todo(TodoType.GROUP, 'Hallo', 'Hallo'));
-            }}
-          >
-            +1 to global
-          </Button>
-        </Toolbar>
-      </AppBar>
+const toggleMenu = () => {
+  setMenuOpen(!menuOpen);
+};
 
-      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer}>
-        <List>
-          <ListItem button>
-            <ListItemIcon><MenuIcon /></ListItemIcon>
-            <ListItemText primary="Menu Item 1" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon><MenuIcon /></ListItemIcon>
-            <ListItemText primary="Menu Item 2" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon><MenuIcon /></ListItemIcon>
-            <ListItemText primary="Menu Item 3" />
-          </ListItem>
-        </List>
-      </Drawer>
-  
-      <Container>
-        <Typography variant="body1" style={{ marginTop: '1rem' }}>
-          Welcome to project Checkbox.
+return (
+  <Container maxWidth="lg">
+    <AppBar position="static">
+      <Toolbar>
+        <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleMenu}>
+        <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" style={{ flexGrow: 1, textAlign: 'center' }}>
+          Checkbox Landing Page
         </Typography>
-  
-        <ToDoComponent
-          todo={new Todo(TodoType.GROUP, 'Hallo', 'Hallo')}
-          onEditClick={() => console.log('Trololol')}
-          onDeleteClick={() => console.log('Trololol')}
-        />
-      </Container>
+        <Button
+          color="inherit"
+          onClick={() => {
+            todoStorage.addTodo(new Todo(TodoType.GROUP, 'Hallo', 'Hallo'));
+          }}
+        >
+          +1 to global
+        </Button>
+      </Toolbar>
+    </AppBar>
+
+    <SwipeableDrawer
+    anchor="left"
+    open={menuOpen}
+    onClose={toggleMenu}
+    onOpen={toggleMenu}
+  >
+    {/* pass the toggleMenu function as a prop to the Menu component */}
+    <Menu toggleMenu={toggleMenu} />
+    </SwipeableDrawer>
+
+    <Container>
+      <Typography variant="body1" style={{ marginTop: '1rem' }}>
+        Welcome to project Checkbox.
+      </Typography>
+
+      <ToDoComponent
+        todo={new Todo(TodoType.GROUP, 'Hallo', 'Hallo')}
+        onEditClick={() => console.log('Trololol')}
+        onDeleteClick={() => console.log('Trololol')}
+      />
     </Container>
-  );
+  </Container>
+);
 };
