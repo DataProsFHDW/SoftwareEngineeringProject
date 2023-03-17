@@ -16,6 +16,8 @@ import { AppBar, Toolbar, IconButton, Typography, Button, Container } from '@mui
 import MenuIcon from '@mui/icons-material/Menu';
 
 export const LandingPage: React.FC = () => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   const useStorage = useGlobalStorage();
   const [state, setState] = useStorage("todostorage");
 
@@ -26,11 +28,15 @@ export const LandingPage: React.FC = () => {
     console.log("TodoStorage init value", todoStorage.getTodoList())
   }, [todoStorage.storage]);
 
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
   return (
     <Container maxWidth="lg">
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu">
+          <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" style={{ flexGrow: 1, textAlign: 'center' }}>
@@ -46,6 +52,23 @@ export const LandingPage: React.FC = () => {
           </Button>
         </Toolbar>
       </AppBar>
+
+      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer}>
+        <List>
+          <ListItem button>
+            <ListItemIcon><MenuIcon /></ListItemIcon>
+            <ListItemText primary="Menu Item 1" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon><MenuIcon /></ListItemIcon>
+            <ListItemText primary="Menu Item 2" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon><MenuIcon /></ListItemIcon>
+            <ListItemText primary="Menu Item 3" />
+          </ListItem>
+        </List>
+      </Drawer>
   
       <Container>
         <Typography variant="body1" style={{ marginTop: '1rem' }}>
@@ -60,5 +83,4 @@ export const LandingPage: React.FC = () => {
       </Container>
     </Container>
   );
-  
 };
