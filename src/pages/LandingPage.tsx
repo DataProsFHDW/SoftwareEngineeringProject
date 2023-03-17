@@ -1,5 +1,4 @@
 import { EmailAuthProvider } from '@firebase/auth';
-import { IonButton, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { auth } from '..';
@@ -11,6 +10,10 @@ import { TodoType } from '../models/TodoType';
 import useGlobalStorage from '../storage/StateManagement';
 import { useTodoStorage } from '../storage/StateManagementWrapper';
 import './Page.css';
+
+// Import MUI components
+import { AppBar, Toolbar, IconButton, Typography, Button, Container } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 export const LandingPage: React.FC = () => {
   const useStorage = useGlobalStorage();
@@ -24,37 +27,38 @@ export const LandingPage: React.FC = () => {
   }, [todoStorage.storage]);
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <div className="Counter">
-            <button type="button" onClick={() => {
-              todoStorage.addTodo(new Todo(TodoType.GROUP, "Hallo", "Hallo"));
-            }}>
-              +1 to global
-            </button>
-          </div>
-          <IonTitle className="ion-text-center">Checkbox Landing Page</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
-      <IonContent className="ion-padding" fullscreen>
-        <IonText>Welcome to project Checkbox.</IonText>
-
-        <br />
-        <br />
-
+    <Container maxWidth="lg">
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" style={{ flexGrow: 1, textAlign: 'center' }}>
+            Checkbox Landing Page
+          </Typography>
+          <Button
+            color="inherit"
+            onClick={() => {
+              todoStorage.addTodo(new Todo(TodoType.GROUP, 'Hallo', 'Hallo'));
+            }}
+          >
+            +1 to global
+          </Button>
+        </Toolbar>
+      </AppBar>
+  
+      <Container>
+        <Typography variant="body1" style={{ marginTop: '1rem' }}>
+          Welcome to project Checkbox.
+        </Typography>
+  
         <ToDoComponent
-          /*id={"Trash 23"}
-          key={"ToDo-" + 1}*/
-          todo={new Todo(TodoType.GROUP, "Hallo", "Hallo")}
-          onEditClick={() => console.log("Trololol")}
-          onDeleteClick={() => console.log("Trololol")}
+          todo={new Todo(TodoType.GROUP, 'Hallo', 'Hallo')}
+          onEditClick={() => console.log('Trololol')}
+          onDeleteClick={() => console.log('Trololol')}
         />
-      </IonContent>
-    </IonPage>
+      </Container>
+    </Container>
   );
+  
 };
