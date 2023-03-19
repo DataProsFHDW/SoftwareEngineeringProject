@@ -11,8 +11,8 @@ export class Todo implements ITodo {
     //creator: string = "";
     //inputOnClick:any; 
 
-    constructor(id: string = uuidv4(),todoType: TodoType, todoTitle: string, todoDescription: string) {
-        this.id = id; // TODO change id to Firebase doc id
+    constructor(todoType: TodoType, todoTitle: string, todoDescription: string) {
+        this.id = uuidv4(); // TODO change id to Firebase doc id
         this.todoType = todoType;
         this.todoTitle = todoTitle;
         this.todoDescription = todoDescription;

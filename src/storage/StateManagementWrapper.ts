@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Preferences } from '@capacitor/preferences';
 import useGlobalStorage from "./StateManagement";
-import { Todo } from "../models/Todo";
 import { ITodo } from "../models/ITodo";
 
 // https://medium.com/ringcentral-developers/use-react-hooks-with-storage-as-global-state-management-f2945492aade

@@ -1,6 +1,7 @@
 import {
   IonButton,
   IonButtons,
+  IonCol,
   IonContent,
   IonFab,
   IonFabButton,
@@ -15,6 +16,7 @@ import {
   IonModal,
   IonPage,
   IonReorderGroup,
+  IonRow,
   IonSelect,
   IonSelectOption,
   IonTitle,
@@ -23,27 +25,47 @@ import {
   useIonModal,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
-import { useEffect } from "react";
 import { ToDoComponent } from "../components/ToDoComponent";
-import { Todo } from "../models/Todo";
 import { TodoType } from "../models/TodoType";
 import "./ToDoPage.css";
-import React, { useState } from "react";
 import { ITodo } from "../models/ITodo";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
 import { TodoEditModal } from "../components/TodoEditModal";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
-
+import { uuidv4 } from "@firebase/util";
+import { useEffect, useRef, useState } from "react";
 // Zu Erledigen: [] Ausgliederung Modal zu ToDo-Details (siehe Link Arbeitsrechner)
 
 export const ToDoPage: React.FC = () => {
   const todoStorage = useTodoStorage();
+  /*
+  const todoStorage: ITodo[] = [
+      {
+        id: uuidv4(),
+        todoType:  TodoType.SIMPLE,
+        todoTitle: "Todo1" ?? "Title",
+        todoDescription: "Desc" ?? ""
+      },
+      {
+        id: uuidv4(),
+        todoType:  TodoType.SIMPLE,
+        todoTitle: "Todo2" ?? "Title",
+        todoDescription: "Desc" ?? ""
+      },
+      {
+        id: uuidv4(),
+        todoType:  TodoType.SIMPLE,
+        todoTitle: "Todo3" ?? "Title",
+        todoDescription: "Desc" ?? ""
+      }
+    ]
+  */
   useEffect(() => {
     console.log("TodoList Changed", todoStorage.getTodoList())
   }, [todoStorage]); // [] => do on initial render of todoPageComponent
 
-
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
+  
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [newTodoTitle, updateNewTodoTitle] = useState<
     string | undefined | null
@@ -55,7 +77,8 @@ export const ToDoPage: React.FC = () => {
     TodoType | undefined | null
   >(null);
 
-  const [selectedTodo, setSelectedTodo] = useState<ITodo | null>(null)
+
+  const [selectedTodo, setSelectedTodo] = useState<ITodo>()
 
   const [present, dismiss] = useIonModal(TodoEditModal, {
     lineItem: selectedTodo,
@@ -64,6 +87,7 @@ export const ToDoPage: React.FC = () => {
 
   const handleEditClick = (todo: ITodo) => {
     setSelectedTodo(todo);
+    console.log(selectedTodo)
     present({
       onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
         if (ev.detail.role === "confirm") {
@@ -84,10 +108,13 @@ export const ToDoPage: React.FC = () => {
 
   function submitTodo() {
     todoStorage.addTodo(
-      new Todo(
-        newTodoType ?? TodoType.SIMPLE,
-        newTodoTitle ?? "Title",
-        newTodoDesc ?? "Description"));
+      {
+        id: uuidv4(),
+        todoType: newTodoType ?? TodoType.SIMPLE,
+        todoTitle: newTodoTitle ?? "Title",
+        todoDescription: newTodoDesc ?? ""
+      }
+    )
     updateNewTodoTitle(null);
     updateNewTodoType(null);
     updateNewTodoDesc(null)
@@ -101,12 +128,23 @@ export const ToDoPage: React.FC = () => {
 
   let toDoRender = todoStorage.getTodoList().map((todo, index) => {
     return (
+      /*
       <ToDoComponent
         key={"ToDo-" + index}
         todo={todo}
         onEditClick={() => handleEditClick(todo)}
         onDeleteClick={() => deleteTodo(index)}
       />
+      */
+      <IonRow key={todo.id}>
+      <IonCol>Title: {todo.todoTitle}</IonCol>
+      <IonCol>Description: {todo.todoDescription?? ""}</IonCol>
+      <IonCol>
+        <IonButton onClick={() => handleEditClick(todo)}>
+          Click Me
+        </IonButton>
+      </IonCol>
+    </IonRow>
     );
   });
 

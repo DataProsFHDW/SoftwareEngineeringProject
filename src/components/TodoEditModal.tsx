@@ -22,7 +22,7 @@ export const TodoEditModal: React.FC<Props> = ({
       id: todoItem.id, // TODO change id to Firebase doc id
       todoType: todoItem.todoType,
       todoTitle: inputTitleRef.current?.value ?? "Title",
-      todoDescription: "Edited Content",
+      todoDescription: "Edited",
     }
   }
   return (
