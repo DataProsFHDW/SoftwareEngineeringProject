@@ -39,6 +39,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import FirestoreCollections from "./models/FirestoreCollections";
 import { doc, getDoc } from "firebase/firestore/lite";
 import { fetchUsername, UsernamePage } from "./pages/UsernamePage";
+import { TodoPage2 } from "./pages/TodoPage2";
 
 
 setupIonicReact();
@@ -106,6 +107,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/todo" exact={false}>
               <ToDoPage />
+            </Route>
+            <Route path="/todo2" exact={false}>
+              <TodoPage2 />
             </Route>
 
             <Route path="/logout" exact={false}>
