@@ -38,34 +38,7 @@ import { useEffect, useRef, useState } from "react";
 
 export const ToDoPage: React.FC = () => {
   const todoStorage = useTodoStorage();
-  /*
-  const todoStorage: ITodo[] = [
-      {
-        id: uuidv4(),
-        todoType:  TodoType.SIMPLE,
-        todoTitle: "Todo1" ?? "Title",
-        todoDescription: "Desc" ?? ""
-      },
-      {
-        id: uuidv4(),
-        todoType:  TodoType.SIMPLE,
-        todoTitle: "Todo2" ?? "Title",
-        todoDescription: "Desc" ?? ""
-      },
-      {
-        id: uuidv4(),
-        todoType:  TodoType.SIMPLE,
-        todoTitle: "Todo3" ?? "Title",
-        todoDescription: "Desc" ?? ""
-      }
-    ]
-  */
-  useEffect(() => {
-    console.log("TodoList Changed", todoStorage.getTodoList())
-  }, [todoStorage]); // [] => do on initial render of todoPageComponent
-
-  /*const [todoList, setTodoList] = useState<string[]>([]);*/
-  
+ 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [newTodoTitle, updateNewTodoTitle] = useState<
     string | undefined | null
@@ -81,13 +54,26 @@ export const ToDoPage: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<ITodo>()
 
   const [present, dismiss] = useIonModal(TodoEditModal, {
-    lineItem: selectedTodo,
+    todoItem: selectedTodo,
     onDismiss:  (data: ITodo, role: string) => dismiss(data, role),
   });
 
+  
+  useEffect(() => {
+    console.log("TodoList Changed", todoStorage.getTodoList())
+  }, [todoStorage]); // [] => do on initial render of todoPageComponent
+
+  /*const [todoList, setTodoList] = useState<string[]>([]);*/
+  useEffect(() => {
+    console.log("Effect on current LineItem" +JSON.stringify(selectedTodo));
+    if (!!selectedTodo) {
+      todoStorage.updateTodo(selectedTodo) 
+    }
+    }, [selectedTodo])
+  
+
   const handleEditClick = (todo: ITodo) => {
     setSelectedTodo(todo);
-    console.log(selectedTodo)
     present({
       onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
         if (ev.detail.role === "confirm") {
@@ -128,23 +114,12 @@ export const ToDoPage: React.FC = () => {
 
   let toDoRender = todoStorage.getTodoList().map((todo, index) => {
     return (
-      /*
       <ToDoComponent
         key={"ToDo-" + index}
         todo={todo}
         onEditClick={() => handleEditClick(todo)}
         onDeleteClick={() => deleteTodo(index)}
       />
-      */
-      <IonRow key={todo.id}>
-      <IonCol>Title: {todo.todoTitle}</IonCol>
-      <IonCol>Description: {todo.todoDescription?? ""}</IonCol>
-      <IonCol>
-        <IonButton onClick={() => handleEditClick(todo)}>
-          Click Me
-        </IonButton>
-      </IonCol>
-    </IonRow>
     );
   });
 
