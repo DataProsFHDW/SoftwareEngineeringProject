@@ -1,11 +1,9 @@
 import {
   IonButton,
   IonButtons,
-  IonCol,
   IonContent,
   IonFab,
   IonFabButton,
-  IonGrid,
   IonHeader,
   IonIcon,
   IonInput,
@@ -17,26 +15,24 @@ import {
   IonModal,
   IonPage,
   IonReorderGroup,
-  IonRow,
   IonSelect,
   IonSelectOption,
-  IonText,
   IonTitle,
   IonToolbar,
   ItemReorderEventDetail,
+  useIonModal,
 } from "@ionic/react";
 import { add } from "ionicons/icons";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { ToDoComponent } from "../components/ToDoComponent";
 import { Todo } from "../models/Todo";
 import { TodoType } from "../models/TodoType";
 import "./ToDoPage.css";
 import React, { useState } from "react";
-import TodoDetails from "../components/TodoDetails";
-import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
-import { TodoInterface } from "../models/TodoInterface";
-import { Unsubscribe } from "firebase/auth";
+import { ITodo } from "../models/ITodo";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
+import { TodoEditModal } from "../components/TodoEditModal";
+import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 
 // Zu Erledigen: [] Ausgliederung Modal zu ToDo-Details (siehe Link Arbeitsrechner)
 
@@ -45,6 +41,7 @@ export const ToDoPage: React.FC = () => {
   useEffect(() => {
     console.log("TodoList Changed", todoStorage.getTodoList())
   }, [todoStorage]); // [] => do on initial render of todoPageComponent
+
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -58,24 +55,25 @@ export const ToDoPage: React.FC = () => {
     TodoType | undefined | null
   >(null);
 
-  const [selectedTodo, setSelectedTodo] = useState<TodoInterface | null>(null)
+  const [selectedTodo, setSelectedTodo] = useState<ITodo | null>(null)
 
+  const [present, dismiss] = useIonModal(TodoEditModal, {
+    lineItem: selectedTodo,
+    onDismiss:  (data: ITodo, role: string) => dismiss(data, role),
+  });
 
-  /*const [todoItems, updateTodoItems] = useState<Todo[]>([
-    new Todo(TodoType.SINGLE, "ToDo Item 1 Hans", "Description of ToDo Item 1"),
-    new Todo(TodoType.SINGLE, "ToDo Item 2", "Description of ToDo Item 2"),
-    new Todo(TodoType.GROUP, "ToDo Item 3", "Description of ToDo Item 3"),
-  ]);*/
-  //Old Try manuelles PopUp: const [selectedToDo, setSelectedToDo] = useState<Todo | undefined>(undefined);
-  //Zu Old Try TodoDetails: const [showModal, setShowModal] = useState(false);
-
-  const handleEditClick = (index: number) => {
-    const todoItemClone = todoStorage.getTodoList()[index];
-    setSelectedTodo(todoItemClone)
-    updateNewTodoType(selectedTodo?.todoType)
-    updateNewTodoTitle(selectedTodo?.todoTitle)
-    updateNewTodoDesc(selectedTodo?.todoDescription);
-    setModalIsOpen(true)
+  const handleEditClick = (todo: ITodo) => {
+    setSelectedTodo(todo);
+    present({
+      onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
+        if (ev.detail.role === "confirm") {
+          //setMessage(ev.detail.data??"Empty Title");
+          console.log("Confirmed Input: " + JSON.stringify(ev.detail.data));
+          setSelectedTodo(ev.detail.data as ITodo)
+          console.log(selectedTodo);
+        }
+      },
+    });
   };
 
   function deleteTodo(index: number) {
@@ -87,7 +85,7 @@ export const ToDoPage: React.FC = () => {
   function submitTodo() {
     todoStorage.addTodo(
       new Todo(
-        newTodoType ?? TodoType.SINGLE,
+        newTodoType ?? TodoType.SIMPLE,
         newTodoTitle ?? "Title",
         newTodoDesc ?? "Description"));
     updateNewTodoTitle(null);
@@ -104,9 +102,9 @@ export const ToDoPage: React.FC = () => {
   let toDoRender = todoStorage.getTodoList().map((todo, index) => {
     return (
       <ToDoComponent
-        /*key={"ToDo-" + index}*/
+        key={"ToDo-" + index}
         todo={todo}
-        onEditClick={() => handleEditClick(index)}
+        onEditClick={() => handleEditClick(todo)}
         onDeleteClick={() => deleteTodo(index)}
       />
     );
@@ -140,12 +138,6 @@ export const ToDoPage: React.FC = () => {
           </IonFabButton>
         </IonFab>
 
-        {/* OLD Try: mit ToDo Details:
-          <IonModal isOpen={showModal}>
-            <TodoDetails></TodoDetails>
-            <IonButton onClick={() => setShowModal(false)}>Close Modal</IonButton>
-          </IonModal>
-        */}
         {/* Here is a hard coded version, of PopUp Feature => Unfähig Hooks und verschiedene Komponenten zu nutzen*/}
         <IonModal isOpen={modalIsOpen}>
           <IonHeader>
@@ -186,11 +178,8 @@ export const ToDoPage: React.FC = () => {
                 value={newTodoDesc}
               />
               <IonSelect placeholder="Select TodoType" interface="popover" onIonChange={(e) => updateNewTodoType(e.detail.value)}>
-                <IonSelectOption value={TodoType.SINGLE}>
+                <IonSelectOption value={TodoType.SIMPLE}>
                   Simple
-                </IonSelectOption>
-                <IonSelectOption value={TodoType.TIMEBOUND}>
-                  Timebound
                 </IonSelectOption>
                 <IonSelectOption value={TodoType.GROUP}>Group</IonSelectOption>
               </IonSelect>
