@@ -9,13 +9,13 @@ import {
   IonButton,
   IonButtons,
 } from "@ionic/react";
-import { TodoInterface } from "../models/TodoInterface";
+import { ITodo } from "../models/ITodo";
 import "./ToDoComponent.css";
 
 interface ToDoComponentProps {
   onEditClick: any;
   onDeleteClick: any;
-  todo: TodoInterface,
+  todo: ITodo,
 }
 
 export const ToDoComponent: React.FC<ToDoComponentProps> = ({

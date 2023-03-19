@@ -2,35 +2,35 @@ import { useEffect, useState } from "react";
 import { Preferences } from '@capacitor/preferences';
 import useGlobalStorage from "./StateManagement";
 import { Todo } from "../models/Todo";
-import { TodoInterface } from "../models/TodoInterface";
+import { ITodo } from "../models/ITodo";
 
 // https://medium.com/ringcentral-developers/use-react-hooks-with-storage-as-global-state-management-f2945492aade
 export const useTodoStorage = () => {
     const useStorage = useGlobalStorage();
     const [storage, setStorage] = useStorage("todoStorage", []);
 
-    const getTodoList = (): TodoInterface[] => {
-        if (storage as TodoInterface) {
-            return storage as TodoInterface[]
+    const getTodoList = (): ITodo[] => {
+        if (storage as ITodo) {
+            return storage as ITodo[]
         }
         return [];
     }
 
-    const setTodoList = async (todolist: TodoInterface[]) => await setStorage(todolist);
+    const setTodoList = async (todolist: ITodo[]) => await setStorage(todolist);
 
-    const addTodo = async (todo: TodoInterface) => await setStorage([...storage, todo]);
+    const addTodo = async (todo: ITodo) => await setStorage([...storage, todo]);
 
-    const removeTodo = async (todo: TodoInterface) => removeTodoById(todo.id);
+    const removeTodo = async (todo: ITodo) => removeTodoById(todo.id);
 
     const removeTodoById = async (id: string) => {
-        let todoList: TodoInterface[] = storage;
-        todoList = todoList.filter((item: TodoInterface) => item.id !== id);
+        let todoList: ITodo[] = storage;
+        todoList = todoList.filter((item: ITodo) => item.id !== id);
         setTodoList(todoList);
     }
 
-    const updateTodo = async (todo: TodoInterface) => {
-        let todoList: TodoInterface[] = storage;
-        todoList = todoList.map((item: TodoInterface) => {
+    const updateTodo = async (todo: ITodo) => {
+        let todoList: ITodo[] = storage;
+        todoList = todoList.map((item: ITodo) => {
             if (item.id === todo.id) {
                 return todo;
             }
