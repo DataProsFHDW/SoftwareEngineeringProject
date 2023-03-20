@@ -19,7 +19,7 @@ type Props = {
 
     function exportTodoWrapper(): ITodo {
       return {
-        todoType: selectTypeRef.current?.value,
+        todoType: selectTypeRef.current?.value ?? TodoType.SIMPLE,
         todoTitle: inputTitleRef.current?.value ?? "Title",
         todoDescription: inputDescRef.current?.value?.toString() ?? "",
         id: uuidv4(),

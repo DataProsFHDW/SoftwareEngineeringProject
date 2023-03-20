@@ -29,7 +29,7 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
         <div className="card-content">
           <IonCardHeader>
             <IonCardTitle>{todo.todoTitle}</IonCardTitle>
-            <IonCardSubtitle>{todo.todoType.toString()}</IonCardSubtitle>
+            <IonCardSubtitle>{todo.todoType?.toString()}</IonCardSubtitle>
           </IonCardHeader>
 
           <IonCardContent>{todo.todoDescription}</IonCardContent>
