@@ -1,0 +1,11 @@
+import { uuidv4 } from "@firebase/util";
+import { User } from "./User";
+
+export interface IGroup {
+    id: string;
+    GROUP_NAME: string;
+    GROUP_TODO_LIST: any[] | null;
+    USER_COLLECTION: Record<string, User> | null;
+}
+
+
