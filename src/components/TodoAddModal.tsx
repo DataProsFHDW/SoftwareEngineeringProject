@@ -20,7 +20,7 @@ type Props = {
     function exportTodoWrapper(): ITodo {
       return {
         todoType: selectTypeRef.current?.value ?? TodoType.SIMPLE,
-        todoTitle: inputTitleRef.current?.value ?? "Title",
+        todoTitle: inputTitleRef.current?.value?.toString() ?? "Title",
         todoDescription: inputDescRef.current?.value?.toString() ?? "",
         id: uuidv4(),
       };
@@ -48,20 +48,25 @@ type Props = {
         </IonHeader>
         <IonContent className="ion-padding">
           <IonItem>
-            <IonLabel position="stacked">Enter Todo Title</IonLabel>
+            <IonLabel position="floating">Enter Todo Title</IonLabel>
             {/** updateNewTodo(e.detail.value)*/}
             <IonInput
               type="text"
               placeholder="e.g. Shopping"
+              required={true}
               ref={inputTitleRef}
             />
-            <IonLabel position="stacked">Enter Todo Description</IonLabel>
+            </IonItem>
+            <IonItem>
+            <IonLabel position="floating">Enter Todo Description</IonLabel>
             {/** updateNewTodo(e.detail.value)*/}
             <IonInput
               type="text"
               placeholder="e.g. at the mall..."
               ref={inputDescRef}
             />
+            </IonItem>
+            <IonItem>
             <IonSelect
               placeholder="Select TodoType"
               interface="popover"
