@@ -1,24 +1,15 @@
 import {
-  IonButton,
   IonButtons,
-  IonCol,
   IonContent,
   IonFab,
   IonFabButton,
   IonHeader,
   IonIcon,
-  IonInput,
-  IonItem,
-  IonLabel,
   IonList,
   IonListHeader,
   IonMenuButton,
-  IonModal,
   IonPage,
   IonReorderGroup,
-  IonRow,
-  IonSelect,
-  IonSelectOption,
   IonTitle,
   IonToolbar,
   ItemReorderEventDetail,
@@ -26,14 +17,12 @@ import {
 } from "@ionic/react";
 import { add } from "ionicons/icons";
 import { ToDoComponent } from "../components/ToDoComponent";
-import { TodoType } from "../models/TodoType";
 import "./ToDoPage.css";
 import { ITodo } from "../models/ITodo";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
 import { TodoEditModal } from "../components/TodoEditModal";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
-import { uuidv4 } from "@firebase/util";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { TodoAddModal } from "../components/TodoAddModal";
 // Zu Erledigen: [] Ausgliederung Modal zu ToDo-Details (siehe Link Arbeitsrechner)
 
