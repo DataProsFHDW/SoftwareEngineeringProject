@@ -1,9 +1,9 @@
 import { TodoType } from "./TodoType";
-import { TodoInterface } from "./TodoInterface";
+import { ITodo } from "./ITodo";
 import { uuidv4 } from "@firebase/util";
 import { User } from "./User";
 
-export class Todo implements TodoInterface {
+export class Todo implements ITodo {
     id: string;
     todoType: TodoType;
     todoTitle: string;

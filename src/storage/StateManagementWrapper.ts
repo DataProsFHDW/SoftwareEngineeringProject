@@ -1,44 +1,44 @@
 import { useEffect, useState } from "react";
 import { Preferences } from '@capacitor/preferences';
 import useGlobalStorage from "./StateManagement";
-import { Todo } from "../models/Todo";
-import { TodoInterface } from "../models/TodoInterface";
+import { ITodo } from "../models/ITodo";
+import NotificationUtils from "../utils/NotificationUtils";
 
 // https://medium.com/ringcentral-developers/use-react-hooks-with-storage-as-global-state-management-f2945492aade
 export const useTodoStorage = () => {
     const useStorage = useGlobalStorage();
     const [storage, setStorage] = useStorage("todoStorage", []);
 
-    const getTodoList = (): TodoInterface[] => {
-        if (storage as TodoInterface) {
-            return storage as TodoInterface[]
+    const getTodoList = (): ITodo[] => {
+        if (storage as ITodo) {
+            return storage as ITodo[]
         }
         return [];
 
         // TODO get from firebase
     }
 
-    const setTodoList = async (todolist: TodoInterface[]) => await setStorage(todolist);
+    const setTodoList = async (todolist: ITodo[]) => await setStorage(todolist);
 
-    const addTodo = async (todo: TodoInterface) {
+    const addTodo = async (todo: ITodo) => {
+        NotificationUtils.schedule(new Date(), todo.todoTitle.toString(), todo.todoDescription ?? "");
         await setStorage([...storage, todo]);
-        // TODO add in firebase
     }
 
-    const removeTodo = async (todo: TodoInterface) => removeTodoById(todo.id);
+    const removeTodo = async (todo: ITodo) => removeTodoById(todo.id);
 
 
     const removeTodoById = async (id: string) => {
-        let todoList: TodoInterface[] = storage;
-        todoList = todoList.filter((item: TodoInterface) => item.id !== id);
+        let todoList: ITodo[] = storage;
+        todoList = todoList.filter((item: ITodo) => item.id !== id);
         setTodoList(todoList);
 
         // TODO remove in firebase
     }
 
-    const updateTodo = async (todo: TodoInterface) => {
-        let todoList: TodoInterface[] = storage;
-        todoList = todoList.map((item: TodoInterface) => {
+    const updateTodo = async (todo: ITodo) => {
+        let todoList: ITodo[] = storage;
+        todoList = todoList.map((item: ITodo) => {
             if (item.id === todo.id) {
                 return todo;
             }
