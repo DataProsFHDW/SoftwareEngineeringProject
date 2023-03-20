@@ -1,5 +1,4 @@
 export enum TodoType {
-    SINGLE = "Single ToDo",
-    TIMEBOUND = "Timebound ToDo",
+    SIMPLE = "Single ToDo",
     GROUP = "Group ToDo",
 }

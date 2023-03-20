@@ -38,6 +38,12 @@ const appPages: AppPage[] = [
     mdIcon: paperPlaneSharp
   },
   {
+    title: 'To-Dos 2',
+    url: '/todo2',
+    iosIcon: paperPlaneOutline,
+    mdIcon: paperPlaneSharp
+  },
+  {
     title: 'Favorites',
     url: '/page/Favorites',
     iosIcon: heartOutline,

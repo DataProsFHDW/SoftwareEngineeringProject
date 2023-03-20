@@ -1,10 +1,10 @@
 import { TodoType } from "./TodoType";
 
-export interface TodoInterface {
+export interface ITodo {
     id: string; // TODO change id to Firebase doc id
     todoType: TodoType;
-    todoTitle: string;
-    todoDescription?: string;
+    todoTitle: number| string; // Number just cause Error in Modal Input field
+    todoDescription?: string| null| undefined;
     //creator: string = "";
     //inputOnClick:any;
 

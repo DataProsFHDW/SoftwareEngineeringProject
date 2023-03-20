@@ -6,11 +6,11 @@ import { auth } from '..';
 import ExploreContainer from '../components/ExploreContainer';
 import Menu from '../components/Menu';
 import { ToDoComponent } from '../components/ToDoComponent';
-import { Todo } from '../models/Todo';
 import { TodoType } from '../models/TodoType';
 import useGlobalStorage from '../storage/StateManagement';
 import { useTodoStorage } from '../storage/StateManagementWrapper';
 import './Page.css';
+import { uuidv4 } from "@firebase/util";
 
 export const LandingPage: React.FC = () => {
   const useStorage = useGlobalStorage();
@@ -32,7 +32,13 @@ export const LandingPage: React.FC = () => {
           </IonButtons>
           <div className="Counter">
             <button type="button" onClick={() => {
-              todoStorage.addTodo(new Todo(TodoType.GROUP, "Hallo", "Hallo"));
+              todoStorage.addTodo(
+                {
+                  id: uuidv4(),
+                  todoType: TodoType.SIMPLE,
+                  todoTitle: "Title",
+                  todoDescription: ""
+                });
             }}>
               +1 to global
             </button>
@@ -50,7 +56,12 @@ export const LandingPage: React.FC = () => {
         <ToDoComponent
           /*id={"Trash 23"}
           key={"ToDo-" + 1}*/
-          todo={new Todo(TodoType.GROUP, "Hallo", "Hallo")}
+          todo={{
+            id: uuidv4(),
+            todoType: TodoType.SIMPLE,
+            todoTitle: "Title",
+            todoDescription:  ""
+          }}
           onEditClick={() => console.log("Trololol")}
           onDeleteClick={() => console.log("Trololol")}
         />

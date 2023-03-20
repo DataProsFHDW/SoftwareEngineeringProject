@@ -107,7 +107,6 @@ const App: React.FC = () => {
             <Route path="/todo" exact={false}>
               <ToDoPage />
             </Route>
-
             <Route path="/logout" exact={false}>
               <Logout />
             </Route>
