@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Preferences } from '@capacitor/preferences';
 import useGlobalStorage from "./StateManagement";
 import { ITodo } from "../models/ITodo";
+import NotificationUtils from "../utils/NotificationUtils";
 
 // https://medium.com/ringcentral-developers/use-react-hooks-with-storage-as-global-state-management-f2945492aade
 export const useTodoStorage = () => {
@@ -17,7 +18,10 @@ export const useTodoStorage = () => {
 
     const setTodoList = async (todolist: ITodo[]) => await setStorage(todolist);
 
-    const addTodo = async (todo: ITodo) => await setStorage([...storage, todo]);
+    const addTodo = async (todo: ITodo) => {
+        NotificationUtils.schedule(new Date(), todo.todoTitle.toString(), todo.todoDescription ?? "");
+        await setStorage([...storage, todo]);
+    }
 
     const removeTodo = async (todo: ITodo) => removeTodoById(todo.id);
 
