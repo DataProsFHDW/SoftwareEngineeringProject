@@ -24,7 +24,7 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
   onDeleteClick,
 }) => {
   return (
-    <IonItem key={`todoItem-${todo.id}`}>
+    <IonItem>
       <IonCard >
         <div className="card-content">
           <IonCardHeader>
