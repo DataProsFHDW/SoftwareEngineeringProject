@@ -86,7 +86,6 @@ const App: React.FC = () => {
     if (auth.currentUser == null) {
       Network.getStatus().then((value) => {
         if (value.connected && value.connectionType != undefined) {
-          console.log("Sheesh")
           try {
             /* Null check in debug mode */
             var email = "demoFirebaseMail@gmail.com";

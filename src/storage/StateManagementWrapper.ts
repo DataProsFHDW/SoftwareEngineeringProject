@@ -32,7 +32,6 @@ export const useTodoStorage = () => {
         try {
             // TODO refresh todos try
             await Network.getStatus().then(async (value) => {
-                console.log("Wrong Data???", value)
                 if (!value.connected || value.connectionType == undefined) {
                     present({ message: "Please enable internet.", duration: 1500, position: "bottom" });
                     console.log("Please enable internet")
