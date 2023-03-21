@@ -6,12 +6,15 @@ import FirestoreCollectionFields from '../models/FirestoreCollectionFields';
 import './Page.css';
 import { useHistory } from 'react-router';
 import { auth, firestore } from '../Database-function';
+import { useTodoStorage } from '../storage/StateManagementWrapper';
 
-export async function fetchUsername(): Promise<string | null | undefined> {
+export async function fetchUsername(todoStorage: any): Promise<string | null | undefined> {
     const refDocUser = doc(firestore, FirestoreCollections.USERS, auth.currentUser?.uid!);
     var docUser = await getDoc(refDocUser);
     if (!docUser.exists() || docUser.data()!.username == null) {
         console.log("Username Not set")
+    } else if (docUser.data()!.usernames) {
+        todoStorage.setUsername(docUser.data()!.username);
     }
     return docUser.data()!.username;
 }

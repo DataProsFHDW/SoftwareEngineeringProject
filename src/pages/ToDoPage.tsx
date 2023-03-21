@@ -41,10 +41,13 @@ export const ToDoPage: React.FC = () => {
     onDismiss: (data: ITodoGroup, role: string) => dismissAdd(data, role),
   });
 
+  useEffect(() => {
+    todoStorage.refreshTodos();
+  }, []); // [] => do on initial render of todoPageComponent
 
   useEffect(() => {
-    console.log("TodoList Changed", todoStorage.getTodoList())
-  }, [todoStorage]); // [] => do on initial render of todoPageComponent
+    // console.log("TodoList Changed", todoStorage.getTodoList())
+  }, [todoStorage.storage]); // [] => do on initial render of todoPageComponent
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
   useEffect(() => {

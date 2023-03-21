@@ -3,6 +3,7 @@ import {
   IonRouterOutlet,
   IonSplitPane,
   setupIonicReact,
+  useIonToast,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route, useHistory } from "react-router-dom";
@@ -37,13 +38,25 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { fetchUsername, UsernamePage } from "./pages/UsernamePage";
 import { auth } from "./Database-function";
+import { useTodoStorage } from "./storage/StateManagementWrapper";
+import { Network } from "@capacitor/network";
 
 setupIonicReact();
 
 const App: React.FC = () => {
 
   const [user, loading, error] = useAuthState(auth);
-  const [username, setUsername] = useState<string | null | undefined>(null);
+  const [username, setUsername] = useState<string | null | undefined>(undefined);
+  const todoStorage = useTodoStorage();
+  const [present] = useIonToast();
+
+  useEffect(() => {
+    // init
+    const init = async () => {
+      setUsername(await todoStorage.getUsername())
+    }
+    init();
+  });
 
   useEffect(() => {
     console.log("Auth State Changed", /* user */);
@@ -51,7 +64,15 @@ const App: React.FC = () => {
     const fetchUserProfile = async () => {
       if (auth.currentUser != null) {
         /* Logged in */
-        setUsername(await fetchUsername());
+        try {
+          await Network.getStatus().then(async (value) => {
+            if (value.connected && value.connectionType != undefined) {
+              await todoStorage.setUsername(await fetchUsername(todoStorage));
+            }
+          });
+        } catch (ex) {
+        }
+        setUsername(await todoStorage.getUsername())
       }
     }
     fetchUserProfile();
@@ -63,18 +84,29 @@ const App: React.FC = () => {
 
   if (user != null || (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')) {
     if (auth.currentUser == null) {
-      /* Null check in debug mode */
-      var email = "demoFirebaseMail@gmail.com";
-      var password = "demoPassword";
-      var credential = createUserWithEmailAndPassword(auth, email, password).catch((error) => { /* console.log("Debug user already exists") */ });
-      signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
-        /* Signed in */
-        var user = userCredential.user;
-        console.log("Debug user logged in")
-      }).catch((error) => { });
+      Network.getStatus().then((value) => {
+        if (value.connected && value.connectionType != undefined) {
+          console.log("Sheesh")
+          try {
+            /* Null check in debug mode */
+            var email = "demoFirebaseMail@gmail.com";
+            var password = "demoPassword";
+            // var credential = createUserWithEmailAndPassword(auth, email, password).catch((error) => { /* console.log("Debug user already exists") */ });
+            signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+              /* Signed in */
+              var user = userCredential.user;
+              console.log("Debug user logged in")
+            }).catch((error) => { });
+          } catch (ex) {
+            present({ message: "Please try again.", duration: 1500 });
+          }
+        }
+      });
     }
 
-    if (username == null) {
+    if (username == undefined) {
+      routerJsx = (<></>);
+    } else if (username == null) {
       /* No username */
       routerJsx = (
         <>

@@ -11,38 +11,52 @@ import { Network } from '@capacitor/network';
 // https://medium.com/ringcentral-developers/use-react-hooks-with-storage-as-global-state-management-f2945492aade
 export const useTodoStorage = () => {
     const useStorage = useGlobalStorage();
-    const [storage, setStorage] = useStorage("todoStorage", []);
+    const [storage, setStorage] = useStorage("todoStorage", {
+        todoList: [], username: null
+    });
     const [present] = useIonToast();
+
+    const setUsername = async (username: string | null | undefined) => {
+        await setStorage({ todoList: getTodoList(), username: username });
+    }
+
+    const getUsername = () => {
+        return storage.username;
+    }
+
+    const setTodoList = async (todoList: ITodoGroup[]) => {
+        await setStorage({ todoList: todoList, username: getUsername() });
+    }
 
     const refreshTodos = async () => {
         try {
             // TODO refresh todos try
             await Network.getStatus().then(async (value) => {
                 console.log("Wrong Data???", value)
-                if (!value.connected) {
+                if (!value.connected || value.connectionType == undefined) {
                     present({ message: "Please enable internet.", duration: 1500, position: "bottom" });
                     console.log("Please enable internet")
                     return;
                 } else {
-                    console.log("Trying to upload offline data");
-                    getTodoList().forEach(async (todo) => {
-                        if (!todo.isSynced) {
-                            try {
+                    try {
+                        getTodoList().forEach(async (todo) => {
+                            if (!todo.isSynced) {
                                 if (todo.isDeleted) {
                                     await deleteToDoToFirestore(todo.id);
                                     return;
                                 } else {
                                     await updateToDoToFirestore(todo.id, todo);
                                 }
-                            } catch (error) {
-                                console.error("Error while saving to firebase", error);
-                                present({ message: "Please try again.", duration: 1500 });
-                            }
-                        }
-                    });
 
-                    var todos = await getAllToDosFromFirestore();
-                    setStorage(todos);
+                            }
+                        });
+
+                        var todos = await getAllToDosFromFirestore();
+                        if (todos) setTodoList(compareTodoList(getTodoList(), todos));
+                    } catch (error) {
+                        console.error("Error while saving to firebase", error);
+                        present({ message: "Please try again.", duration: 1500 });
+                    }
                 }
             });
         } catch (exception) {
@@ -50,20 +64,33 @@ export const useTodoStorage = () => {
         }
     }
 
+    const compareTodoList = (listOld: ITodoGroup[], listNew: ITodoGroup[]): ITodoGroup[] => {
+        var res: ITodoGroup[] = listNew;
+        listOld.forEach((e) => {
+            var contains: boolean = false;
+            res.forEach((listElement) => {
+                if (listElement.id == e.id) {
+                    contains = true;
+                }
+            });
+            if (!contains) res = [...res, e];
+        });
+        return res;
+    }
+
     const getTodoList = (): ITodoGroup[] => {
-        if (storage as ITodoGroup) {
-            return storage as ITodoGroup[]
+        if (storage.todoList as ITodoGroup) {
+            return storage.todoList as ITodoGroup[]
         }
         return [];
         // TODO get from firebase
     }
 
-    const setTodoList = async (todolist: ITodoGroup[]) => await setStorage(todolist);
-
     const addTodo = async (todo: ITodo) => {
         NotificationUtils.schedule(new Date(), todo.todoTitle.toString(), todo.todoDescription ?? "");
         try {
-            if ((await Network.getStatus()).connected) {
+            var networkState = await Network.getStatus();
+            if (networkState.connected && networkState.connectionType != undefined) {
                 var id = await addToDoFirestore({
                     id: todo.id,
                     todoType: todo.todoType,
@@ -73,7 +100,7 @@ export const useTodoStorage = () => {
                     isDeleted: false,
                     isSynced: true,
                 });
-                await setStorage([...storage, {
+                setTodoList([...getTodoList(), {
                     id: id,
                     todoType: todo.todoType,
                     todoTitle: todo.todoTitle,
@@ -83,8 +110,8 @@ export const useTodoStorage = () => {
                     isSynced: true,
                 },]);
             } else {
-                await setStorage([...storage, {
-                    id: uuidv4,
+                setTodoList([...getTodoList(), {
+                    id: uuidv4(),
                     todoType: todo.todoType,
                     todoTitle: todo.todoTitle,
                     todoDescription: todo.todoDescription,
@@ -92,6 +119,7 @@ export const useTodoStorage = () => {
                     isDeleted: false,
                     isSynced: false,
                 },]);
+                await refreshTodos();
             }
         } catch (error) {
             console.error("Error while saving to firebase", error);
@@ -104,13 +132,14 @@ export const useTodoStorage = () => {
     const removeTodoById = async (id: string) => {
         console.log(getUsersFromFirestore(), "users");
         try {
-            if ((await Network.getStatus()).connected) {
+            var networkState = await Network.getStatus();
+            if (networkState.connected && networkState.connectionType != undefined) {
                 await deleteToDoToFirestore(id);
-                let todoList: ITodoGroup[] = storage;
+                let todoList: ITodoGroup[] = getTodoList();
                 todoList = todoList.filter((item: ITodo) => item.id !== id);
                 setTodoList(todoList);
             } else {
-                let todoList: ITodoGroup[] = storage;
+                let todoList: ITodoGroup[] = getTodoList();
                 todoList = todoList.map((item: ITodoGroup) => {
                     if (item.id === id) {
                         return {
@@ -126,6 +155,7 @@ export const useTodoStorage = () => {
                     return item;
                 });
                 setTodoList(todoList);
+                await refreshTodos();
             }
         } catch (error) {
             console.error("Error while removing from firebase", error);
@@ -135,9 +165,10 @@ export const useTodoStorage = () => {
 
     const updateTodo = async (todo: ITodoGroup) => {
         try {
-            if ((await Network.getStatus()).connected) {
+            var networkState = await Network.getStatus();
+            if (networkState.connected && networkState.connectionType != undefined) {
                 await updateToDoToFirestore(todo.id, todo);
-                let todoList: ITodoGroup[] = storage;
+                let todoList: ITodoGroup[] = getTodoList();
                 todoList = todoList.map((item: ITodoGroup) => {
                     if (item.id === todo.id) {
                         return todo;
@@ -147,7 +178,7 @@ export const useTodoStorage = () => {
                 );
                 setTodoList(todoList);
             } else {
-                let todoList: ITodoGroup[] = storage;
+                let todoList: ITodoGroup[] = getTodoList();
                 todoList = todoList.map((item: ITodoGroup) => {
                     if (item.id === todo.id) {
                         return {
@@ -164,6 +195,7 @@ export const useTodoStorage = () => {
                 }
                 );
                 setTodoList(todoList);
+                await refreshTodos();
             }
         } catch (error) {
             console.error("Error while updating Todo to firebase", error);
@@ -171,7 +203,9 @@ export const useTodoStorage = () => {
         }
     }
 
-    const clearStorage = async () => await setStorage([]);
+    const clearStorage = async () => await setStorage({
+        todoList: [], username: null
+    });
 
-    return { storage, refreshTodos, getTodoList, setTodoList, clearStorage, addTodo, removeTodo, removeTodoById, updateTodo };
+    return { storage, setUsername, getUsername, refreshTodos, getTodoList, setTodoList, clearStorage, addTodo, removeTodo, removeTodoById, updateTodo };
 };
