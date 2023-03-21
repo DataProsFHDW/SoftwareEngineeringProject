@@ -1,12 +1,17 @@
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from './utils/firebase/firebase-config';
-import { Todo } from "./models/Todo";
 import { Group } from "./models/Group";
-import { User } from "./models/User";
+import { User, User2 } from "./models/User";
 
 import { EmailAuthProvider, getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore, collection, addDoc, doc, deleteDoc, getDoc, setDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, deleteDoc, getDoc, getDocs, setDoc, query, where } from "firebase/firestore";
 import { group } from "console";
+import { Todo } from "./models/Todo_old";
+import { ITodo, ITodoGroup } from "./models/ITodo";
+import { List } from "@ionic/core/dist/types/components/list/list";
+import FirestoreCollectionFields from "./models/FirestoreCollectionFields";
+import FirestoreCollections from "./models/FirestoreCollections";
+import { TodoType } from "./models/TodoType";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -44,7 +49,7 @@ const getUser = async (userId: string) => {
     if (!navigator.onLine) {
       handleOfflineError('getUser');
     }
-    let docSnap = await getDoc(doc(firestore, user_co,userId));
+    let docSnap = await getDoc(doc(firestore, user_co, userId));
     return docSnap;
   } catch (error) {
     console.error('Error getting user:', error);
@@ -57,7 +62,7 @@ const updateUser = async (userId: string, user: User) => {
     if (!navigator.onLine) {
       handleOfflineError('updateUser');
     }
-    await setDoc(doc(firestore, user_co,userId),user);
+    await setDoc(doc(firestore, user_co, userId), user);
   } catch (error) {
     console.error(error);
     throw new Error('Failed to update user in database.');
@@ -76,13 +81,26 @@ const deleteUser = async (userId: string) => {
   }
 };
 
-const addToDo = async (todo: Todo) => {
+export const getUsersFromFirestore = async (): Promise<User2[] | null> => {
+  try {
+    if (!navigator.onLine) {
+      return null;
+    }
+    let docSnap = await getDocs(collection(firestore, FirestoreCollections.USERS));
+    return docSnap.docs.map((doc) => new User2(doc.id, doc.data()["username"].toString()));
+  } catch (error) {
+    console.error('Error getting users', error);
+    return null;
+  }
+  return null;
+};
+
+export const addToDoFirestore = async (todo: ITodoGroup) => {
   try {
     if (!navigator.onLine) {
       handleOfflineError('addToDo');
     }
     let todoDoc = await addDoc(collection(firestore, todo_co), todo);
-    console.log("Document written with ID: ", todoDoc.id);
     return todoDoc.id;
   } catch (error) {
     console.error('Error adding todo:', error);
@@ -90,12 +108,40 @@ const addToDo = async (todo: Todo) => {
   }
 };
 
+export const getAllToDosFromFirestore = async (): Promise<ITodoGroup[] | null> => {
+  try {
+    if (!navigator.onLine) {
+      return null;
+    }
+
+    let docSnap = await getDocs(collection(firestore, todo_co));
+
+    var todos = docSnap.docs.map((doc) => {
+      return {
+        id: doc.id,
+        todoType: TodoType.SIMPLE,
+        todoTitle: doc.data()["todoTitle"].toString(),
+        todoDescription: doc.data()["todoDescription"].toString(),
+        users: doc.data()["users"],
+        isDeleted: false,
+        isSynced: true,
+      }
+    }).filter((todo) => todo.users.includes(auth.currentUser?.uid));
+
+    return todos;
+  } catch (error) {
+    console.error('Error getting all todo:', error);
+    return null;
+  }
+  return null;
+};
+
 const getToDo = async (todoId: string) => {
   try {
     if (!navigator.onLine) {
       handleOfflineError('getToDo');
     }
-    let docSnap = await getDoc(doc(firestore, todo_co,todoId));
+    let docSnap = await getDoc(doc(firestore, todo_co, todoId));
     return docSnap;
   } catch (error) {
     console.error('Error getting todo:', error);
@@ -103,24 +149,24 @@ const getToDo = async (todoId: string) => {
   }
 };
 
-const updateToDo = async (todoId: string, todo: Todo) => {
+export const updateToDoToFirestore = async (todoId: string, todo: ITodo) => {
   try {
     if (!navigator.onLine) {
       handleOfflineError('updateToDo');
     }
-    await setDoc(doc(firestore, todo_co,todoId),todo);
+    var updatedDoc = await setDoc(doc(firestore, todo_co, todoId), todo, { merge: true });
   } catch (error) {
     console.error('Error updating todo:', error);
     throw error;
   }
 };
 
-const deleteToDo = async (todoId: string) => {
+export const deleteToDoToFirestore = async (todoId: string) => {
   try {
     if (!navigator.onLine) {
       handleOfflineError('deleteToDo');
     }
-    await deleteDoc(doc(firestore, todo_co, todoId));
+    await deleteDoc(doc(firestore, todo_co, todoId.toString()));
   } catch (error) {
     console.error('Error deleting todo:', error);
     throw error;
@@ -146,7 +192,7 @@ const getGroup = async (groupId: string) => {
     if (!navigator.onLine) {
       handleOfflineError('getGroup');
     }
-    let docSnap = await getDoc(doc(firestore, group_co,groupId));
+    let docSnap = await getDoc(doc(firestore, group_co, groupId));
     return docSnap;
   } catch (error) {
     console.error('Error getting group:', error);
@@ -159,7 +205,7 @@ const updateGroup = async (groupId: string, group: Group) => {
     if (!navigator.onLine) {
       handleOfflineError('updateGroup');
     }
-    await setDoc(doc(firestore, group_co,groupId), group);
+    await setDoc(doc(firestore, group_co, groupId), group);
   } catch (error) {
     console.error('Error updating group:', error);
     throw error;

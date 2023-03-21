@@ -1,5 +1,16 @@
 import { uuidv4 } from "@firebase/util";
 
+export class User2 {
+    id: string;
+    name: string;
+
+    constructor(id: string, name: string) {
+        this.id = id;
+        this.name = name;
+    }
+
+}
+
 export class User {
     id: string;
     name: string;
@@ -7,8 +18,8 @@ export class User {
     username: string;
     groupList: string[] | null;
     userToDoList: string[] | null;
-  
-    constructor(name: string, surname: string, username: string) {  
+
+    constructor(name: string, surname: string, username: string) {
         this.id = uuidv4();
         this.name = name;
         this.surname = surname;

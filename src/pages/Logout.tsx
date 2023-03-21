@@ -2,7 +2,7 @@ import { IonSpinner } from "@ionic/react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { auth } from "..";
+import { auth } from "../Database-function";
 
 export const Logout = () => {
     const history = useHistory();

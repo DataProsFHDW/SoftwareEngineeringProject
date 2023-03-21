@@ -1,16 +1,11 @@
-import { EmailAuthProvider } from '@firebase/auth';
-import { IonButton, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
+import { uuidv4 } from "@firebase/util";
+import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonText, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect } from 'react';
-import { useParams } from 'react-router';
-import { auth } from '..';
-import ExploreContainer from '../components/ExploreContainer';
-import Menu from '../components/Menu';
 import { ToDoComponent } from '../components/ToDoComponent';
 import { TodoType } from '../models/TodoType';
 import useGlobalStorage from '../storage/StateManagement';
 import { useTodoStorage } from '../storage/StateManagementWrapper';
 import './Page.css';
-import { uuidv4 } from "@firebase/util";
 
 export const LandingPage: React.FC = () => {
   const useStorage = useGlobalStorage();
@@ -60,7 +55,7 @@ export const LandingPage: React.FC = () => {
             id: uuidv4(),
             todoType: TodoType.SIMPLE,
             todoTitle: "Title",
-            todoDescription:  ""
+            todoDescription: ""
           }}
           onEditClick={() => console.log("Trololol")}
           onDeleteClick={() => console.log("Trololol")}

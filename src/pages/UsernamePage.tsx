@@ -1,17 +1,17 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonMenuButton, IonPage, IonText, IonTitle, IonToolbar, useIonToast } from '@ionic/react';
-import { doc, getDoc, setDoc } from 'firebase/firestore/lite';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { auth, firestore } from '..';
 import FirestoreCollections from '../models/FirestoreCollections';
 import FirestoreCollectionFields from '../models/FirestoreCollectionFields';
 import './Page.css';
 import { useHistory } from 'react-router';
+import { auth, firestore } from '../Database-function';
 
 export async function fetchUsername(): Promise<string | null | undefined> {
     const refDocUser = doc(firestore, FirestoreCollections.USERS, auth.currentUser?.uid!);
     var docUser = await getDoc(refDocUser);
     if (!docUser.exists() || docUser.data()!.username == null) {
-         console.log("Username Not set")
+        console.log("Username Not set")
     }
     return docUser.data()!.username;
 }

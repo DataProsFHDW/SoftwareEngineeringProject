@@ -1,9 +1,9 @@
 import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonContent, IonHeader, IonMenuButton, IonPage, IonText, IonTitle, IonToolbar } from "@ionic/react";
 import { createUserWithEmailAndPassword, EmailAuthProvider, FacebookAuthProvider, GithubAuthProvider, GoogleAuthProvider, PhoneAuthProvider, signInWithEmailAndPassword, signInWithPopup, TwitterAuthProvider } from "firebase/auth";
-import { auth } from "..";
 import * as firebaseui from 'firebaseui'
 import React, { useState } from "react";
 import { useHistory } from "react-router";
+import { auth } from "../Database-function";
 
 export const LoginPage = () => {
   const [isEmailHidden, setEmailHidden] = useState(true)

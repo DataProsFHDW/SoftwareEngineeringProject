@@ -32,14 +32,11 @@ import { ToDoPage } from "./pages/ToDoPage";
 import { useEffect, useState } from "react";
 import { LoginPage } from "./pages/Login";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, firestore } from ".";
 import { Logout } from "./pages/Logout";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import FirestoreCollections from "./models/FirestoreCollections";
-import { doc, getDoc } from "firebase/firestore/lite";
 import { fetchUsername, UsernamePage } from "./pages/UsernamePage";
-
+import { auth } from "./Database-function";
 
 setupIonicReact();
 
@@ -52,11 +49,11 @@ const App: React.FC = () => {
     console.log("Auth State Changed", /* user */);
 
     const fetchUserProfile = async () => {
-      if (auth.currentUser != null) { 
+      if (auth.currentUser != null) {
         /* Logged in */
-        setUsername(await fetchUsername()); 
+        setUsername(await fetchUsername());
       }
-    } 
+    }
     fetchUserProfile();
   }, [user]);
 

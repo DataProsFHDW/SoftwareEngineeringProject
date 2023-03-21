@@ -1,4 +1,5 @@
 import {
+  IonButton,
   IonButtons,
   IonContent,
   IonFab,
@@ -18,7 +19,7 @@ import {
 import { add } from "ionicons/icons";
 import { ToDoComponent } from "../components/ToDoComponent";
 import "./ToDoPage.css";
-import { ITodo } from "../models/ITodo";
+import { ITodo, ITodoGroup } from "../models/ITodo";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
 import { TodoEditModal } from "../components/TodoEditModal";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
@@ -28,38 +29,38 @@ import { TodoAddModal } from "../components/TodoAddModal";
 
 export const ToDoPage: React.FC = () => {
   const todoStorage = useTodoStorage();
- 
-  const [selectedTodo, setSelectedTodo] = useState<ITodo>()
+
+  const [selectedTodo, setSelectedTodo] = useState<ITodoGroup>()
 
   const [presentEdit, dismissEdit] = useIonModal(TodoEditModal, {
     todoItem: selectedTodo,
-    onDismiss:  (data: ITodo, role: string) => dismissEdit(data, role),
+    onDismiss: (data: ITodoGroup, role: string) => dismissEdit(data, role),
   });
 
   const [presentAdd, dismissAdd] = useIonModal(TodoAddModal, {
-    onDismiss:  (data: ITodo, role: string) => dismissAdd(data, role),
+    onDismiss: (data: ITodoGroup, role: string) => dismissAdd(data, role),
   });
 
-  
+
   useEffect(() => {
     console.log("TodoList Changed", todoStorage.getTodoList())
   }, [todoStorage]); // [] => do on initial render of todoPageComponent
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
   useEffect(() => {
-    console.log("Effect on current LineItem" +JSON.stringify(selectedTodo));
+    console.log("Effect on current LineItem" + JSON.stringify(selectedTodo));
     if (!!selectedTodo) {
-      todoStorage.updateTodo(selectedTodo) 
+      todoStorage.updateTodo(selectedTodo)
     }
-    }, [selectedTodo])
-  
-  const handleEditClick = (todo: ITodo) => {
+  }, [selectedTodo])
+
+  const handleEditClick = (todo: ITodoGroup) => {
     setSelectedTodo(todo)
     presentEdit({
       onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
         if (ev.detail.role === "confirm") {
           console.log("Confirmed Input: " + JSON.stringify(ev.detail.data));
-          setSelectedTodo(ev.detail.data as ITodo)
+          setSelectedTodo(ev.detail.data as ITodoGroup)
           console.log(selectedTodo);
         }
       },
@@ -106,6 +107,9 @@ export const ToDoPage: React.FC = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle className="ion-text-center">Your To Dos</IonTitle>
+          <IonButton onClick={() => {
+            todoStorage.refreshTodos();
+          }}>Refresh</IonButton>
         </IonToolbar>
       </IonHeader>
 
