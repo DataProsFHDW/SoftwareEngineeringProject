@@ -85,7 +85,7 @@ export const useTodoStorage = () => {
     }
 
     const addTodo = async (todo: ITodo) => {
-        NotificationUtils.schedule(new Date(), todo.todoTitle.toString(), todo.todoDescription ?? "");
+        // NotificationUtils.schedule(new Date(), todo.todoTitle.toString(), todo.todoDescription ?? "");
         try {
             var networkState = await Network.getStatus();
             if (networkState.connected && networkState.connectionType != undefined) {
