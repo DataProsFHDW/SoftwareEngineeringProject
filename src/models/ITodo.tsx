@@ -6,7 +6,7 @@ export interface ITodo {
     todoTitle: number | string; // Number just cause Error in Modal Input field
     todoDescription?: string | null | undefined;
     //creator: string = "";
-    //inputOnClick:any;
+    //inputOnClick:any; 
 
 }
 
