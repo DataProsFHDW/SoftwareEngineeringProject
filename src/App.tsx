@@ -37,7 +37,7 @@ import { Logout } from "./pages/Logout";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { fetchUsername, UsernamePage } from "./pages/UsernamePage";
-import { auth } from "./Database-function";
+import { auth } from "./utils/firebase/Database-function";
 import { useTodoStorage } from "./storage/StateManagementWrapper";
 import { Network } from "@capacitor/network";
 

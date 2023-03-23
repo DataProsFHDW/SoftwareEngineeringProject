@@ -3,7 +3,7 @@ import { Preferences } from '@capacitor/preferences';
 import useGlobalStorage from "./StateManagement";
 import { ITodo, ITodoGroup } from "../models/ITodo";
 import NotificationUtils from "../utils/NotificationUtils";
-import { addToDoFirestore, auth, deleteToDoToFirestore, getAllToDosFromFirestore, getUsersFromFirestore, updateToDoToFirestore } from "../Database-function";
+import { addToDoFirestore, auth, deleteToDoToFirestore, getAllToDosFromFirestore, getUsersFromFirestore, updateToDoToFirestore } from "../utils/firebase/Database-function";
 import { useIonToast } from "@ionic/react";
 import { uuidv4 } from "@firebase/util";
 import { Network } from '@capacitor/network';

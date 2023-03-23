@@ -1,17 +1,17 @@
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from './utils/firebase/firebase-config';
-import { Group } from "./models/Group";
-import { User, User2 } from "./models/User";
+import { firebaseConfig } from './firebase-config';
+import { Group } from "../../models/Group";
+import { User, User2 } from "../../models/User";
 
 import { EmailAuthProvider, getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore, collection, addDoc, doc, deleteDoc, getDoc, getDocs, setDoc, query, where } from "firebase/firestore";
 import { group } from "console";
-import { Todo } from "./models/Todo_old";
-import { ITodo, ITodoGroup } from "./models/ITodo";
+import { Todo } from "../../models/Todo_old";
+import { ITodo, ITodoGroup } from "../../models/ITodo";
 import { List } from "@ionic/core/dist/types/components/list/list";
-import FirestoreCollectionFields from "./models/FirestoreCollectionFields";
-import FirestoreCollections from "./models/FirestoreCollections";
-import { TodoType } from "./models/TodoType";
+import FirestoreCollectionFields from "../../models/FirestoreCollectionFields";
+import FirestoreCollections from "../../models/FirestoreCollections";
+import { TodoType } from "../../models/TodoType";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

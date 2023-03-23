@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, EmailAuthProvider, FacebookAuthProvider
 import * as firebaseui from 'firebaseui'
 import React, { useState } from "react";
 import { useHistory } from "react-router";
-import { auth } from "../Database-function";
+import { auth } from "../utils/firebase/Database-function";
 
 export const LoginPage = () => {
   const [isEmailHidden, setEmailHidden] = useState(true)

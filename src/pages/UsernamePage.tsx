@@ -5,7 +5,7 @@ import FirestoreCollections from '../models/FirestoreCollections';
 import FirestoreCollectionFields from '../models/FirestoreCollectionFields';
 import './Page.css';
 import { useHistory } from 'react-router';
-import { auth, firestore } from '../Database-function';
+import { auth, firestore } from '../utils/firebase/Database-function';
 import { useTodoStorage } from '../storage/StateManagementWrapper';
 
 export async function fetchUsername(todoStorage: any): Promise<string | null | undefined> {
