@@ -5,8 +5,10 @@ export interface ITodo {
     todoType: TodoType;
     todoTitle: number | string; // Number just cause Error in Modal Input field
     todoDescription?: string | null | undefined;
+    todoDate?: Date | null | undefined;
+    todoCreationDate?: Date | null | undefined;
     //creator: string = "";
-    //inputOnClick:any; 
+    //inputOnClick:any;  
 
 }
 

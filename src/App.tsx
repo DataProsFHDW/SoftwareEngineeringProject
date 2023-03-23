@@ -37,9 +37,9 @@ import { Logout } from "./pages/Logout";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { fetchUsername, UsernamePage } from "./pages/UsernamePage";
-import { auth } from "./utils/firebase/Database-function";
 import { useTodoStorage } from "./storage/StateManagementWrapper";
 import { Network } from "@capacitor/network";
+import { auth } from "./utils/firebase/Database-function";
 
 setupIonicReact();
 
@@ -82,7 +82,9 @@ const App: React.FC = () => {
 
   var routerJsx;
 
-  if (user != null || (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')) {
+  var isDemoUser = true;
+
+  if (user != null || (isDemoUser && (!process.env.NODE_ENV || process.env.NODE_ENV === 'development'))) {
     if (auth.currentUser == null) {
       Network.getStatus().then((value) => {
         if (value.connected && value.connectionType != undefined) {
