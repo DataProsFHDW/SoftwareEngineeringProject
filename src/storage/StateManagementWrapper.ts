@@ -123,6 +123,8 @@ export const useTodoStorage = () => {
             console.error("Error while saving to firebase", error);
             present({ message: "Please try again.", duration: 1500 });
         }
+
+        NotificationUtils.scheduleAllTodos(getTodoList());
     }
 
     const removeTodo = async (todo: ITodo) => removeTodoById(todo.id);
@@ -159,6 +161,8 @@ export const useTodoStorage = () => {
             console.error("Error while removing from firebase", error);
             present({ message: "Please try again.", duration: 1500 });
         }
+
+        NotificationUtils.scheduleAllTodos(getTodoList());
     }
 
     const updateTodo = async (todo: ITodoGroup) => {
@@ -199,6 +203,8 @@ export const useTodoStorage = () => {
             console.error("Error while updating Todo to firebase", error);
             present({ message: "Please try again.", duration: 1500 });
         }
+
+        NotificationUtils.scheduleAllTodos(getTodoList());
     }
 
     const clearStorage = async () => await setStorage({

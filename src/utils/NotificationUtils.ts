@@ -1,7 +1,26 @@
 import { LocalNotifications } from '@capacitor/local-notifications';
+import { ITodoGroup } from '../models/ITodo';
 
 class NotificationUtils {
     notificationCount: number = 0;
+
+    public async scheduleAllTodos(todoList: ITodoGroup[]) {
+        if (!(await LocalNotifications.requestPermissions()).display) return;
+
+        this.clearAllNotifications();
+        todoList.forEach((todo) => {
+            var date: Date = todo.todoDate ?? new Date();
+            if (!todo.todoDate) {
+                // todo is not scheduled, schedule it for 1 hour from now
+                date.setHours(date.getHours() + 1);
+                // date.setSeconds(date.getSeconds() + 1);
+            }
+
+            this.schedule(date,
+                todo.todoTitle.toString() == "" ? "Todo Reminder" : todo.todoTitle.toString(),
+                todo.todoDescription ?? "");
+        });
+    }
 
     public async clearAllNotifications() {
         if (!(await LocalNotifications.requestPermissions()).display) return;
