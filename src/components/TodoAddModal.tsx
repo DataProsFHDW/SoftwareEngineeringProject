@@ -18,6 +18,9 @@ type Props = {
     const selectTypeRef = useRef<HTMLIonSelectElement>(null);
 
     function exportTodoWrapper(): ITodo {
+      if(inputTitleRef.current?.value=== "" || inputTitleRef.current?.value === null) {
+        inputTitleRef.current.value = "Title"
+      }
       return {
         todoType: selectTypeRef.current?.value ?? TodoType.SIMPLE,
         todoTitle: inputTitleRef.current?.value?.toString() ?? "Title",
