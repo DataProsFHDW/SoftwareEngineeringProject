@@ -32,10 +32,14 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
             <IonCardSubtitle>{todo.todoType?.toString()}</IonCardSubtitle>
           </IonCardHeader>
 
-          <IonCardContent>{todo.todoDescription}</IonCardContent>
+          <IonCardContent><>{todo.todoDate}
+          <br></br>
+          </>
+          </IonCardContent>
         </div>
         <IonButton fill="clear" onClick={onDeleteClick}>Delete</IonButton>
         <IonButton fill="clear" onClick={onEditClick}>Edit</IonButton>
+        <IonButton fill="clear" onClick={() => console.log(todo.todoDate)}>Value Check</IonButton>
       </IonCard>
       <IonReorder slot="end"></IonReorder>
     </IonItem>

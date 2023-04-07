@@ -14,6 +14,7 @@ import {
   IonDatetime,
   IonDatetimeButton,
   IonModal,
+  IonPopover,
 } from "@ionic/react";
 import { useRef, useState } from "react";
 import { ITodo } from "../models/ITodo";
@@ -29,12 +30,11 @@ export const TodoAddModal: React.FC<Props> = ({
 }: {
   onDismiss: (data?: ITodo | null | undefined, role?: string) => void;
 }) => {
-
-  //const [dueDate, setDueDate] = useState<string| null | undefined>()
+  const [dueDate, setDueDate] = useState<string| string[] | null | undefined>("")
   const inputTitleRef = useRef<HTMLIonInputElement>(null);
   const inputDescRef = useRef<HTMLIonInputElement>(null);
-  const selectTypeRef = useRef<HTMLIonSelectElement>(null); 
-  const datetime = useRef<null | HTMLIonDatetimeElement>(null);
+  const selectTypeRef = useRef<HTMLIonSelectElement>(null);
+  const datetime = useRef<HTMLIonInputElement| null>(null);
 
   function exportTodoWrapper(): ITodo {
     // No empty String as Title
@@ -44,12 +44,13 @@ export const TodoAddModal: React.FC<Props> = ({
     ) {
       inputTitleRef.current.value = "Title";
     }
-    console.log(datetime)
+    console.log(dueDate);
     return {
       todoType: selectTypeRef.current?.value ?? TodoType.SIMPLE,
       todoTitle: inputTitleRef.current?.value?.toString()!,
       todoDescription: inputDescRef.current?.value?.toString() ?? "",
       id: uuidv4(),
+      todoDate: new Date()
     };
   }
   return (
@@ -103,18 +104,31 @@ export const TodoAddModal: React.FC<Props> = ({
             <IonSelectOption value={TodoType.GROUP}>Group</IonSelectOption>
           </IonSelect>
         </IonItem>
+          
         <IonItem>
+          <IonInput ref={datetime} id="datetimeValue" value={dueDate?.toString()}></IonInput>
+          <IonPopover trigger="datetimeValue">
+          <IonDatetime id="datetime" locale="de-DE" multiple={false} onIonChange={(e) => setDueDate(e.detail.value) }>
+            <span slot="title">Due date for your Todo</span>
+          </IonDatetime>
+          </IonPopover>
+        </IonItem>
+         
+         {/**
+        <IonItem>
+          <IonLabel>Start Time</IonLabel>
+          <IonItem slot="end" id="datetimeValue">{datetime.current?.value}</IonItem>
+          <IonPopover trigger="datetimeValue">
             <IonDatetime
               id="datetime"
-              locale="de-DE"
+              presentation="date-time"
+              value="1994-12-15T13:47:20.789"
               ref={datetime}
-            >
-              <span slot="title">Select a due date for your Todo</span>
-            </IonDatetime>
+            ></IonDatetime>
+          </IonPopover>
         </IonItem>
-        <IonItem>
-          {datetime.current?.value}
-        </IonItem>
+        */}
+        <IonItem>{inputTitleRef.current?.value?.toString()}</IonItem>
       </IonContent>
     </IonPage>
   );
