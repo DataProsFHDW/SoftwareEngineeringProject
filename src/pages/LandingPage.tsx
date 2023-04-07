@@ -32,7 +32,8 @@ export const LandingPage: React.FC = () => {
                   id: uuidv4(),
                   todoType: TodoType.SIMPLE,
                   todoTitle: "Title",
-                  todoDescription: ""
+                  todoDescription: "",
+                  todoDate: new Date(),
                 });
             }}>
               +1 to global
@@ -55,7 +56,8 @@ export const LandingPage: React.FC = () => {
             id: uuidv4(),
             todoType: TodoType.SIMPLE,
             todoTitle: "Title",
-            todoDescription: ""
+            todoDescription: "",
+            todoDate: new Date(),
           }}
           onEditClick={() => console.log("Trololol")}
           onDeleteClick={() => console.log("Trololol")}

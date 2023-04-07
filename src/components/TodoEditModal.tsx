@@ -37,6 +37,7 @@ export const TodoEditModal: React.FC<Props> = ({
       todoTitle: inputTitleRef.current?.value ?? "Title",
       todoDescription: inputDescRef.current?.value?.toString() ?? "",
       id: todoItem.id,
+      todoDate: new Date()
     };
   }
   return (

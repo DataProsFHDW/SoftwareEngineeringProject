@@ -122,6 +122,7 @@ export const getAllToDosFromFirestore = async (): Promise<ITodoGroup[] | null> =
         todoType: TodoType.SIMPLE,
         todoTitle: doc.data()["todoTitle"].toString(),
         todoDescription: doc.data()["todoDescription"].toString(),
+        todoDate: doc.data()["todoDate"],
         users: doc.data()["users"],
         isDeleted: false,
         isSynced: true,

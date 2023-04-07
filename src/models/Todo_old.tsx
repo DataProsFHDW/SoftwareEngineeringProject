@@ -8,6 +8,7 @@ export class Todo implements ITodo {
     todoType: TodoType;
     todoTitle: string;
     todoDescription: string;
+    todoDate: Date;
 /*  creator: User;
     responsible: User;
     inputOnClick:any; 
@@ -23,6 +24,7 @@ export class Todo implements ITodo {
         this.todoType = todoType;
         this.todoTitle = todoTitle;
         this.todoDescription = todoDescription;
+        this.todoDate = new Date();
     }
 
 }

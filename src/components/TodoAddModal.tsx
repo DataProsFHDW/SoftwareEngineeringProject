@@ -16,7 +16,7 @@ import {
   IonModal,
   IonPopover,
 } from "@ionic/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ITodo } from "../models/ITodo";
 import { TodoType } from "../models/TodoType";
 import { uuidv4 } from "@firebase/util";
@@ -30,11 +30,22 @@ export const TodoAddModal: React.FC<Props> = ({
 }: {
   onDismiss: (data?: ITodo | null | undefined, role?: string) => void;
 }) => {
-  const [dueDate, setDueDate] = useState<string| string[] | null | undefined>("")
+  const [dueDate, setDueDate] = useState<string | string[] | null | undefined>(
+    ""
+  );
   const inputTitleRef = useRef<HTMLIonInputElement>(null);
   const inputDescRef = useRef<HTMLIonInputElement>(null);
   const selectTypeRef = useRef<HTMLIonSelectElement>(null);
-  const datetime = useRef<HTMLIonInputElement| null>(null);
+  const datetime = useRef<HTMLIonInputElement | null>(null);
+  let datetimeReturn: Date;
+
+  useEffect(() => {
+    console.log("Effect on current due date" + JSON.stringify(dueDate));
+    if (!!dueDate) {
+      datetimeReturn = new Date(dueDate.toString())
+      console.log("If is true: " + datetimeReturn)
+    }
+  }, [dueDate])
 
   function exportTodoWrapper(): ITodo {
     // No empty String as Title
@@ -44,13 +55,12 @@ export const TodoAddModal: React.FC<Props> = ({
     ) {
       inputTitleRef.current.value = "Title";
     }
-    console.log(dueDate);
     return {
       todoType: selectTypeRef.current?.value ?? TodoType.SIMPLE,
       todoTitle: inputTitleRef.current?.value?.toString()!,
       todoDescription: inputDescRef.current?.value?.toString() ?? "",
       id: uuidv4(),
-      todoDate: new Date()
+      todoDate: new Date(),
     };
   }
   return (
@@ -104,17 +114,28 @@ export const TodoAddModal: React.FC<Props> = ({
             <IonSelectOption value={TodoType.GROUP}>Group</IonSelectOption>
           </IonSelect>
         </IonItem>
-          
+
         <IonItem>
-          <IonInput ref={datetime} id="datetimeValue" value={dueDate?.toString()}></IonInput>
+          <IonInput
+            ref={datetime}
+            id="datetimeValue"
+            value={dueDate?.toString()}
+            placeholder="Choose Due Date"
+            type="text"
+          ></IonInput>
           <IonPopover trigger="datetimeValue">
-          <IonDatetime id="datetime" locale="de-DE" multiple={false} onIonChange={(e) => setDueDate(e.detail.value) }>
-            <span slot="title">Due date for your Todo</span>
-          </IonDatetime>
+            <IonDatetime
+              id="datetime"
+              locale="de-DE"
+              multiple={false}
+              onIonChange={(e) => setDueDate(e.detail.value)}
+            >
+              <span slot="title">Due date for your Todo</span>
+            </IonDatetime>
           </IonPopover>
         </IonItem>
-         
-         {/**
+
+        {/**
         <IonItem>
           <IonLabel>Start Time</IonLabel>
           <IonItem slot="end" id="datetimeValue">{datetime.current?.value}</IonItem>
@@ -128,7 +149,6 @@ export const TodoAddModal: React.FC<Props> = ({
           </IonPopover>
         </IonItem>
         */}
-        <IonItem>{inputTitleRef.current?.value?.toString()}</IonItem>
       </IonContent>
     </IonPage>
   );
