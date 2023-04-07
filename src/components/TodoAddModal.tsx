@@ -11,8 +11,11 @@ import {
   IonInput,
   IonSelect,
   IonSelectOption,
+  IonDatetime,
+  IonDatetimeButton,
+  IonModal,
 } from "@ionic/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ITodo } from "../models/ITodo";
 import { TodoType } from "../models/TodoType";
 import { uuidv4 } from "@firebase/util";
@@ -26,9 +29,12 @@ export const TodoAddModal: React.FC<Props> = ({
 }: {
   onDismiss: (data?: ITodo | null | undefined, role?: string) => void;
 }) => {
+
+  //const [dueDate, setDueDate] = useState<string| null | undefined>()
   const inputTitleRef = useRef<HTMLIonInputElement>(null);
   const inputDescRef = useRef<HTMLIonInputElement>(null);
-  const selectTypeRef = useRef<HTMLIonSelectElement>(null);
+  const selectTypeRef = useRef<HTMLIonSelectElement>(null); 
+  const datetime = useRef<null | HTMLIonDatetimeElement>(null);
 
   function exportTodoWrapper(): ITodo {
     // No empty String as Title
@@ -38,9 +44,10 @@ export const TodoAddModal: React.FC<Props> = ({
     ) {
       inputTitleRef.current.value = "Title";
     }
+    console.log(datetime)
     return {
       todoType: selectTypeRef.current?.value ?? TodoType.SIMPLE,
-      todoTitle: inputTitleRef.current?.value?.toString() ?? "Title",
+      todoTitle: inputTitleRef.current?.value?.toString()!,
       todoDescription: inputDescRef.current?.value?.toString() ?? "",
       id: uuidv4(),
     };
@@ -97,6 +104,16 @@ export const TodoAddModal: React.FC<Props> = ({
           </IonSelect>
         </IonItem>
         <IonItem>
+            <IonDatetime
+              id="datetime"
+              locale="de-DE"
+              ref={datetime}
+            >
+              <span slot="title">Select a due date for your Todo</span>
+            </IonDatetime>
+        </IonItem>
+        <IonItem>
+          {datetime.current?.value}
         </IonItem>
       </IonContent>
     </IonPage>

@@ -51,7 +51,7 @@ export const ToDoPage: React.FC = () => {
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
   useEffect(() => {
-    console.log("Effect on current LineItem" + JSON.stringify(selectedTodo));
+    console.log("Effect on current TodoItem" + JSON.stringify(selectedTodo));
     if (!!selectedTodo) {
       todoStorage.updateTodo(selectedTodo)
     }
