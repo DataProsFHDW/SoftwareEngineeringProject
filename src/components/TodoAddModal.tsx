@@ -20,6 +20,8 @@ import { useEffect, useRef, useState } from "react";
 import { ITodo } from "../models/ITodo";
 import { TodoType } from "../models/TodoType";
 import { uuidv4 } from "@firebase/util";
+import { format, parseISO } from 'date-fns';
+
 
 type Props = {
   onDismiss: () => void;
@@ -30,9 +32,7 @@ export const TodoAddModal: React.FC<Props> = ({
 }: {
   onDismiss: (data?: ITodo | null | undefined, role?: string) => void;
 }) => {
-  const [dueDate, setDueDate] = useState<string | string[] | null | undefined>(
-    ""
-  );
+  const [dueDate, setDueDate] = useState<string | string[] | null | undefined>();
   const inputTitleRef = useRef<HTMLIonInputElement>(null);
   const inputDescRef = useRef<HTMLIonInputElement>(null);
   const selectTypeRef = useRef<HTMLIonSelectElement>(null);
@@ -63,6 +63,8 @@ export const TodoAddModal: React.FC<Props> = ({
       todoDate: datetimeReturn,
     };
   }
+
+
   return (
     <IonPage>
       <IonHeader>
@@ -119,7 +121,7 @@ export const TodoAddModal: React.FC<Props> = ({
           <IonInput
             ref={datetime}
             id="datetimeValue"
-            value={dueDate?.toString()}
+            value={dueDate ? format(parseISO(dueDate?.toString()!), 'MMM d, yyyy'): null}
             placeholder="Choose Due Date"
             type="text"
           ></IonInput>
