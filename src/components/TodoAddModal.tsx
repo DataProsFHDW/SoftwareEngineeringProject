@@ -60,7 +60,7 @@ export const TodoAddModal: React.FC<Props> = ({
       todoTitle: inputTitleRef.current?.value?.toString()!,
       todoDescription: inputDescRef.current?.value?.toString() ?? "",
       id: uuidv4(),
-      todoDate: new Date(),
+      todoDate: datetimeReturn,
     };
   }
   return (
@@ -134,21 +134,6 @@ export const TodoAddModal: React.FC<Props> = ({
             </IonDatetime>
           </IonPopover>
         </IonItem>
-
-        {/**
-        <IonItem>
-          <IonLabel>Start Time</IonLabel>
-          <IonItem slot="end" id="datetimeValue">{datetime.current?.value}</IonItem>
-          <IonPopover trigger="datetimeValue">
-            <IonDatetime
-              id="datetime"
-              presentation="date-time"
-              value="1994-12-15T13:47:20.789"
-              ref={datetime}
-            ></IonDatetime>
-          </IonPopover>
-        </IonItem>
-        */}
       </IonContent>
     </IonPage>
   );
