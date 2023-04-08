@@ -48,7 +48,6 @@ export const TodoAddModal: React.FC<Props> = ({
   const inputDescRef = useRef<HTMLIonInputElement>(null);
   const selectTypeRef = useRef<HTMLIonSelectElement>(null);
   const datetime = useRef<HTMLIonInputElement | null>(null);
-  const datetimeCal = useRef<HTMLIonDatetimeElement>(null);
   let datetimeReturn: Date| null| undefined = null;
 
   useEffect(() => {
