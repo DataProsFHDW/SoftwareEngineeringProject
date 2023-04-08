@@ -11,6 +11,7 @@ import {
 } from "@ionic/react";
 import { ITodo } from "../models/ITodo";
 import "./ToDoComponent.css";
+import { Timestamp } from "firebase/firestore";
 
 interface ToDoComponentProps {
   onEditClick: any;
@@ -33,7 +34,9 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
           </IonCardHeader>
 
           <IonCardContent>
-            {todo.todoDate?todo.todoDate.toString(): "nothing here"}
+            {todo.todoDate == null ? "Nothing" : todo.todoDate.toLocaleDateString("de-DE")
+             + " | " + todo.todoDate.toLocaleTimeString("de-DE")}
+            {/*todo.todoDate? todo.todoDate.toString(): "nothing here"*/}
  
           </IonCardContent>
         </div>

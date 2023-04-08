@@ -4,7 +4,7 @@ import { Group } from "../../models/Group";
 import { User, User2 } from "../../models/User";
 
 import { EmailAuthProvider, getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore, collection, addDoc, doc, deleteDoc, getDoc, getDocs, setDoc, query, where } from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, deleteDoc, getDoc, getDocs, setDoc, query, where, Timestamp } from "firebase/firestore";
 import { group } from "console";
 import { Todo } from "../../models/Todo_old";
 import { ITodo, ITodoGroup } from "../../models/ITodo";
@@ -117,12 +117,21 @@ export const getAllToDosFromFirestore = async (): Promise<ITodoGroup[] | null> =
     let docSnap = await getDocs(collection(firestore, todo_co));
 
     var todos = docSnap.docs.map((doc) => {
+      let timestamp = null;
+
+      if(doc.data()["todoDate"]) {
+        // Object { seconds: 1680908377, nanoseconds: 755000000 }
+        timestamp = new Timestamp(
+          doc.data()["todoDate"]["seconds"],
+          doc.data()["todoDate"]["nanoseconds"]).toDate();
+      }
+
       return {
         id: doc.id,
         todoType: TodoType.SIMPLE,
         todoTitle: doc.data()["todoTitle"].toString(),
         todoDescription: doc.data()["todoDescription"].toString(),
-        todoDate: doc.data()["todoDate"],
+        todoDate: timestamp,
         users: doc.data()["users"],
         isDeleted: false,
         isSynced: true,

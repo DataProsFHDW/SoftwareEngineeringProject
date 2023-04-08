@@ -1,6 +1,6 @@
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { ITodoGroup } from '../models/ITodo';
-
+ 
 class NotificationUtils {
     notificationCount: number = 0;
 
@@ -13,8 +13,8 @@ class NotificationUtils {
             if (!todo.todoDate) {
                 // todo is not scheduled, schedule it for 1 hour from now
                 date.setHours(date.getHours() + 1);
-                // date.setSeconds(date.getSeconds() + 1);
-            }
+                // date.setSeconds(date.getSeconds() + 1); 
+            } 
 
             this.schedule(date,
                 todo.todoTitle.toString() == "" ? "Todo Reminder" : todo.todoTitle.toString(),
