@@ -57,7 +57,7 @@ const appPages: AppPage[] = [
   },
   {
     title: 'Statistics',
-    url: '/page/Statistics',
+    url: '/page/Statspage',
     iosIcon: statsChartOutline,
     mdIcon: statsChartSharp
   },
