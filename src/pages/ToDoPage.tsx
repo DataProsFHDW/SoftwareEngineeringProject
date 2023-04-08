@@ -91,10 +91,10 @@ export const ToDoPage: React.FC = () => {
     event.detail.complete();
   }
 
-  let toDoRender = todoStorage.getTodoList().map((todo, index) => {
+  let todoRender = todoStorage.getTodoList().map((todo, index) => {
     return (
       <ToDoComponent
-        key={"ToDo-" + index}
+        key={"Todo-" + index}
         todo={todo}
         onEditClick={() => handleEditClick(todo)}
         onDeleteClick={() => deleteTodo(index)}
@@ -124,7 +124,7 @@ export const ToDoPage: React.FC = () => {
           </IonListHeader>
           {/* The reorder gesture is disabled by default, enable it to drag and drop items */}
           <IonReorderGroup disabled={false} onIonItemReorder={handleReorder}>
-            {toDoRender}
+            {todoRender}
           </IonReorderGroup>
         </IonList>
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
