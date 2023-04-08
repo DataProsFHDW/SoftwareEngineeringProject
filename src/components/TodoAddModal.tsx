@@ -134,7 +134,7 @@ export const TodoAddModal: React.FC<Props> = ({
               clearInput={true} 
               value={
                 dueDate
-                  ? (new Date(dueDate.toString())).toLocaleString("de-DE")
+                  ? "Due on: " + (new Date(dueDate.toString())).toLocaleString("de-DE")
                   : null
               }
               placeholder="Choose Due Date"
