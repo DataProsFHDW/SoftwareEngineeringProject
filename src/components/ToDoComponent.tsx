@@ -24,6 +24,13 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
   onEditClick,
   onDeleteClick,
 }) => {
+
+  let todoJsx = "";
+  if (typeof todo.todoDate == "object") {
+    todoJsx = todo.todoDate!.toLocaleDateString("de-DE")
+      + " | " + todo.todoDate!.toLocaleTimeString("de-DE");
+  }
+
   return (
     <IonItem>
       <IonCard >
@@ -34,10 +41,9 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
           </IonCardHeader>
 
           <IonCardContent>
-            {todo.todoDate == null ? "Nothing" : todo.todoDate.toLocaleDateString("de-DE")
-             + " | " + todo.todoDate.toLocaleTimeString("de-DE")}
+            {todoJsx}
             {/*todo.todoDate? todo.todoDate.toString(): "nothing here"*/}
- 
+
           </IonCardContent>
         </div>
         <IonButton fill="clear" onClick={onDeleteClick}>Delete</IonButton>
