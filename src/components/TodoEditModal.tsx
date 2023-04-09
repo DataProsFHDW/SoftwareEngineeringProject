@@ -33,7 +33,7 @@ export const TodoEditModal: React.FC<Props> = ({
 }) => {
   const [dueDate, setDueDate] = useState<
     string | string[] | null | undefined
-  >(todoItem.todoDate?.toString());
+  >(todoItem.todoDate ? todoItem.todoDate.toString() : null );
 
   const inputTitleRef = useRef<HTMLIonInputElement>(null);
   const inputDescRef = useRef<HTMLIonInputElement>(null);
@@ -43,11 +43,20 @@ export const TodoEditModal: React.FC<Props> = ({
 
   useEffect(() => {
     console.log("Effect on current due date" + JSON.stringify(dueDate));
-    if (!!dueDate) {
-      datetimeReturn = new Date(dueDate.toString());
+    if (dueDate) {
+      datetimeReturn = new Date(dueDate?.toString()!);
       console.log("If is true: " + datetimeReturn);
     }
+    else{
+      datetimeReturn = null;
+    }
   }, [dueDate]);
+
+  function handleInputChange(changeEvent: any): void {
+    if (!changeEvent.detail.value) {
+      setDueDate(null)
+    }
+  }
 
   function exportTodoWrapper(): ITodo {
     if (
@@ -112,7 +121,7 @@ export const TodoEditModal: React.FC<Props> = ({
               <IonSelectOption value={TodoType.GROUP}>Group</IonSelectOption>
             </IonSelect>
           </IonItem>
-          <IonItem>
+          <IonItem>            
             <IonInput
               ref={datetime}
               id="datetimeValue"
@@ -123,6 +132,7 @@ export const TodoEditModal: React.FC<Props> = ({
                     new Date(dueDate.toString()).toLocaleString("de-DE")
                   : null
               }
+              onIonChange={(e) => handleInputChange(e)}
               placeholder="Choose Due Date"
               type="text"
             ></IonInput>
@@ -133,6 +143,7 @@ export const TodoEditModal: React.FC<Props> = ({
                 multiple={false}
                 onIonChange={(e) => setDueDate(e.detail.value)}
                 showDefaultButtons={true}
+                firstDayOfWeek={1}
                 size={"cover"}
               >
                 <span slot="title">Select Due date for your Todo</span>

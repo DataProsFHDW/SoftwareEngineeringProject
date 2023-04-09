@@ -26,7 +26,8 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
 }) => {
 
   let todoDateJsx = "";
-  if (typeof todo.todoDate == "object") {
+
+  if (todo.todoDate != null && typeof todo.todoDate == "object") {
     todoDateJsx = todo.todoDate!.toLocaleDateString("de-DE")
       + " | " + todo.todoDate!.toLocaleTimeString("de-DE");
   }
