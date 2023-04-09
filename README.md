@@ -21,5 +21,5 @@ npm install -g @ionic/cli @capacitor/cli firebase-cli firebase-tools
 
 ### Start & Debug Application
 ```bash
-ionic serve
+ionic serve --external
 ```
