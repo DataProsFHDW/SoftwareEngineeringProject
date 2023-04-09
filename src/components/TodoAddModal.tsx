@@ -15,12 +15,23 @@ import {
   IonDatetimeButton,
   IonModal,
   IonPopover,
+  IonList,
 } from "@ionic/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ITodo } from "../models/ITodo";
 import { TodoType } from "../models/TodoType";
 import { uuidv4 } from "@firebase/util";
-
+import { format, parseISO } from "date-fns";
+import styled from "styled-components";
+/*
+const IonModalBox = styled(IonModal)`
+  --height: "45%";
+  &::part(content) {
+    position: absolute;
+    bottom: 0;
+  }
+`;
+*/
 type Props = {
   onDismiss: () => void;
 };
@@ -30,11 +41,22 @@ export const TodoAddModal: React.FC<Props> = ({
 }: {
   onDismiss: (data?: ITodo | null | undefined, role?: string) => void;
 }) => {
-  const [dueDate, setDueDate] = useState<string| string[] | null | undefined>("")
+  const [dueDate, setDueDate] = useState<
+    string | string[] | null | undefined
+  >();
   const inputTitleRef = useRef<HTMLIonInputElement>(null);
   const inputDescRef = useRef<HTMLIonInputElement>(null);
   const selectTypeRef = useRef<HTMLIonSelectElement>(null);
-  const datetime = useRef<HTMLIonInputElement| null>(null);
+  const datetime = useRef<HTMLIonInputElement | null>(null);
+  let datetimeReturn: Date| null| undefined = null;
+
+  useEffect(() => {
+    console.log("Effect on current due date" + JSON.stringify(dueDate));
+    if (!!dueDate) {
+      datetimeReturn = new Date(dueDate.toString());
+      console.log("If is true: " + datetimeReturn);
+    }
+  }, [dueDate]);
 
   function exportTodoWrapper(): ITodo {
     // No empty String as Title
@@ -44,13 +66,12 @@ export const TodoAddModal: React.FC<Props> = ({
     ) {
       inputTitleRef.current.value = "Title";
     }
-    console.log(dueDate);
     return {
       todoType: selectTypeRef.current?.value ?? TodoType.SIMPLE,
       todoTitle: inputTitleRef.current?.value?.toString()!,
       todoDescription: inputDescRef.current?.value?.toString() ?? "",
       id: uuidv4(),
-      todoDate: new Date()
+      todoDate: datetimeReturn,
     };
   }
   return (
@@ -75,60 +96,63 @@ export const TodoAddModal: React.FC<Props> = ({
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <IonItem>
-          <IonLabel position="floating">Enter Todo Title</IonLabel>
-          {/** updateNewTodo(e.detail.value)*/}
-          <IonInput
-            type="text"
-            placeholder="e.g. Shopping"
-            required={true}
-            ref={inputTitleRef}
-          />
-        </IonItem>
-        <IonItem>
-          <IonLabel position="floating">Enter Todo Description</IonLabel>
-          {/** updateNewTodo(e.detail.value)*/}
-          <IonInput
-            type="text"
-            placeholder="e.g. at the mall..."
-            ref={inputDescRef}
-          />
-        </IonItem>
-        <IonItem>
-          <IonSelect
-            placeholder="Select TodoType"
-            interface="popover"
-            ref={selectTypeRef}
-          >
-            <IonSelectOption value={TodoType.SIMPLE}>Simple</IonSelectOption>
-            <IonSelectOption value={TodoType.GROUP}>Group</IonSelectOption>
-          </IonSelect>
-        </IonItem>
-          
-        <IonItem>
-          <IonInput ref={datetime} id="datetimeValue" value={dueDate?.toString()}></IonInput>
-          <IonPopover trigger="datetimeValue">
-          <IonDatetime id="datetime" locale="de-DE" multiple={false} onIonChange={(e) => setDueDate(e.detail.value) }>
-            <span slot="title">Due date for your Todo</span>
-          </IonDatetime>
-          </IonPopover>
-        </IonItem>
-         
-         {/**
-        <IonItem>
-          <IonLabel>Start Time</IonLabel>
-          <IonItem slot="end" id="datetimeValue">{datetime.current?.value}</IonItem>
-          <IonPopover trigger="datetimeValue">
-            <IonDatetime
-              id="datetime"
-              presentation="date-time"
-              value="1994-12-15T13:47:20.789"
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating">Enter Todo Title</IonLabel>
+            {/** updateNewTodo(e.detail.value)*/}
+            <IonInput
+              type="text"
+              placeholder="e.g. Shopping"
+              required={true}
+              ref={inputTitleRef}
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating">Enter Todo Description</IonLabel>
+            {/** updateNewTodo(e.detail.value)*/}
+            <IonInput
+              type="text"
+              placeholder="e.g. at the mall..."
+              ref={inputDescRef}
+            />
+          </IonItem>
+          <IonItem>
+            <IonSelect
+              placeholder="Select TodoType"
+              interface="popover"
+              ref={selectTypeRef}
+            >
+              <IonSelectOption value={TodoType.SIMPLE}>Simple</IonSelectOption>
+              <IonSelectOption value={TodoType.GROUP}>Group</IonSelectOption>
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonInput
               ref={datetime}
-            ></IonDatetime>
-          </IonPopover>
-        </IonItem>
-        */}
-        <IonItem>{inputTitleRef.current?.value?.toString()}</IonItem>
+              id="datetimeValue"
+              clearInput={true} 
+              value={
+                dueDate
+                  ? "Due on: " + (new Date(dueDate.toString())).toLocaleString("de-DE")
+                  : null
+              }
+              placeholder="Choose Due Date"
+              type="text"
+            ></IonInput>
+            <IonModal trigger="datetimeValue">
+              <IonDatetime
+                id="datetime"
+                locale="de-DE"
+                multiple={false}
+                onIonChange={(e) => setDueDate(e.detail.value)}
+                showDefaultButtons={true}
+                size={"cover"}
+              >
+                <span slot="title">Select Due date for your Todo</span>
+              </IonDatetime>
+            </IonModal>
+          </IonItem>
+        </IonList>
       </IonContent>
     </IonPage>
   );

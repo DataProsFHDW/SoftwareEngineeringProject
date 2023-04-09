@@ -11,6 +11,7 @@ import {
 } from "@ionic/react";
 import { ITodo } from "../models/ITodo";
 import "./ToDoComponent.css";
+import { Timestamp } from "firebase/firestore";
 
 interface ToDoComponentProps {
   onEditClick: any;
@@ -23,6 +24,13 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
   onEditClick,
   onDeleteClick,
 }) => {
+
+  let todoDateJsx = "";
+  if (typeof todo.todoDate == "object") {
+    todoDateJsx = todo.todoDate!.toLocaleDateString("de-DE")
+      + " | " + todo.todoDate!.toLocaleTimeString("de-DE");
+  }
+
   return (
     <IonItem>
       <IonCard >
@@ -32,9 +40,10 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
             <IonCardSubtitle>{todo.todoType?.toString()}</IonCardSubtitle>
           </IonCardHeader>
 
-          <IonCardContent><>{todo.todoDate}
-          <br></br>
-          </>
+          <IonCardContent>
+            {todoDateJsx}
+            {/*todo.todoDate? todo.todoDate.toString(): "nothing here"*/}
+
           </IonCardContent>
         </div>
         <IonButton fill="clear" onClick={onDeleteClick}>Delete</IonButton>
