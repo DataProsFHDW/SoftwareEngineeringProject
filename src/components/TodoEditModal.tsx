@@ -31,9 +31,9 @@ export const TodoEditModal: React.FC<Props> = ({
   todoItem: ITodo;
   onDismiss: (data?: ITodo | null | undefined, role?: string) => void;
 }) => {
-  const [dueDate, setDueDate] = useState<
-    string | string[] | null | undefined
-  >(todoItem.todoDate ? todoItem.todoDate.toString() : null );
+  const [dueDate, setDueDate] = useState<string | string[] | null | undefined>(
+    todoItem.todoDate ? todoItem.todoDate.toString() : null
+  );
 
   const inputTitleRef = useRef<HTMLIonInputElement>(null);
   const inputDescRef = useRef<HTMLIonInputElement>(null);
@@ -46,15 +46,14 @@ export const TodoEditModal: React.FC<Props> = ({
     if (dueDate) {
       datetimeReturn = new Date(dueDate?.toString()!);
       console.log("If is true: " + datetimeReturn);
-    }
-    else{
+    } else {
       datetimeReturn = null;
     }
   }, [dueDate]);
 
   function handleInputChange(changeEvent: any): void {
     if (!changeEvent.detail.value) {
-      setDueDate(null)
+      setDueDate(null);
     }
   }
 
@@ -73,6 +72,7 @@ export const TodoEditModal: React.FC<Props> = ({
       todoDate: datetimeReturn,
     };
   }
+
   return (
     <IonPage>
       <IonHeader>
@@ -121,7 +121,7 @@ export const TodoEditModal: React.FC<Props> = ({
               <IonSelectOption value={TodoType.GROUP}>Group</IonSelectOption>
             </IonSelect>
           </IonItem>
-          <IonItem>            
+          <IonItem>
             <IonInput
               ref={datetime}
               id="datetimeValue"
