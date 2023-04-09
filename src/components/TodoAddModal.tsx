@@ -56,6 +56,9 @@ export const TodoAddModal: React.FC<Props> = ({
       datetimeReturn = new Date(dueDate.toString());
       console.log("If is true: " + datetimeReturn);
     }
+    else {
+      datetimeReturn = null
+    }
   }, [dueDate]);
 
   function exportTodoWrapper(): ITodo {
