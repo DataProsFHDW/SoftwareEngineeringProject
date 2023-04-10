@@ -13,7 +13,7 @@ import FirestoreCollectionFields from "../../models/FirestoreCollectionFields";
 import FirestoreCollections from "../../models/FirestoreCollections";
 import { TodoType } from "../../models/TodoType";
 
-// Initialize Firebase
+// Initialize Firebase 
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 

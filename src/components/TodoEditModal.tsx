@@ -16,11 +16,13 @@ import {
   IonModal,
 } from "@ionic/react";
 import React, { useEffect, useRef, useState } from "react";
-import { ITodo } from "../models/ITodo";
+import { ITodoGroup } from "../models/ITodo";
 import { TodoType } from "../models/TodoType";
+import { getUsersFromFirestore, auth } from "../utils/firebase/Database-function";
+import { User2 } from "../models/User";
 
 type Props = {
-  todoItem: ITodo;
+  todoItem: ITodoGroup;
   onDismiss: () => void;
 };
 
@@ -28,8 +30,8 @@ export const TodoEditModal: React.FC<Props> = ({
   todoItem,
   onDismiss,
 }: {
-  todoItem: ITodo;
-  onDismiss: (data?: ITodo | null | undefined, role?: string) => void;
+  todoItem: ITodoGroup;
+  onDismiss: (data?: ITodoGroup | null | undefined, role?: string) => void;
 }) => {
   const [dueDate, setDueDate] = useState<string | string[] | null | undefined>(
     todoItem.todoDate ? todoItem.todoDate.toString() : null
@@ -51,25 +53,50 @@ export const TodoEditModal: React.FC<Props> = ({
     }
   }, [dueDate]);
 
+  const [listUser, setListUser] = useState<User2[]>([]);
+  const [selectedUsers, setselectedUsers] = useState<string[]>([]);
+
+  useEffect(() => {
+    setselectedUsers(todoItem.users ?? []);
+
+    async function getUsers() {
+      var users = await getUsersFromFirestore();
+      if (users != null) {
+        users = users.filter((user) => user.id != auth.currentUser?.uid);
+        setListUser(users);
+      }
+    //  console.log("Fetched users", users)
+    }
+    getUsers();
+  }, []);
+
+  useEffect(() => {
+    // console.log("Reload?")
+  }, [listUser])
+
+
   function handleInputChange(changeEvent: any): void {
     if (!changeEvent.detail.value) {
       setDueDate(null);
     }
   }
 
-  function exportTodoWrapper(): ITodo {
+  function exportTodoWrapper(): ITodoGroup {
     if (
       inputTitleRef.current?.value === "" ||
       inputTitleRef.current?.value === null
     ) {
       inputTitleRef.current.value = "Title";
-    }
+    } 
     return {
       todoType: selectTypeRef.current?.value,
       todoTitle: inputTitleRef.current?.value ?? "Title",
       todoDescription: inputDescRef.current?.value?.toString() ?? "",
       id: todoItem.id,
       todoDate: datetimeReturn,
+      users: selectedUsers,
+      isDeleted: false,
+      isSynced: false,
     };
   }
 
@@ -87,7 +114,10 @@ export const TodoEditModal: React.FC<Props> = ({
             <IonButton
               strong={true}
               color="primary"
-              onClick={() => onDismiss(exportTodoWrapper(), "confirm")}
+              onClick={() => {
+                onDismiss(exportTodoWrapper(), "confirm");
+                console.log("Selected Users", selectedUsers)
+              }}
             >
               Submit
             </IonButton>
@@ -129,7 +159,7 @@ export const TodoEditModal: React.FC<Props> = ({
               value={
                 dueDate
                   ? "Due on: " +
-                    new Date(dueDate.toString()).toLocaleString("de-DE")
+                  new Date(dueDate.toString()).toLocaleString("de-DE")
                   : null
               }
               onIonChange={(e) => handleInputChange(e)}
@@ -149,6 +179,29 @@ export const TodoEditModal: React.FC<Props> = ({
                 <span slot="title">Select Due date for your Todo</span>
               </IonDatetime>
             </IonModal>
+          </IonItem>
+          <IonItem>
+            <IonSelect
+              aria-label="Collaborators"
+              placeholder="Select people to collaborate with"
+              aria-labelledby="select-label"
+              interface="popover"
+              onIonChange={(e) => setselectedUsers(e.detail.value)}
+              value={selectedUsers}
+              multiple={true}>
+              {
+                listUser.map((user) =>
+                (
+                  <IonSelectOption 
+                  key={"SelectOption"+user.id}
+                  value={user.id} 
+                  
+                  >
+                    {user.name}
+                  </IonSelectOption>)
+                )
+              }
+            </IonSelect>
           </IonItem>
         </IonList>
       </IonContent>
