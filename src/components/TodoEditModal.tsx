@@ -20,6 +20,7 @@ import { ITodoGroup } from "../models/ITodo";
 import { TodoType } from "../models/TodoType";
 import { getUsersFromFirestore, auth } from "../utils/firebase/Database-function";
 import { User2 } from "../models/User";
+import { id } from "date-fns/locale";
 
 type Props = {
   todoItem: ITodoGroup;
@@ -57,6 +58,8 @@ export const TodoEditModal: React.FC<Props> = ({
   const [selectedUsers, setselectedUsers] = useState<string[]>([]);
 
   useEffect(() => {
+    setDueDate(todoItem.todoDate?.toString() ?? null);
+    datetimeReturn = new Date(dueDate?.toString()!);
     setselectedUsers(todoItem.users ?? []);
 
     async function getUsers() {
