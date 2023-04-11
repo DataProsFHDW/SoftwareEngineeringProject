@@ -84,10 +84,10 @@ export const useTodoStorage = () => {
         // TODO get from firebase
     }
 
-    // get Data for Stats
-    const exportTodoList = (): ITodoGroup[] => {
-        return getTodoList();
-    }
+    // // get Data for Stats
+    // const exportTodoList = (): ITodoGroup[] => {
+    //     return getTodoList();
+    // }
 
     const addTodo = async (todo: ITodo) => {
         // NotificationUtils.schedule(new Date(), todo.todoTitle.toString(), todo.todoDescription ?? "");
@@ -216,5 +216,5 @@ export const useTodoStorage = () => {
         todoList: [], username: null
     });
 
-    return { storage, setUsername, getUsername, refreshTodos, getTodoList, setTodoList, clearStorage, addTodo, removeTodo, removeTodoById, updateTodo, exportTodoList };
+    return { storage, setUsername, getUsername, refreshTodos, getTodoList, setTodoList, clearStorage, addTodo, removeTodo, removeTodoById, updateTodo };
 };

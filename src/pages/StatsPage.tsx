@@ -9,7 +9,7 @@ import { useTodoStorage } from '../storage/StateManagementWrapper';
 
 
 // Testen der Charts -> richtige Daten müssen noch eingepflegt werden
-const dataPie = [
+const dataPieTest = [
     {name: "Facebook", value:2000},
     {name: "Instagram", value:1500},
     {name: "Twitter", value:1000},
@@ -58,22 +58,18 @@ const dataBar = [
       pv: 4300,
       amt: 2100,
     },
-  ];
-
-  const TodoList = () => {
-    const { exportTodoList } = useTodoStorage();
-    const todos = exportTodoList();
-  
-    return (
-      <ul>
-        {todos.map((todo, index) => (
-          <li key={index}>{todo.id}</li>
-        ))}
-      </ul>
-    );
-  };
+];
 
 const StatsPage: React.FC = () => {
+  const { getTodoList } = useTodoStorage();
+  const todos = getTodoList();
+  const todoCount = todos.length;
+
+  const SingleTodoCount = todos.filter(todo => todo.todoType.includes("Single")).length;
+  const GroupTodoCount = todoCount - SingleTodoCount;
+
+  const TodosCreationDate = todos.filter(todo => todo.todoCreationDate).length;
+
   return (
     <IonPage>
       <IonHeader>
@@ -87,7 +83,7 @@ const StatsPage: React.FC = () => {
           <Pie
             dataKey="value"
             isAnimationActive={false}
-            data={dataPie}
+            data={[{ name: 'Single', value: SingleTodoCount }, { name: 'Group', value: GroupTodoCount }]}
             cx="50%"
             cy="50%"
             outerRadius={80}
@@ -132,8 +128,17 @@ const StatsPage: React.FC = () => {
           <Tooltip />
           <Area type="monotone" dataKey="uv" stroke="#8884d8" fill="#8884d8" />
         </AreaChart>
-        <h1>Todo List</h1>
-        <TodoList/>
+        <div> 
+          <ul>
+            <p>Anzahl: {todoCount}</p>
+            {todos.map((todo, index) => (
+              <React.Fragment key={index}>               
+                <li>{todo.todoTitle}</li>
+                <li>{todo.id}</li>
+              </React.Fragment>
+            ))}
+          </ul>
+        </div>  
       </IonContent>
     </IonPage>
   );
