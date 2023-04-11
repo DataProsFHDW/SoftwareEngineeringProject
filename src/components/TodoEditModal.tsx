@@ -97,7 +97,7 @@ export const TodoEditModal: React.FC<Props> = ({
       todoDescription: inputDescRef.current?.value?.toString() ?? "",
       id: todoItem.id,
       todoDate: datetimeReturn,
-      users: selectedUsers,
+      users: [...selectedUsers.filter((u) => u != auth.currentUser!.uid!), auth.currentUser?.uid!],
       isDeleted: false,
       isSynced: false,
     };
