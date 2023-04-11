@@ -52,7 +52,7 @@ export const TodoAddModal: React.FC<Props> = ({
 
   useEffect(() => {
     console.log("Effect on current due date" + JSON.stringify(dueDate));
-    if (!!dueDate) {
+    if (dueDate) {
       datetimeReturn = new Date(dueDate.toString());
       console.log("If is true: " + datetimeReturn);
     }
