@@ -39,7 +39,7 @@ export const TodoEditModal: React.FC<Props> = ({
   const inputDescRef = useRef<HTMLIonInputElement>(null);
   const selectTypeRef = useRef<HTMLIonSelectElement>(null);
   const datetime = useRef<HTMLIonInputElement | null>(null);
-  let datetimeReturn: Date | null | undefined = null;
+  let datetimeReturn: Date | null | undefined = todoItem.todoDate ? new Date(todoItem.todoDate.toString()) : null;
 
   useEffect(() => {
     console.log("Effect on current due date" + JSON.stringify(dueDate));
