@@ -31,7 +31,7 @@ export const ToDoPage: React.FC = () => {
   const todoStorage = useTodoStorage();
 
   const [selectedTodo, setSelectedTodo] = useState<ITodoGroup>()
-
+ 
   const [presentEdit, dismissEdit] = useIonModal(TodoEditModal, {
     todoItem: selectedTodo,
     onDismiss: (data: ITodoGroup, role: string) => dismissEdit(data, role),
