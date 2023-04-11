@@ -51,19 +51,7 @@ export const TodoEditModal: React.FC<Props> = ({
     todoItem.users ?? []
   );
 
-  let datetimeReturn: Date | null | undefined = todoItem.todoDate
-    ? new Date(todoItem.todoDate.toString())
-    : null;
-  /*
   useEffect(() => {
-    console.log("Effect on current due date" + JSON.stringify(dueDate));
-
-  }, [dueDate]);
-*/
-  useEffect(() => {
-    //setDueDate(todoItem.todoDate?.toString() ?? null);
-    //datetimeReturn = new Date(dueDate?.toString()!);
-    //setselectedUsers(todoItem.users ?? []);
 
     async function getUsers() {
       var users = await getUsersFromFirestore();
@@ -71,7 +59,6 @@ export const TodoEditModal: React.FC<Props> = ({
         users = users.filter((user) => user.id != auth.currentUser?.uid);
         setListUser(users);
       }
-      //  console.log("Fetched users", users)
     }
     getUsers();
   }, []);
@@ -80,14 +67,15 @@ export const TodoEditModal: React.FC<Props> = ({
     // console.log("Reload?")
   }, [listUser]);
 
-  function handleInputChange(changeEvent: any): void {
+  function handleDateInputChange(changeEvent: any): void {
     if (!changeEvent.detail.value) {
       setDueDate(null);
     }
   }
 
   function exportTodoWrapper(): ITodoGroup {
-    let titleReturn = todoTitle.toString();
+    let titleReturn: string = todoTitle.toString();
+    let datetimeReturn: Date | null = null;
     if (titleReturn === "" || titleReturn === null) {
       titleReturn = "Title";
     }
@@ -98,7 +86,7 @@ export const TodoEditModal: React.FC<Props> = ({
       datetimeReturn = null;
     }
     return {
-      todoType: todoType,
+      todoType: todoType ?? TodoType.SIMPLE,
       todoTitle: titleReturn,
       todoDescription: todoDesc?.toString() ?? "",
       id: todoItem.id,
@@ -173,7 +161,7 @@ export const TodoEditModal: React.FC<Props> = ({
                     new Date(dueDate.toString()).toLocaleString("de-DE")
                   : null
               }
-              onIonChange={(e) => handleInputChange(e)}
+              onIonChange={(e) => handleDateInputChange(e)}
               placeholder="Choose Due Date"
               type="text"
             ></IonInput>

@@ -18,11 +18,16 @@ import {
   IonList,
 } from "@ionic/react";
 import { useEffect, useRef, useState } from "react";
-import { ITodo } from "../models/ITodo";
+import { ITodo, ITodoGroup } from "../models/ITodo";
 import { TodoType } from "../models/TodoType";
 import { uuidv4 } from "@firebase/util";
 import { format, parseISO } from "date-fns";
 import styled from "styled-components";
+import { User2 } from "../models/User";
+import {
+  getUsersFromFirestore,
+  auth,
+} from "../utils/firebase/Database-function";
 /*
 const IonModalBox = styled(IonModal)`
   --height: "45%";
@@ -39,42 +44,70 @@ type Props = {
 export const TodoAddModal: React.FC<Props> = ({
   onDismiss,
 }: {
-  onDismiss: (data?: ITodo | null | undefined, role?: string) => void;
+  onDismiss: (data?: ITodoGroup | null | undefined, role?: string) => void;
 }) => {
+  const [todoTitle, setTodoTitle] = useState<number | string>();
+  const [todoDesc, setTodoDesc] = useState<
+    string | number | null | undefined
+  >();
+  const [todoType, setTodoType] = useState<TodoType>();
   const [dueDate, setDueDate] = useState<
     string | string[] | null | undefined
   >();
-  const inputTitleRef = useRef<HTMLIonInputElement>(null);
-  const inputDescRef = useRef<HTMLIonInputElement>(null);
-  const selectTypeRef = useRef<HTMLIonSelectElement>(null);
-  const datetime = useRef<HTMLIonInputElement | null>(null);
-  let datetimeReturn: Date| null| undefined = null;
+  const [listUser, setListUser] = useState<User2[]>([]);
+  const [selectedUsers, setselectedUsers] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log("Effect on current due date" + JSON.stringify(dueDate));
-    if (dueDate) {
-      datetimeReturn = new Date(dueDate.toString());
-      console.log("If is true: " + datetimeReturn);
+    async function getUsers() {
+      var users = await getUsersFromFirestore();
+      if (users != null) {
+        users = users.filter((user) => user.id != auth.currentUser?.uid);
+        setListUser(users);
+      }
     }
-    else {
-      datetimeReturn = null
-    }
-  }, [dueDate]);
+    getUsers();
+  }, []);
 
-  function exportTodoWrapper(): ITodo {
-    // No empty String as Title
-    if (
-      inputTitleRef.current?.value === "" ||
-      inputTitleRef.current?.value === null
-    ) {
-      inputTitleRef.current.value = "Title";
+  useEffect(() => {
+    // console.log("Reload?")
+  }, [listUser]);
+
+  function handleDateInputChange(changeEvent: any): void {
+    if (!changeEvent.detail.value) {
+      setDueDate(null);
     }
+  }
+
+
+  function exportTodoWrapper(): ITodoGroup {
+    // No empty String as Title
+    let titleReturn = todoTitle?.toString();
+    let datetimeReturn: Date | null = null;
+
+    if (
+      titleReturn === "" ||
+      titleReturn === null ||
+      titleReturn === undefined
+    ) {
+      titleReturn = "Title";
+    }
+    if (dueDate) {
+      datetimeReturn = new Date(dueDate?.toString()!);
+      console.log("DueDate is true: " + datetimeReturn);
+    }
+    // Format
     return {
-      todoType: selectTypeRef.current?.value ?? TodoType.SIMPLE,
-      todoTitle: inputTitleRef.current?.value?.toString()!,
-      todoDescription: inputDescRef.current?.value?.toString() ?? "",
       id: uuidv4(),
+      todoTitle: titleReturn,
+      todoDescription: todoDesc?.toString() ?? "",
+      todoType: todoType ?? TodoType.SIMPLE,
       todoDate: datetimeReturn,
+      users: [
+        ...selectedUsers.filter((u) => u != auth.currentUser!.uid!),
+        auth.currentUser?.uid!,
+      ],
+      isDeleted: false,
+      isSynced: false,
     };
   }
   return (
@@ -107,7 +140,7 @@ export const TodoAddModal: React.FC<Props> = ({
               type="text"
               placeholder="e.g. Shopping"
               required={true}
-              ref={inputTitleRef}
+              onIonChange={(e) => setTodoTitle(e.detail.value?.toString())}
             />
           </IonItem>
           <IonItem>
@@ -116,14 +149,14 @@ export const TodoAddModal: React.FC<Props> = ({
             <IonInput
               type="text"
               placeholder="e.g. at the mall..."
-              ref={inputDescRef}
+              onIonChange={(e) => setTodoDesc(e.detail.value?.toString())}
             />
           </IonItem>
           <IonItem>
             <IonSelect
               placeholder="Select TodoType"
               interface="popover"
-              ref={selectTypeRef}
+              onIonChange={(e) => setTodoType(e.detail.value)}
             >
               <IonSelectOption value={TodoType.SIMPLE}>Simple</IonSelectOption>
               <IonSelectOption value={TodoType.GROUP}>Group</IonSelectOption>
@@ -131,14 +164,15 @@ export const TodoAddModal: React.FC<Props> = ({
           </IonItem>
           <IonItem>
             <IonInput
-              ref={datetime}
               id="datetimeValue"
-              clearInput={true} 
+              clearInput={true}
               value={
                 dueDate
-                  ? "Due on: " + (new Date(dueDate.toString())).toLocaleString("de-DE")
+                  ? "Due on: " +
+                    new Date(dueDate.toString()).toLocaleString("de-DE")
                   : null
               }
+              onIonChange={(e) => handleDateInputChange(e)}
               placeholder="Choose Due Date"
               type="text"
             ></IonInput>
@@ -149,11 +183,29 @@ export const TodoAddModal: React.FC<Props> = ({
                 multiple={false}
                 onIonChange={(e) => setDueDate(e.detail.value)}
                 showDefaultButtons={true}
+                firstDayOfWeek={1}
                 size={"cover"}
               >
                 <span slot="title">Select Due date for your Todo</span>
               </IonDatetime>
             </IonModal>
+          </IonItem>
+          <IonItem>
+            <IonSelect
+              aria-label="Collaborators"
+              placeholder="Select people to collaborate with"
+              aria-labelledby="select-label"
+              interface="popover"
+              onIonChange={(e) => setselectedUsers(e.detail.value)}
+              value={selectedUsers}
+              multiple={true}
+            >
+              {listUser.map((user) => (
+                <IonSelectOption key={"SelectOption" + user.id} value={user.id}>
+                  {user.name}
+                </IonSelectOption>
+              ))}
+            </IonSelect>
           </IonItem>
         </IonList>
       </IonContent>

@@ -34,6 +34,9 @@ export const LandingPage: React.FC = () => {
                   todoTitle: "Title",
                   todoDescription: "",
                   todoDate: new Date(),
+                  users: [],
+                  isDeleted: false,
+                  isSynced: false,
                 });
             }}>
               +1 to global
