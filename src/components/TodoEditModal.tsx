@@ -15,12 +15,14 @@ import {
   IonList,
   IonModal,
 } from "@ionic/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ITodoGroup } from "../models/ITodo";
 import { TodoType } from "../models/TodoType";
-import { getUsersFromFirestore, auth } from "../utils/firebase/Database-function";
+import {
+  getUsersFromFirestore,
+  auth,
+} from "../utils/firebase/Database-function";
 import { User2 } from "../models/User";
-import { id } from "date-fns/locale";
 
 type Props = {
   todoItem: ITodoGroup;
@@ -34,33 +36,34 @@ export const TodoEditModal: React.FC<Props> = ({
   todoItem: ITodoGroup;
   onDismiss: (data?: ITodoGroup | null | undefined, role?: string) => void;
 }) => {
+  const [todoTitle, setTodoTitle] = useState<number | string>(
+    todoItem.todoTitle
+  );
+  const [todoDesc, setTodoDesc] = useState<string | number | null | undefined>(
+    todoItem.todoDescription
+  );
+  const [todoType, setTodoType] = useState<TodoType>(todoItem.todoType);
   const [dueDate, setDueDate] = useState<string | string[] | null | undefined>(
     todoItem.todoDate ? todoItem.todoDate.toString() : null
   );
+  const [listUser, setListUser] = useState<User2[]>([]);
+  const [selectedUsers, setselectedUsers] = useState<string[]>(
+    todoItem.users ?? []
+  );
 
-  const inputTitleRef = useRef<HTMLIonInputElement>(null);
-  const inputDescRef = useRef<HTMLIonInputElement>(null);
-  const selectTypeRef = useRef<HTMLIonSelectElement>(null);
-  const datetime = useRef<HTMLIonInputElement | null>(null);
-  let datetimeReturn: Date | null | undefined = todoItem.todoDate ? new Date(todoItem.todoDate.toString()) : null;
-
+  let datetimeReturn: Date | null | undefined = todoItem.todoDate
+    ? new Date(todoItem.todoDate.toString())
+    : null;
+  /*
   useEffect(() => {
     console.log("Effect on current due date" + JSON.stringify(dueDate));
-    if (dueDate) {
-      datetimeReturn = new Date(dueDate?.toString()!);
-      console.log("If is true: " + datetimeReturn);
-    } else {
-      datetimeReturn = null;
-    }
+
   }, [dueDate]);
-
-  const [listUser, setListUser] = useState<User2[]>([]);
-  const [selectedUsers, setselectedUsers] = useState<string[]>([]);
-
+*/
   useEffect(() => {
-    setDueDate(todoItem.todoDate?.toString() ?? null);
-    datetimeReturn = new Date(dueDate?.toString()!);
-    setselectedUsers(todoItem.users ?? []);
+    //setDueDate(todoItem.todoDate?.toString() ?? null);
+    //datetimeReturn = new Date(dueDate?.toString()!);
+    //setselectedUsers(todoItem.users ?? []);
 
     async function getUsers() {
       var users = await getUsersFromFirestore();
@@ -68,15 +71,14 @@ export const TodoEditModal: React.FC<Props> = ({
         users = users.filter((user) => user.id != auth.currentUser?.uid);
         setListUser(users);
       }
-    //  console.log("Fetched users", users)
+      //  console.log("Fetched users", users)
     }
     getUsers();
   }, []);
 
   useEffect(() => {
     // console.log("Reload?")
-  }, [listUser])
-
+  }, [listUser]);
 
   function handleInputChange(changeEvent: any): void {
     if (!changeEvent.detail.value) {
@@ -85,19 +87,26 @@ export const TodoEditModal: React.FC<Props> = ({
   }
 
   function exportTodoWrapper(): ITodoGroup {
-    if (
-      inputTitleRef.current?.value === "" ||
-      inputTitleRef.current?.value === null
-    ) {
-      inputTitleRef.current.value = "Title";
-    } 
+    let titleReturn = todoTitle.toString();
+    if (titleReturn === "" || titleReturn === null) {
+      titleReturn = "Title";
+    }
+    if (dueDate) {
+      datetimeReturn = new Date(dueDate?.toString()!);
+      console.log("If is true: " + datetimeReturn);
+    } else {
+      datetimeReturn = null;
+    }
     return {
-      todoType: selectTypeRef.current?.value,
-      todoTitle: inputTitleRef.current?.value ?? "Title",
-      todoDescription: inputDescRef.current?.value?.toString() ?? "",
+      todoType: todoType,
+      todoTitle: titleReturn,
+      todoDescription: todoDesc?.toString() ?? "",
       id: todoItem.id,
       todoDate: datetimeReturn,
-      users: [...selectedUsers.filter((u) => u != auth.currentUser!.uid!), auth.currentUser?.uid!],
+      users: [
+        ...selectedUsers.filter((u) => u != auth.currentUser!.uid!),
+        auth.currentUser?.uid!,
+      ],
       isDeleted: false,
       isSynced: false,
     };
@@ -119,7 +128,7 @@ export const TodoEditModal: React.FC<Props> = ({
               color="primary"
               onClick={() => {
                 onDismiss(exportTodoWrapper(), "confirm");
-                console.log("Selected Users", selectedUsers)
+                console.log("Selected Users", selectedUsers);
               }}
             >
               Submit
@@ -134,21 +143,21 @@ export const TodoEditModal: React.FC<Props> = ({
             <IonInput
               type="text"
               placeholder="e.g. Shopping"
-              value={todoItem.todoTitle}
-              ref={inputTitleRef}
+              value={todoTitle}
+              onIonChange={(e) => setTodoTitle(e.detail.value ?? "")}
             />
             <IonLabel position="stacked">Enter Todo Description</IonLabel>
             <IonInput
               type="text"
               placeholder="e.g. at the mall..."
-              value={todoItem.todoDescription}
-              ref={inputDescRef}
+              value={todoDesc}
+              onIonChange={(e) => setTodoDesc(e.detail.value ?? "")}
             />
             <IonSelect
               placeholder="Select TodoType"
               interface="popover"
-              ref={selectTypeRef}
-              value={todoItem.todoType}
+              value={todoType}
+              onIonChange={(e) => setTodoType(e.detail.value)}
             >
               <IonSelectOption value={TodoType.SIMPLE}>Simple</IonSelectOption>
               <IonSelectOption value={TodoType.GROUP}>Group</IonSelectOption>
@@ -156,13 +165,12 @@ export const TodoEditModal: React.FC<Props> = ({
           </IonItem>
           <IonItem>
             <IonInput
-              ref={datetime}
               id="datetimeValue"
               clearInput={true}
               value={
                 dueDate
                   ? "Due on: " +
-                  new Date(dueDate.toString()).toLocaleString("de-DE")
+                    new Date(dueDate.toString()).toLocaleString("de-DE")
                   : null
               }
               onIonChange={(e) => handleInputChange(e)}
@@ -191,19 +199,13 @@ export const TodoEditModal: React.FC<Props> = ({
               interface="popover"
               onIonChange={(e) => setselectedUsers(e.detail.value)}
               value={selectedUsers}
-              multiple={true}>
-              {
-                listUser.map((user) =>
-                (
-                  <IonSelectOption 
-                  key={"SelectOption"+user.id}
-                  value={user.id} 
-                  
-                  >
-                    {user.name}
-                  </IonSelectOption>)
-                )
-              }
+              multiple={true}
+            >
+              {listUser.map((user) => (
+                <IonSelectOption key={"SelectOption" + user.id} value={user.id}>
+                  {user.name}
+                </IonSelectOption>
+              ))}
             </IonSelect>
           </IonItem>
         </IonList>
