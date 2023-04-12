@@ -19,7 +19,7 @@ import {
 import { add } from "ionicons/icons";
 import { ToDoComponent } from "../components/ToDoComponent";
 import "./ToDoPage.css";
-import { ITodo, ITodoGroup } from "../models/ITodo";
+import { ITodoGroup } from "../models/ITodo";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
 import { TodoEditModal } from "../components/TodoEditModal";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
@@ -52,7 +52,7 @@ export const ToDoPage: React.FC = () => {
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
   useEffect(() => {
     console.log("Effect on current TodoItem" + JSON.stringify(selectedTodo));
-    if (!!selectedTodo) {
+    if (selectedTodo) {
       todoStorage.updateTodo(selectedTodo)
     }
   }, [selectedTodo])
