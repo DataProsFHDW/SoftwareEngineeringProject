@@ -97,6 +97,7 @@ export const useTodoStorage = () => {
                     users: [auth.currentUser?.uid!],
                     isDeleted: false,
                     isSynced: true,
+                    isOpen: todo.isOpen,
                 });
                 setTodoList([...getTodoList(), {
                     id: id,
@@ -106,6 +107,7 @@ export const useTodoStorage = () => {
                     users: [auth.currentUser?.uid!],
                     isDeleted: false,
                     isSynced: true,
+                    isOpen: todo.isOpen,
                 },]);
             } else {
                 setTodoList([...getTodoList(), {
@@ -116,6 +118,7 @@ export const useTodoStorage = () => {
                     users: [auth.currentUser?.uid!],
                     isDeleted: false,
                     isSynced: false,
+                    isOpen: todo.isOpen,
                 },]);
                 await refreshTodos();
             }
@@ -150,6 +153,7 @@ export const useTodoStorage = () => {
                             users: item.users,
                             isDeleted: true,
                             isSynced: false,
+                            isOpen: item.isOpen,
                         };
                     }
                     return item;
@@ -191,6 +195,7 @@ export const useTodoStorage = () => {
                             users: todo.users,
                             isDeleted: todo.isDeleted,
                             isSynced: false,
+                            isOpen: todo.isOpen,
                         };
                     }
                     return item;
