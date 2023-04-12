@@ -108,6 +108,7 @@ export const addToDoFirestore = async (todo: ITodoGroup) => {
   }
 };
 
+// Methode abklären !!!
 export const getAllToDosFromFirestore = async (): Promise<ITodoGroup[] | null> => {
   try {
     if (!navigator.onLine) {
@@ -125,6 +126,7 @@ export const getAllToDosFromFirestore = async (): Promise<ITodoGroup[] | null> =
         users: doc.data()["users"],
         isDeleted: false,
         isSynced: true,
+        todoOpen: true || false,
       }
     }).filter((todo) => todo.users.includes(auth.currentUser?.uid));
 

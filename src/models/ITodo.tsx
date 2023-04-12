@@ -7,6 +7,7 @@ export interface ITodo {
     todoDescription?: string | null | undefined;
     todoDate?: Date | null | undefined;
     todoCreationDate?: Date | null | undefined;
+    todoOpen: boolean 
     //creator: string = "";
     //inputOnClick:any;  
 
