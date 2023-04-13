@@ -8,6 +8,7 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
+  useIonModal,
 } from "@ionic/react";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
 import React, { useEffect, useState } from "react";
@@ -17,80 +18,100 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction"; // needed
 import { formatDate } from "@fullcalendar/core";
-
+import { createEventId } from "../utils/calendar/calendarEventUtils";
+import { TodoEditModal } from "../components/TodoEditModal";
+import { ITodoGroup } from "../models/ITodo";
+import { TodoType } from "../models/TodoType";
 
 interface eventType {
-  id: string,
-  title: string,
-  start: Date
+  id: string;
+  title: string;
+  start: Date;
+  extendedProps: object;
 }
 
 const events: eventType[] = [
-  { id: "1", title: 'Meeting', start: new Date() }
-]
+  {
+    id: "1",
+    title: "Meeting",
+    start: new Date(),
+    extendedProps: {
+      todoData: {
+        todoType: TodoType.SIMPLE,
+        todoTitle: "Title",
+        todoDescription: "",
+        todoDate: new Date(),
+      },
+    },
+  },
+];
 
 export const CalendarPage: React.FC = () => {
   const todoStorage = useTodoStorage();
   const todoList = todoStorage.getTodoList();
 
-  const [weekendsVisible, setWeekendsVisible] = useState<boolean>(true)
-  const [currentEvents, setCurrentEvents] = useState<eventType[]> (events)
-  
+  const [weekendsVisible, setWeekendsVisible] = useState<boolean>(true);
+  const [currentEvents, setCurrentEvents] = useState<eventType[]>(events);
+  const [selectedTodo, setSelectedTodo] = useState<ITodoGroup>();
+
+  const [presentEdit, dismissEdit] = useIonModal(TodoEditModal, {
+    todoItem: selectedTodo,
+    onDismiss: (data: ITodoGroup, role: string) => dismissEdit(data, role),
+  });
   useEffect(() => {
     todoStorage.refreshTodos();
   }, []);
 
-    return (
-      <IonPage>
-        <IonHeader>
-          <IonToolbar>
-            <IonButtons slot="start">
-              <IonMenuButton />
-            </IonButtons>
-            <IonTitle>Calendar View</IonTitle>
-            <IonButton
-              onClick={() => {
-                //this.todoStorage.refreshTodos();
-              }}
-            >
-              Refresh
-            </IonButton>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent>
-          <IonText>Hier könnte ihr Kalender stehen.</IonText>
-              <FullCalendar
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                headerToolbar={{
-                  left: "prev,next today",
-                  center: "title",
-                  right: "dayGridMonth,timeGridWeek,timeGridDay",
-                }}
-                initialView="dayGridMonth"
-                editable={true}
-                selectable={true}
-                selectMirror={true}
-                dayMaxEvents={true}
-                weekends={weekendsVisible}
-                initialEvents={events} // alternatively, use the `events` setting to fetch from a feed
-                select={handleDateSelect}
-                eventContent={renderEventContent} // custom render function
-                eventClick={handleEventClick}
-                eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+  return (
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonMenuButton />
+          </IonButtons>
+          <IonTitle>Calendar View</IonTitle>
+          <IonButton
+            onClick={() => {
+              //this.todoStorage.refreshTodos();
+            }}
+          >
+            Refresh
+          </IonButton>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          headerToolbar={{
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth,timeGridWeek,timeGridDay",
+          }}
+          initialView="dayGridMonth"
+          editable={true}
+          selectable={true}
+          selectMirror={true}
+          dayMaxEvents={true}
+          weekends={weekendsVisible}
+          initialEvents={events} // alternatively, use the `events` setting to fetch from a feed
+          select={handleDateSelect}
+          eventContent={renderEventContent} // custom render function
+          eventClick={handleEventClick}
+          eventsSet={handleEvents} // called after events are initialized/added/changed/removed
 
-                /* you can update a remote database when these fire:
+          /* you can update a remote database when these fire:
             eventAdd={function(){}}
             eventChange={function(){}}
             eventRemove={function(){}}
             */
-              />
-        </IonContent>
-      </IonPage>
-    );
+        />
+      </IonContent>
+    </IonPage>
+  );
 
-    function handleWeekendsToggle() {
-   setWeekendsVisible(!weekendsVisible)
-  };
+  function handleWeekendsToggle() {
+    setWeekendsVisible(!weekendsVisible);
+  }
 
   function handleDateSelect(selectInfo: any) {
     let title = prompt("Please enter a new title for your event");
@@ -107,16 +128,16 @@ export const CalendarPage: React.FC = () => {
         allDay: selectInfo.allDay,
       });
     }
-  };
+  }
 
-  function handleEventClick (clickInfo: any) {
+  function handleEventClick(clickInfo: any) {
     clickInfo.event.remove();
-  };
+  }
 
- function handleEvents (events: any){
-    setCurrentEvents(events)
-  };
-}
+  function handleEvents(events: any) {
+    setCurrentEvents(events);
+  }
+};
 
 function renderEventContent(eventInfo: any) {
   return (
@@ -126,4 +147,3 @@ function renderEventContent(eventInfo: any) {
     </>
   );
 }
-
