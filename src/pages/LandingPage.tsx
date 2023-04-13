@@ -37,6 +37,7 @@ export const LandingPage: React.FC = () => {
                   users: [],
                   isDeleted: false,
                   isSynced: false,
+                  isOpen: true,
                 });
             }}>
               +1 to global
@@ -61,9 +62,11 @@ export const LandingPage: React.FC = () => {
             todoTitle: "Title",
             todoDescription: "",
             todoDate: new Date(),
+            isOpen: true,
           }}
           onEditClick={() => console.log("Trololol")}
           onDeleteClick={() => console.log("Trololol")}
+          onCheckboxClick={() => console.log("Trololol")}
         />
       </IonContent>
     </IonPage>

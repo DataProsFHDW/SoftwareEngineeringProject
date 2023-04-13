@@ -32,6 +32,7 @@ import { LandingPage } from "./pages/LandingPage";
 import { ToDoPage } from "./pages/ToDoPage";
 import { useEffect, useState } from "react";
 import { LoginPage } from "./pages/Login";
+import  StatsPage  from "./pages/StatsPage"
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Logout } from "./pages/Logout";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -40,6 +41,8 @@ import { fetchUsername, UsernamePage } from "./pages/UsernamePage";
 import { useTodoStorage } from "./storage/StateManagementWrapper";
 import { Network } from "@capacitor/network";
 import { auth } from "./utils/firebase/Database-function";
+import { CalendarPage } from "./pages/CalendarPage";
+import { ArchivePage } from "./pages/ArchivePage";
 
 setupIonicReact();
 
@@ -139,8 +142,17 @@ const App: React.FC = () => {
             <Route path="/todo" exact={false}>
               <ToDoPage />
             </Route>
+            <Route path="/archive" exact={false}>
+              <ArchivePage />
+            </Route>
+            <Route path="/page/statsPage" exact={false}>
+              <StatsPage/>
+            </Route>
             <Route path="/logout" exact={false}>
               <Logout />
+            </Route>
+            <Route path="/calendar" exact={false}>
+              <CalendarPage/>
             </Route>
           </IonRouterOutlet>
         </>)

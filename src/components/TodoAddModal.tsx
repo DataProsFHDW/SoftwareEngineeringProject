@@ -21,8 +21,6 @@ import { useEffect, useRef, useState } from "react";
 import { ITodo, ITodoGroup } from "../models/ITodo";
 import { TodoType } from "../models/TodoType";
 import { uuidv4 } from "@firebase/util";
-import { format, parseISO } from "date-fns";
-import styled from "styled-components";
 import { User2 } from "../models/User";
 import {
   getUsersFromFirestore,
@@ -108,6 +106,7 @@ export const TodoAddModal: React.FC<Props> = ({
       ],
       isDeleted: false,
       isSynced: false,
+      isOpen: true,
     };
   }
   return (
