@@ -10,28 +10,36 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
-import React from "react";
+import React, { useEffect, useState } from "react";
 //Fullcalendar and Realted Plugins
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction"; // needed
 import { formatDate } from "@fullcalendar/core";
-import {
-  INITIAL_EVENTS,
-  createEventId,
-} from "../utils/calendar/calendarEventUtils";
-
-export class CalendarPage extends React.Component {
-  //todoStorage = useTodoStorage();
 
 
-  state = {
-    weekendsVisible: true,
-    currentEvents: [],
-  };
+interface eventType {
+  id: string,
+  title: string,
+  start: Date
+}
 
-  render() {
+const events: eventType[] = [
+  { id: "1", title: 'Meeting', start: new Date() }
+]
+
+export const CalendarPage: React.FC = () => {
+  const todoStorage = useTodoStorage();
+  const todoList = todoStorage.getTodoList();
+
+  const [weekendsVisible, setWeekendsVisible] = useState<boolean>(true)
+  const [currentEvents, setCurrentEvents] = useState<eventType[]> (events)
+  
+  useEffect(() => {
+    todoStorage.refreshTodos();
+  }, []);
+
     return (
       <IonPage>
         <IonHeader>
@@ -63,12 +71,12 @@ export class CalendarPage extends React.Component {
                 selectable={true}
                 selectMirror={true}
                 dayMaxEvents={true}
-                weekends={this.state.weekendsVisible}
-                initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
-                select={this.handleDateSelect}
+                weekends={weekendsVisible}
+                initialEvents={events} // alternatively, use the `events` setting to fetch from a feed
+                select={handleDateSelect}
                 eventContent={renderEventContent} // custom render function
-                eventClick={this.handleEventClick}
-                eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
+                eventClick={handleEventClick}
+                eventsSet={handleEvents} // called after events are initialized/added/changed/removed
 
                 /* you can update a remote database when these fire:
             eventAdd={function(){}}
@@ -79,14 +87,12 @@ export class CalendarPage extends React.Component {
         </IonContent>
       </IonPage>
     );
-  }
-  handleWeekendsToggle = () => {
-    this.setState({
-      weekendsVisible: !this.state.weekendsVisible,
-    });
+
+    function handleWeekendsToggle() {
+   setWeekendsVisible(!weekendsVisible)
   };
 
-  handleDateSelect = (selectInfo: any) => {
+  function handleDateSelect(selectInfo: any) {
     let title = prompt("Please enter a new title for your event");
     let calendarApi = selectInfo.view.calendar;
 
@@ -103,14 +109,12 @@ export class CalendarPage extends React.Component {
     }
   };
 
-  handleEventClick = (clickInfo: any) => {
+  function handleEventClick (clickInfo: any) {
     clickInfo.event.remove();
   };
 
-  handleEvents = (events: any) => {
-    this.setState({
-      currentEvents: events,
-    });
+ function handleEvents (events: any){
+    setCurrentEvents(events)
   };
 }
 
@@ -123,17 +127,3 @@ function renderEventContent(eventInfo: any) {
   );
 }
 
-function renderSidebarEvent(event: any) {
-  return (
-    <li key={event.id}>
-      <b>
-        {formatDate(event.start, {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        })}
-      </b>
-      <i>{event.title}</i>
-    </li>
-  );
-}
