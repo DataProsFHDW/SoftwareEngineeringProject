@@ -41,6 +41,7 @@ import { fetchUsername, UsernamePage } from "./pages/UsernamePage";
 import { useTodoStorage } from "./storage/StateManagementWrapper";
 import { Network } from "@capacitor/network";
 import { auth } from "./utils/firebase/Database-function";
+import { ArchivePage } from "./pages/ArchivePage";
 
 setupIonicReact();
 
@@ -138,7 +139,10 @@ const App: React.FC = () => {
             <Route path="/todo" exact={false}>
               <ToDoPage />
             </Route>
-            <Route path="/page/Statspage">
+            <Route path="/archive" exact={false}>
+              <ArchivePage />
+            </Route>
+            <Route path="/page/statsPage" exact={false}>
               <StatsPage/>
             </Route>
             <Route path="/logout" exact={false}>

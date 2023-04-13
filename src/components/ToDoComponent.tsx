@@ -28,7 +28,7 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
 }) => {
   return (
     <IonItem>
-      <IonCheckbox slot="start" onIonChange={onCheckboxClick}></IonCheckbox>
+      <IonCheckbox slot="start" onIonChange={onCheckboxClick} checked={!todo.isOpen}></IonCheckbox>
       <IonCard>
         <IonCardHeader>
           <IonCardTitle>{todo.todoTitle}</IonCardTitle>
