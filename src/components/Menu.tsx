@@ -16,6 +16,7 @@ import {
 import { useLocation } from 'react-router-dom';
 import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, logOutOutline, logOutSharp, statsChartOutline, statsChartSharp, calendarNumberOutline } from 'ionicons/icons';
 import './Menu.css';
+import { auth } from '../utils/firebase/Database-function';
 
 interface AppPage {
   url: string;
@@ -85,7 +86,7 @@ const Menu: React.FC = () => {
       <IonContent>
         <IonList id="inbox-list">
           <IonListHeader>Inbox</IonListHeader>
-          <IonNote>hi@ionicframework.com</IonNote>
+          <IonNote>Hi {auth.currentUser?.displayName} </IonNote>
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>

@@ -123,7 +123,7 @@ import {
             <IonButtons slot="start">
               <IonMenuButton />
             </IonButtons>
-            <IonTitle className="ion-text-center">Your To Dos</IonTitle>
+            <IonTitle className="ion-text-center">Your Archived To Dos</IonTitle>
             <IonButton
               onClick={() => {
                 todoStorage.refreshTodos();
