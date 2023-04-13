@@ -1,6 +1,6 @@
 import './Page.css';
 import React from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonMenuButton } from '@ionic/react';
 import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { AreaChart, Area } from 'recharts';
@@ -61,6 +61,7 @@ const dataBar = [
 ];
 
 const StatsPage: React.FC = () => {
+
   const { getTodoList } = useTodoStorage();
   const todos = getTodoList();
   const todoCount = todos.length;
@@ -74,6 +75,9 @@ const StatsPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <IonButtons slot="start">
+            <IonMenuButton />
+          </IonButtons>
           <IonTitle>Statistics</IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -84,6 +88,7 @@ const StatsPage: React.FC = () => {
             dataKey="value"
             isAnimationActive={false}
             data={[{ name: 'Single', value: SingleTodoCount }, { name: 'Group', value: GroupTodoCount }]}
+            //data = {dataPieTest}
             cx="50%"
             cy="50%"
             outerRadius={80}
@@ -145,3 +150,5 @@ const StatsPage: React.FC = () => {
 };
 
 export default StatsPage;
+
+
