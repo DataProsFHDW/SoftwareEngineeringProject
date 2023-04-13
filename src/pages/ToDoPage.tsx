@@ -45,7 +45,7 @@ export const ToDoPage: React.FC = () => {
     todoStorage.refreshTodos();
   }, []); // [] => do on initial render of todoPageComponent
 
-  useEffect(() => {
+  useEffect(() => { 
     // console.log("TodoList Changed", todoStorage.getTodoList())
   }, [todoStorage.storage]); // [] => do on initial render of todoPageComponent
 
@@ -64,6 +64,7 @@ export const ToDoPage: React.FC = () => {
         if (ev.detail.role === "confirm") {
           console.log("Confirmed Input: " + JSON.stringify(ev.detail.data));
           setSelectedTodo(ev.detail.data as ITodoGroup)
+          todoStorage.refreshTodos();
           console.log(selectedTodo);
         }
       },

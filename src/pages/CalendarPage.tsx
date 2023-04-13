@@ -139,7 +139,6 @@ export const CalendarPage: React.FC = () => {
 
   useEffect(() => {
     todoStorage.refreshTodos();
-    console.log(events2)
     
   }, []);
 
