@@ -22,6 +22,7 @@ import { createEventId } from "../utils/calendar/calendarEventUtils";
 import { TodoEditModal } from "../components/TodoEditModal";
 import { ITodoGroup } from "../models/ITodo";
 import { TodoType } from "../models/TodoType";
+import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 
 interface eventType {
   id: string;
@@ -61,6 +62,19 @@ export const CalendarPage: React.FC = () => {
   useEffect(() => {
     todoStorage.refreshTodos();
   }, []);
+
+  const handleEditClick = (todo: ITodoGroup) => {
+    setSelectedTodo(todo)
+    presentEdit({
+      onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
+        if (ev.detail.role === "confirm") {
+          console.log("Confirmed Input: " + JSON.stringify(ev.detail.data));
+          setSelectedTodo(ev.detail.data as ITodoGroup)
+          console.log(selectedTodo);
+        }
+      },
+    });
+  };
 
   return (
     <IonPage>
