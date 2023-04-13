@@ -84,7 +84,7 @@ export const useTodoStorage = () => {
         // TODO get from firebase
     }
 
-    const addTodo = async (todo: ITodo) => {
+    const addTodo = async (todo: ITodoGroup) => {
         // NotificationUtils.schedule(new Date(), todo.todoTitle.toString(), todo.todoDescription ?? "");
         try {
             var networkState = await Network.getStatus();
@@ -95,7 +95,8 @@ export const useTodoStorage = () => {
                     todoTitle: todo.todoTitle,
                     todoDescription: todo.todoDescription,
                     todoDate: todo.todoDate,
-                    users: [auth.currentUser?.uid!],
+                    //users: [auth.currentUser?.uid!],
+                    users: todo.users,
                     isDeleted: false,
                     isSynced: true,
                 });
@@ -105,7 +106,8 @@ export const useTodoStorage = () => {
                     todoTitle: todo.todoTitle,
                     todoDescription: todo.todoDescription,
                     todoDate: todo.todoDate,
-                    users: [auth.currentUser?.uid!],
+                    //users: [auth.currentUser?.uid!],
+                    users: todo.users,
                     isDeleted: false,
                     isSynced: true,
                 },]);
@@ -116,7 +118,8 @@ export const useTodoStorage = () => {
                     todoTitle: todo.todoTitle,
                     todoDescription: todo.todoDescription,
                     todoDate: todo.todoDate,
-                    users: [auth.currentUser?.uid!],
+                    //users: [auth.currentUser?.uid!],
+                    users: todo.users,
                     isDeleted: false,
                     isSynced: false,
                 },]);

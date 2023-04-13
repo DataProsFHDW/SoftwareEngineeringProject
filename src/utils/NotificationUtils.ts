@@ -18,7 +18,7 @@ class NotificationUtils {
 
             this.schedule(date,
                 todo.todoTitle.toString() == "" ? "Todo Reminder" : todo.todoTitle.toString(),
-                todo.todoDescription ?? "");
+                todo.todoDescription?.toString() ?? "");
         });
     }
 

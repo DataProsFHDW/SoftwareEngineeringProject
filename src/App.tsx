@@ -84,7 +84,7 @@ const App: React.FC = () => {
 
   var routerJsx;
 
-  var isDemoUser = true;
+  var isDemoUser = false;
 
   if (user != null || (isDemoUser && (!process.env.NODE_ENV || process.env.NODE_ENV === 'development'))) {
     if (auth.currentUser == null) {
@@ -107,22 +107,24 @@ const App: React.FC = () => {
       });
     }
 
-    if (username == undefined) {
+    if (username === undefined) {
       routerJsx = (<></>);
-    } else if (username == null) {
+    } else if (username === null) {
       /* No username */
       routerJsx = (
         <>
           <IonRouterOutlet id="main">
             {/* Default Landing Page */}
-            <Redirect exact from="/" to="/username" />
-            <Redirect exact from="/Dashboard" to="/username" />
             <Route path="/username">
               <UsernamePage />
             </Route>
+            <Redirect exact from="/" to="/username" />
+            <Redirect exact from="/Dashboard" to="/username" />
+            <Redirect exact from="/login" to="/username" />
             <Redirect to="/username" />
           </IonRouterOutlet>
         </>)
+        
     } else {
       /* Logged in perfectly */
       routerJsx = (
