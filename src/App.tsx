@@ -40,7 +40,6 @@ import { fetchUsername, UsernamePage } from "./pages/UsernamePage";
 import { useTodoStorage } from "./storage/StateManagementWrapper";
 import { Network } from "@capacitor/network";
 import { auth } from "./utils/firebase/Database-function";
-import { WorkingCalendarTemplatePage } from "./pages/WorkingCalendarTemplatePage";
 import { CalendarPage } from "./pages/CalendarPage";
 
 setupIonicReact();
@@ -145,9 +144,6 @@ const App: React.FC = () => {
               <Logout />
             </Route>
             <Route path="/calendar" exact={false}>
-              <WorkingCalendarTemplatePage/>
-            </Route>
-            <Route path="/calendarBaustelle" exact={false}>
               <CalendarPage/>
             </Route>
           </IonRouterOutlet>
