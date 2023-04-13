@@ -60,6 +60,32 @@ const dataBar = [
     },
 ];
 
+
+type CardProps = {
+  value1: string; 
+  value2: string; 
+}; 
+
+const Card: React.FC<CardProps> = ({ value1, value2 }) => {
+  return (
+    <div style={{ 
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '1rem',
+      backgroundColor: 'lightgray',
+      borderRadius: '8px',
+      width: 'fit-content',
+      margin: '0.5rem'
+    }}>
+      <div style={{ display: 'flex',flexDirection: 'column', alignItems: 'center' }}>
+        <h1 style={{ fontSize: '24px', marginRight: '1rem' }}>{value1}</h1>
+        <h1 style={{ fontSize: '24px' }}>{value2}</h1>
+      </div>
+    </div>
+  );
+};
+
 const StatsPage: React.FC = () => {
 
   const { getTodoList } = useTodoStorage();
@@ -70,6 +96,13 @@ const StatsPage: React.FC = () => {
   const GroupTodoCount = todoCount - SingleTodoCount;
 
   const TodosCreationDate = todos.filter(todo => todo.todoCreationDate).length;
+
+  //
+  const value1A = 'Anzahl offene Todos';
+  const value2A = 'World';
+  const value1B = 'Anzahl geschlossene Todos';
+  const value2B = 'Component';
+  
 
   return (
     <IonPage>
@@ -82,21 +115,32 @@ const StatsPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <p>This is the Statistics page.</p>
-        <PieChart width={400} height={400}>
-          <Pie
-            dataKey="value"
-            isAnimationActive={false}
-            data={[{ name: 'Single', value: SingleTodoCount }, { name: 'Group', value: GroupTodoCount }]}
-            //data = {dataPieTest}
-            cx="50%"
-            cy="50%"
-            outerRadius={80}
-            fill="#8884d8"
-            label
-          />
-          <Tooltip />
-        </PieChart>
+        <p className="grey">Here you find Statistics about your Todos.</p>
+        
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <Card value1={value1A} value2={value2A} />
+              <Card value1={value1B} value2={value2B} />
+          </div>        
+        <ResponsiveContainer width={400} height={400}>
+          <PieChart width={400} height={400}>
+            <text x={200} y={20} textAnchor="middle" dominantBaseline="middle">
+              <tspan fontSize="18">Single vs. Group Todos</tspan>
+            </text>
+            <Pie
+              dataKey="value"
+              isAnimationActive={false}
+              data={[{ name: 'Single', value: SingleTodoCount }, { name: 'Group', value: GroupTodoCount }]}
+              //data = {dataPieTest}
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              fill="#8884d8"
+              label
+            />
+            <Tooltip />
+            <Legend verticalAlign="bottom" height={36} />
+          </PieChart>
+        </ResponsiveContainer>
         <BarChart
           width={500}
           height={300}
