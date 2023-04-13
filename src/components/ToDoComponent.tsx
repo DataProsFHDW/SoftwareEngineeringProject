@@ -49,7 +49,6 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
             {/*todo.todoDate? todo.todoDate.toString(): "nothing here"*/}
 
           </IonCardContent>
-        </div>
         <IonButton fill="clear" onClick={onDeleteClick}>Delete</IonButton>
         <IonButton fill="clear" onClick={onEditClick}>Edit</IonButton>
       </IonCard>

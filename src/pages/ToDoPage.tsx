@@ -102,7 +102,7 @@ export const ToDoPage: React.FC = () => {
     event.detail.complete();
   }
 
-  let toDoRender = todoStorage.getTodoList().map((todo, index) => {
+  let todoRender = todoStorage.getTodoList().map((todo, index) => {
     if (todo.isOpen) {
       return (
         <ToDoComponent
