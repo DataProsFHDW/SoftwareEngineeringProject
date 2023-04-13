@@ -61,6 +61,7 @@ export const LandingPage: React.FC = () => {
           }}
           onEditClick={() => console.log("Trololol")}
           onDeleteClick={() => console.log("Trololol")}
+          onCheckboxClick={() => console.log("Trololol")}
         />
       </IonContent>
     </IonPage>

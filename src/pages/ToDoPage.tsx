@@ -98,6 +98,7 @@ export const ToDoPage: React.FC = () => {
         todo={todo}
         onEditClick={() => handleEditClick(todo)}
         onDeleteClick={() => deleteTodo(index)}
+        onCheckboxClick={() => console.log("Checkbox Clicked")}
       />
     );
   });

@@ -16,26 +16,32 @@ import "./ToDoComponent.css";
 interface ToDoComponentProps {
   onEditClick: any;
   onDeleteClick: any;
-  todo: ITodo,
+  onCheckboxClick: any
+  todo: ITodo;
 }
 
 export const ToDoComponent: React.FC<ToDoComponentProps> = ({
   todo,
   onEditClick,
   onDeleteClick,
+  onCheckboxClick
 }) => {
   return (
     <IonItem>
-      <IonCard >
-          <IonCardHeader>
-            <IonCardTitle>{todo.todoTitle}</IonCardTitle>
-            <IonCardSubtitle>{todo.todoType?.toString()}</IonCardSubtitle>
-          </IonCardHeader>
+      <IonCheckbox slot="start" onIonChange={onCheckboxClick}></IonCheckbox>
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>{todo.todoTitle}</IonCardTitle>
+          <IonCardSubtitle>{todo.todoDescription}</IonCardSubtitle>
+        </IonCardHeader>
 
-          <IonCardContent>{todo.todoDescription}</IonCardContent>
-          <IonCheckbox slot="start"></IonCheckbox>s
-        <IonButton fill="clear" onClick={onDeleteClick}>Delete</IonButton>
-        <IonButton fill="clear" onClick={onEditClick}>Edit</IonButton>
+        <IonCardContent>{todo.todoDescription}</IonCardContent>
+        <IonButton fill="clear" onClick={onDeleteClick}>
+          Delete
+        </IonButton>
+        <IonButton fill="clear" onClick={onEditClick}>
+          Edit
+        </IonButton>
       </IonCard>
       <IonReorder slot="end"></IonReorder>
     </IonItem>
