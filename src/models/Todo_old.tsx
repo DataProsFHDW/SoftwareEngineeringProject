@@ -8,6 +8,7 @@ export class Todo implements ITodo {
     todoType: TodoType;
     todoTitle: string;
     todoDescription: string;
+    isOpen: boolean = true;
 /*  creator: User;
     responsible: User;
     inputOnClick:any; 

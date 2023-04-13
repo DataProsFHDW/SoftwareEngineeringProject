@@ -43,6 +43,7 @@ export const TodoAddModal: React.FC<Props> = ({
       todoTitle: inputTitleRef.current?.value?.toString() ?? "Title",
       todoDescription: inputDescRef.current?.value?.toString() ?? "",
       id: uuidv4(),
+      isOpen: true,
     };
   }
   return (

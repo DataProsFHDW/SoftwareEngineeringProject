@@ -8,6 +8,7 @@ import {
   IonItem,
   IonButton,
   IonButtons,
+  IonCheckbox,
 } from "@ionic/react";
 import { ITodo } from "../models/ITodo";
 import "./ToDoComponent.css";
@@ -26,14 +27,13 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
   return (
     <IonItem>
       <IonCard >
-        <div className="card-content">
           <IonCardHeader>
             <IonCardTitle>{todo.todoTitle}</IonCardTitle>
             <IonCardSubtitle>{todo.todoType?.toString()}</IonCardSubtitle>
           </IonCardHeader>
 
           <IonCardContent>{todo.todoDescription}</IonCardContent>
-        </div>
+          <IonCheckbox slot="start"></IonCheckbox>s
         <IonButton fill="clear" onClick={onDeleteClick}>Delete</IonButton>
         <IonButton fill="clear" onClick={onEditClick}>Edit</IonButton>
       </IonCard>
