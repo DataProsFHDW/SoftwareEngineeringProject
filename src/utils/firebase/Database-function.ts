@@ -126,7 +126,7 @@ export const getAllToDosFromFirestore = async (): Promise<ITodoGroup[] | null> =
         users: doc.data()["users"],
         isDeleted: false,
         isSynced: true,
-        isOpen: true || false,
+        isOpen: doc.data()["isOpen"],
       }
     }).filter((todo) => todo.users.includes(auth.currentUser?.uid));
 
