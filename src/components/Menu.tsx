@@ -14,7 +14,7 @@ import {
 } from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
-import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp, calendarNumberOutline } from 'ionicons/icons';
+import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, logOutOutline, logOutSharp, statsChartOutline, statsChartSharp, calendarNumberOutline } from 'ionicons/icons';
 import './Menu.css';
 
 interface AppPage {
@@ -45,7 +45,7 @@ const appPages: AppPage[] = [
   },
   {
     title: 'Archived',
-    url: '/page/Archived',
+    url: '/archive',
     iosIcon: archiveOutline,
     mdIcon: archiveSharp
   },
@@ -56,10 +56,10 @@ const appPages: AppPage[] = [
     mdIcon: trashSharp
   },
   {
-    title: 'Spam',
-    url: '/page/Spam',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp
+    title: 'Statistics',
+    url: '/page/Statspage',
+    iosIcon: statsChartOutline,
+    mdIcon: statsChartSharp
   },
   {
     title: 'Calendar',
@@ -70,8 +70,8 @@ const appPages: AppPage[] = [
   {
     title: 'Logout',
     url: '/logout',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp
+    iosIcon: logOutOutline,
+    mdIcon: logOutSharp
   }
 ];
 

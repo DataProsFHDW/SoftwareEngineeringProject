@@ -106,6 +106,7 @@ export const TodoAddModal: React.FC<Props> = ({
       ],
       isDeleted: false,
       isSynced: false,
+      isOpen: true,
     };
   }
   return (

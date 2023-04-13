@@ -97,6 +97,7 @@ export const TodoEditModal: React.FC<Props> = ({
       ],
       isDeleted: false,
       isSynced: false,
+      isOpen: true,
     };
   }
 

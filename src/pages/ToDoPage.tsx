@@ -30,8 +30,7 @@ import { TodoAddModal } from "../components/TodoAddModal";
 export const ToDoPage: React.FC = () => {
   const todoStorage = useTodoStorage();
 
-  const [selectedTodo, setSelectedTodo] = useState<ITodoGroup>()
- 
+  const [selectedTodo, setSelectedTodo] = useState<ITodoGroup>();
   const [presentEdit, dismissEdit] = useIonModal(TodoEditModal, {
     todoItem: selectedTodo,
     onDismiss: (data: ITodoGroup, role: string) => dismissEdit(data, role),
@@ -55,10 +54,10 @@ export const ToDoPage: React.FC = () => {
     if (selectedTodo) {
       todoStorage.updateTodo(selectedTodo)
     }
-  }, [selectedTodo])
+  }, [selectedTodo]);
 
   const handleEditClick = (todo: ITodoGroup) => {
-    setSelectedTodo(todo)
+    setSelectedTodo(todo);
     presentEdit({
       onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
         if (ev.detail.role === "confirm") {
@@ -75,11 +74,22 @@ export const ToDoPage: React.FC = () => {
     presentAdd({
       onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
         if (ev.detail.role === "add") {
-          todoStorage.addTodo(ev.detail.data)
+          todoStorage.addTodo(ev.detail.data);
         }
       },
     });
   };
+
+  function handleCheckboxClick(todo: ITodoGroup) {
+    console.log("Checkbox Clicked")
+    todoStorage.updateTodo({
+      todoType: todo.todoType,
+      todoTitle: todo.todoTitle,
+      todoDescription: todo.todoDescription,
+      id: todo.id,
+      isOpen: !todo.isOpen,
+    } as ITodoGroup)
+  }
 
   function deleteTodo(index: number) {
     console.log("Delete pressed");
@@ -92,16 +102,19 @@ export const ToDoPage: React.FC = () => {
     event.detail.complete();
   }
 
-  let todoRender = todoStorage.getTodoList().map((todo, index) => {
-    return (
-      <ToDoComponent
-        key={"Todo-" + index}
-        todo={todo}
-        onEditClick={() => handleEditClick(todo)}
-        onDeleteClick={() => deleteTodo(index)}
-      />
-    );
-  });
+  let toDoRender = todoStorage.getTodoList().map((todo, index) => {
+    if (todo.isOpen) {
+      return (
+        <ToDoComponent
+          key={"Todo-" + index}
+          todo={todo}
+          onEditClick={() => handleEditClick(todo)}
+          onDeleteClick={() => deleteTodo(index)}
+          onCheckboxClick={() => handleCheckboxClick(todo)}
+        />
+      );
+   }
+  }).filter( Boolean );
 
   return (
     <IonPage>
@@ -111,9 +124,13 @@ export const ToDoPage: React.FC = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle className="ion-text-center">Your To Dos</IonTitle>
-          <IonButton onClick={() => {
-            todoStorage.refreshTodos();
-          }}>Refresh</IonButton>
+          <IonButton
+            onClick={() => {
+              todoStorage.refreshTodos();
+            }}
+          >
+            Refresh
+          </IonButton>
         </IonToolbar>
       </IonHeader>
 

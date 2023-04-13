@@ -8,6 +8,7 @@ import {
   IonItem,
   IonButton,
   IonButtons,
+  IonCheckbox,
 } from "@ionic/react";
 import { ITodo } from "../models/ITodo";
 import "./ToDoComponent.css";
@@ -16,13 +17,15 @@ import { Timestamp } from "firebase/firestore";
 interface ToDoComponentProps {
   onEditClick: any;
   onDeleteClick: any;
-  todo: ITodo,
+  onCheckboxClick: any
+  todo: ITodo;
 }
 
 export const ToDoComponent: React.FC<ToDoComponentProps> = ({
   todo,
   onEditClick,
   onDeleteClick,
+  onCheckboxClick
 }) => {
 
   let todoDateJsx = "";
@@ -34,12 +37,12 @@ export const ToDoComponent: React.FC<ToDoComponentProps> = ({
 
   return (
     <IonItem>
-      <IonCard >
-        <div className="card-content">
-          <IonCardHeader>
-            <IonCardTitle>{todo.todoTitle}</IonCardTitle>
-            <IonCardSubtitle>{todo.todoType?.toString()}</IonCardSubtitle>
-          </IonCardHeader>
+      <IonCheckbox slot="start" onIonChange={onCheckboxClick} checked={!todo.isOpen}></IonCheckbox>
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>{todo.todoTitle}</IonCardTitle>
+          <IonCardSubtitle>{todo.todoDescription}</IonCardSubtitle>
+        </IonCardHeader>
 
           <IonCardContent>
             {todoDateJsx}
