@@ -75,8 +75,9 @@ const Card: React.FC<CardProps> = ({ value1, value2 }) => {
       padding: '1rem',
       backgroundColor: 'lightgray',
       borderRadius: '8px',
-      width: 'fit-content',
-      margin: '0.5rem'
+      width: '100%',
+      margin: '0.5rem',
+      boxSizing: 'border-box'
     }}>
       <div style={{ display: 'flex',flexDirection: 'column', alignItems: 'center' }}>
         <h1 style={{ fontSize: '24px', marginRight: '1rem' }}>{value1}</h1>
@@ -99,9 +100,9 @@ const StatsPage: React.FC = () => {
 
   //
   const value1A = 'Anzahl offene Todos';
-  const value2A = 'World';
+  const value2A = 'Zahl';
   const value1B = 'Anzahl geschlossene Todos';
-  const value2B = 'Component';
+  const value2B = 'Zahl';
   
 
   return (
