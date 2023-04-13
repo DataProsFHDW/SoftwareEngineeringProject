@@ -108,6 +108,7 @@ export const addToDoFirestore = async (todo: ITodoGroup) => {
   }
 };
 
+// Methode abklären !!!
 export const getAllToDosFromFirestore = async (): Promise<ITodoGroup[] | null> => {
   try {
     if (!navigator.onLine) {
@@ -117,15 +118,29 @@ export const getAllToDosFromFirestore = async (): Promise<ITodoGroup[] | null> =
     let docSnap = await getDocs(collection(firestore, todo_co));
 
     var todos = docSnap.docs.map((doc) => {
+      try{
       return {
         id: doc.id,
         todoType: TodoType.SIMPLE,
         todoTitle: doc.data()["todoTitle"].toString(),
         todoDescription: doc.data()["todoDescription"].toString(),
         users: doc.data()["users"],
-        isDeleted: false,
+        isDeleted: false, 
         isSynced: true,
+        isOpen: doc.data()["isOpen"],
       }
+  }catch(e){
+    return {
+      id: doc.id,
+      todoType: TodoType.SIMPLE,
+      todoTitle: doc.data()["todoTitle"].toString(),
+      todoDescription: doc.data()["todoDescription"].toString(),
+      users: doc.data()["users"],
+      isDeleted: false,
+      isSynced: true,
+      isOpen: true,
+    }
+  }
     }).filter((todo) => todo.users.includes(auth.currentUser?.uid));
 
     return todos;
