@@ -7,6 +7,7 @@ import {
   IonSplitPane,
   IonTitle,
   IonToolbar,
+  isPlatform,
   setupIonicReact,
   useIonToast
 } from "@ionic/react";
@@ -92,7 +93,7 @@ const App: React.FC = () => {
      and isDemoUser is true,
      we will log in as a demo user */
   var isDemoUser = true;
-  if (user != null || (isDemoUser && (!process.env.NODE_ENV || process.env.NODE_ENV === 'development'))) {
+  if (user != null || (isDemoUser && (!process.env.NODE_ENV || process.env.NODE_ENV === 'development' || isPlatform("android")))) {
     if (auth.currentUser == null) {
       Network.getStatus().then((value) => {
         if (value.connected && value.connectionType != undefined) {
