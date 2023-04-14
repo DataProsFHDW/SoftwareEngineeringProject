@@ -24,11 +24,20 @@ import {
 } from "../utils/firebase/Database-function";
 import { User2 } from "../models/User";
 
+/**
+ * TodoEditModal Component to edit a Todo
+ */
 type Props = {
   todoItem: ITodoGroup;
   onDismiss: () => void;
 };
 
+/**
+ * TodoEditModal Component to edit a Todo of the TodoList saved in storage
+ * @param todoItem Todo to edit
+ * @param onDismiss Callback function to dismiss the Modal
+ * @returns React.FC
+ */
 export const TodoEditModal: React.FC<Props> = ({
   todoItem,
   onDismiss,
@@ -159,7 +168,7 @@ export const TodoEditModal: React.FC<Props> = ({
               value={
                 dueDate
                   ? "Due on: " +
-                    new Date(dueDate.toString()).toLocaleString("de-DE")
+                  new Date(dueDate.toString()).toLocaleString("de-DE")
                   : null
               }
               onIonChange={(e) => handleDateInputChange(e)}

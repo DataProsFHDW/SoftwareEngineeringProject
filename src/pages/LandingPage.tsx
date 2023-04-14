@@ -7,6 +7,10 @@ import useGlobalStorage from '../storage/StateManagement';
 import { useTodoStorage } from '../storage/StateManagementWrapper';
 import './Page.css';
 
+/**
+ * LandingPage Component to display the TodoList saved in storage that holds checked items
+ * @returns React.FC
+ */
 export const LandingPage: React.FC = () => {
   const useStorage = useGlobalStorage();
   const [state, setState] = useStorage("todostorage");

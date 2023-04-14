@@ -1,9 +1,16 @@
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { ITodoGroup } from '../models/ITodo';
- 
+
+/**
+ * NotificationUtils is a singleton class that handles all local notifications
+ */
 class NotificationUtils {
     notificationCount: number = 0;
 
+    /**
+     * Schedules all todos in the todoList
+     * @param todoList The list of todos to schedule
+     */
     public async scheduleAllTodos(todoList: ITodoGroup[]) {
         if (!(await LocalNotifications.requestPermissions()).display) return;
 
@@ -14,7 +21,7 @@ class NotificationUtils {
                 // todo is not scheduled, schedule it for 1 hour from now
                 date.setHours(date.getHours() + 1);
                 // date.setSeconds(date.getSeconds() + 1); 
-            } 
+            }
 
             this.schedule(date,
                 todo.todoTitle.toString() == "" ? "Todo Reminder" : todo.todoTitle.toString(),
@@ -22,6 +29,10 @@ class NotificationUtils {
         });
     }
 
+    /**
+     * Clears all notifications
+     * @param todoList The list of todos to schedule
+     */
     public async clearAllNotifications() {
         if (!(await LocalNotifications.requestPermissions()).display) return;
 
@@ -35,9 +46,15 @@ class NotificationUtils {
     }
 
 
+    /**
+     * Schedules a single notification
+     * @param date The date to schedule the notification for
+     * @param title The title of the notification
+     * @param body The body of the notification
+     */
     public async schedule(date: Date = new Date(), title: string = "Title", body: string = "Notification") {
         try {
-            // Request/ check permissions
+            // Request check permissions
             if (!(await LocalNotifications.requestPermissions()).display) return;
 
             LocalNotifications.schedule({
@@ -59,4 +76,5 @@ class NotificationUtils {
     }
 }
 
-export default new NotificationUtils()
+const instance = new NotificationUtils();
+export default instance;

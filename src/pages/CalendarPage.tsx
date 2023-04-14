@@ -5,25 +5,25 @@ import {
   IonHeader,
   IonMenuButton,
   IonPage,
-  IonText,
   IonTitle,
   IonToolbar,
-  useIonModal,
+  useIonModal
 } from "@ionic/react";
-import { useTodoStorage } from "../storage/StateManagementWrapper";
 import React, { useEffect, useState } from "react";
-//Fullcalendar and Realted Plugins
-import FullCalendar from "@fullcalendar/react";
+import { useTodoStorage } from "../storage/StateManagementWrapper";
+// @ts-ignore 
 import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction"; // needed
-import { formatDate } from "@fullcalendar/core";
-import { createEventId } from "../utils/calendar/calendarEventUtils";
+import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 import { TodoEditModal } from "../components/TodoEditModal";
 import { ITodoGroup } from "../models/ITodo";
-import { TodoType } from "../models/TodoType";
-import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
+import { createEventId } from "../utils/calendar/calendarEventUtils";
 
+/**
+ * CalendarPage Component to display the TodoList saved in storage that holds checked items
+ */
 interface eventType {
   id: string;
   title: string;
@@ -31,106 +31,17 @@ interface eventType {
   extendedProps: any;
 }
 
-const events2: eventType[] = [
-  {
-      "id": "0niKODw68kCFcPfJ96xW",
-      "title": "Wild",
-      "start": new Date("2023-04-12T18:14:00.000Z"),
-      "extendedProps": {
-          "todoData": {
-              "id": "0niKODw68kCFcPfJ96xW",
-              "todoType": "Single ToDo",
-              "todoTitle": "Wild",
-              "todoDescription": "LOL collab",
-              "todoDate": "2023-04-12T18:14:00.000Z",
-              "users": [
-                  "cEtY5elpUJNOGC5TTHlkgjKkcrj1",
-                  "fZaZeIfJnZbkOfeaLNmfJkCPRcE2",
-                  "n1uK8YwZiNf8sM0ckjsea79puPw2"
-              ],
-              "isDeleted": false,
-              "isSynced": true
-          }
-      }
-  },
-  {
-      "id": "WLlcFWGPD2KuEnTEwoRb",
-      "title": "Grüsli de La",
-      "start": new Date("2023-04-15T20:25:00.000Z"),
-      "extendedProps": {
-          "todoData": {
-              "id": "WLlcFWGPD2KuEnTEwoRb",
-              "todoType": "Single ToDo",
-              "todoTitle": "Grüsli de La",
-              "todoDescription": "Simoms",
-              "todoDate": "2023-04-15T20:25:00.000Z",
-              "users": [
-                  "cEtY5elpUJNOGC5TTHlkgjKkcrj1",
-                  "n1uK8YwZiNf8sM0ckjsea79puPw2"
-              ],
-              "isDeleted": false,
-              "isSynced": true
-          }
-      }
-  },
-  {
-      "id": "g5cXYI0COJSnG7PHoTQP",
-      "title": "Hallo",
-      "start": new Date("2023-04-22T18:51:00.000Z"),
-      "extendedProps": {
-          "todoData": {
-              "id": "g5cXYI0COJSnG7PHoTQP",
-              "todoType": "Single ToDo",
-              "todoTitle": "Hallo",
-              "todoDescription": "Erde",
-              "todoDate": "2023-04-22T18:51:00.000Z",
-              "users": [
-                  "fZaZeIfJnZbkOfeaLNmfJkCPRcE2",
-                  "n1uK8YwZiNf8sM0ckjsea79puPw2"
-              ],
-              "isDeleted": false,
-              "isSynced": true
-          }
-      }
-  },
-  {
-    id: "1",
-    title: "Meeting",
-    start: new Date(),
-    extendedProps: {
-      todoData: {
-        todoType: TodoType.SIMPLE,
-        todoTitle: "Title",
-        todoDescription: "",
-        todoDate: new Date(),
-      },
-    },
-  },
-]
-/*
-[
-  {
-    id: "1",
-    title: "Meeting",
-    start: new Date(),
-    extendedProps: {
-      todoData: {
-        todoType: TodoType.SIMPLE,
-        todoTitle: "Title",
-        todoDescription: "",
-        todoDate: new Date(),
-      },
-    },
-  },
-];
-*/
+/**
+ * CalendarPage Component to display the TodoList saved in storage that holds checked items
+ * @constructor 
+ * @returns {JSX.Element}
+ */
 export const CalendarPage: React.FC = () => {
   const todoStorage = useTodoStorage();
 
   const [weekendsVisible, setWeekendsVisible] = useState<boolean>(true);
   const [currentEvents, setCurrentEvents] = useState<eventType[] | undefined>();
   const [selectedTodo, setSelectedTodo] = useState<ITodoGroup>();
-  let currentEvents2: any[]| undefined = undefined
 
   const [presentEdit, dismissEdit] = useIonModal(TodoEditModal, {
     todoItem: selectedTodo,
@@ -139,7 +50,7 @@ export const CalendarPage: React.FC = () => {
 
   useEffect(() => {
     todoStorage.refreshTodos();
-    
+
   }, []);
 
   useEffect(() => {
@@ -154,8 +65,8 @@ export const CalendarPage: React.FC = () => {
         };
       }
     });
-    console.log(timedTodoList.filter( Boolean ));
-    setCurrentEvents(timedTodoList.filter( Boolean ) as eventType[]);
+    console.log(timedTodoList.filter(Boolean));
+    setCurrentEvents(timedTodoList.filter(Boolean) as eventType[]);
   }, [todoStorage.storage]);
 
   const handleEditClick = (todo: ITodoGroup) => {
@@ -207,21 +118,10 @@ export const CalendarPage: React.FC = () => {
           select={handleDateSelect}
           eventContent={renderEventContent} // custom render function
           eventClick={handleEventClick}
-          // eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-
-          /* you can update a remote database when these fire:
-            eventAdd={function(){}}
-            eventChange={function(){}}
-            eventRemove={function(){}}
-            */
         />
       </IonContent>
     </IonPage>
   );
-
-  function handleWeekendsToggle() {
-    setWeekendsVisible(!weekendsVisible);
-  }
 
   function handleDateSelect(selectInfo: any) {
     let title = prompt("Please enter a new title for your event");
@@ -242,10 +142,6 @@ export const CalendarPage: React.FC = () => {
 
   function handleEventClick(clickInfo: any) {
     clickInfo.event.remove();
-  }
-
-  function handleEvents(events: any) {
-    setCurrentEvents(events);
   }
 };
 

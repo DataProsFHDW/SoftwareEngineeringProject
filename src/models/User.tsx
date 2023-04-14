@@ -1,5 +1,8 @@
 import { uuidv4 } from "@firebase/util";
 
+/**
+ * User class to create a User
+ */
 export class User2 {
     id: string;
     name: string;
@@ -11,6 +14,9 @@ export class User2 {
 
 }
 
+/**
+ * User class to create a User
+ */
 export class User {
     id: string;
     name: string;

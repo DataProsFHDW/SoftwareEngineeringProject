@@ -3,6 +3,10 @@ import { useParams } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
 import './Page.css';
 
+/**
+ * Page Component to display the TodoList saved in storage that holds checked items
+ * @returns React.FC
+ */
 const Page: React.FC = () => {
 
   const { name } = useParams<{ name: string; }>();

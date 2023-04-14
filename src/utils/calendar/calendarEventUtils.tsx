@@ -1,8 +1,10 @@
 import { uuidv4 } from "@firebase/util"
 
-let eventGuid = 0
 let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 
+/**
+ * Initial Events
+ */
 export const INITIAL_EVENTS = [
   {
     id: createEventId(),
@@ -16,6 +18,9 @@ export const INITIAL_EVENTS = [
   }
 ]
 
+/**
+ * Random ID Generator
+ */
 export function createEventId() {
   return uuidv4()
 }

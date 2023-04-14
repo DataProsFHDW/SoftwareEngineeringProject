@@ -18,6 +18,11 @@ import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp
 import './Menu.css';
 import { auth } from '../utils/firebase/Database-function';
 
+/**
+ * The AppPage interface defines the shape of an object that represents an app page.
+ *
+ * @interface AppPage
+ */
 interface AppPage {
   url: string;
   iosIcon: string;
@@ -78,12 +83,18 @@ const appPages: AppPage[] = [
 
 const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
+/**
+ * The Menu component is a functional React component that renders an overlay menu with links to app pages and labels.
+ *
+ * @returns {JSX.Element} - A React element that renders an overlay menu with links to app pages and labels.
+ */
 const Menu: React.FC = () => {
   const location = useLocation();
 
   return (
     <IonMenu contentId="main" type="overlay">
       <IonContent>
+        {/* Render a list of links to app pages */}
         <IonList id="inbox-list">
           <IonListHeader>Inbox</IonListHeader>
           <IonNote>Hi {auth.currentUser?.displayName} </IonNote>

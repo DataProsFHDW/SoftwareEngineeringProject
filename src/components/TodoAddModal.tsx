@@ -26,19 +26,16 @@ import {
   getUsersFromFirestore,
   auth,
 } from "../utils/firebase/Database-function";
-/*
-const IonModalBox = styled(IonModal)`
-  --height: "45%";
-  &::part(content) {
-    position: absolute;
-    bottom: 0;
-  }
-`;
-*/
+
 type Props = {
   onDismiss: () => void;
 };
 
+/**
+ * TodoAddModal Component to add a new Todo to the TodoList
+ * @param onDismiss Callback function to dismiss the Modal
+ * @returns React.FC 
+ */
 export const TodoAddModal: React.FC<Props> = ({
   onDismiss,
 }: {
@@ -168,7 +165,7 @@ export const TodoAddModal: React.FC<Props> = ({
               value={
                 dueDate
                   ? "Due on: " +
-                    new Date(dueDate.toString()).toLocaleString("de-DE")
+                  new Date(dueDate.toString()).toLocaleString("de-DE")
                   : null
               }
               onIonChange={(e) => handleDateInputChange(e)}

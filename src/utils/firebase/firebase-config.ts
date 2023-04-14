@@ -1,3 +1,6 @@
+/**
+ * For Firebase JS SDK v7.20.0 and later, measurementId is optional
+ */
 export const firebaseConfig = {
     apiKey: "AIzaSyC77fOeWJhpqyG7r82jTv-LC1X-My6ymII",
     authDomain: "checkbox-1.firebaseapp.com",

@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
-import { Preferences } from '@capacitor/preferences';
-import useGlobalStorage from "./StateManagement";
-import { ITodo, ITodoGroup } from "../models/ITodo";
-import NotificationUtils from "../utils/NotificationUtils";
-import { addToDoFirestore, auth, deleteToDoToFirestore, getAllToDosFromFirestore, getUsersFromFirestore, updateToDoToFirestore } from "../utils/firebase/Database-function";
-import { useIonToast } from "@ionic/react";
-import { uuidv4 } from "@firebase/util";
 import { Network } from '@capacitor/network';
+import { uuidv4 } from "@firebase/util";
+import { useIonToast } from "@ionic/react";
+import { ITodo, ITodoGroup } from "../models/ITodo";
+import { addToDoFirestore, deleteToDoToFirestore, getAllToDosFromFirestore, getUsersFromFirestore, updateToDoToFirestore } from "../utils/firebase/Database-function";
+import NotificationUtils from "../utils/NotificationUtils";
+import useGlobalStorage from "./StateManagement";
 
-// https://medium.com/ringcentral-developers/use-react-hooks-with-storage-as-global-state-management-f2945492aade
+/**
+ * This is a wrapper for the useGlobalStorage hook.
+ * It provides a simple interface to store and retrieve data from the global storage.
+ */
 export const useTodoStorage = () => {
     const useStorage = useGlobalStorage();
     const [storage, setStorage] = useStorage("todoStorage", {
@@ -16,18 +17,33 @@ export const useTodoStorage = () => {
     });
     const [present] = useIonToast();
 
+    /**
+     * This method lets you set the username in the global storage.
+     * @param username The username to be stored.
+     */
     const setUsername = async (username: string | null | undefined) => {
         await setStorage({ todoList: getTodoList(), username: username });
     }
 
+    /**
+     * This method lets you retrieve the username from the global storage.
+     */
     const getUsername = () => {
         return storage.username;
     }
 
+    /**
+     * This method lets you set the todo list in the global storage.
+     * @param todoList The todo list to be stored. 
+     */
     const setTodoList = async (todoList: ITodoGroup[]) => {
         await setStorage({ todoList: todoList, username: getUsername() });
     }
 
+    /**
+     * This method lets you refresh the todo list from the global storage and syncs it with the online state.
+     * It also schedules all todos for notifications.
+     */
     const refreshTodos = async () => {
         try {
             await Network.getStatus().then(async (value) => {
@@ -62,6 +78,13 @@ export const useTodoStorage = () => {
         }
     }
 
+    /**
+     * This method lets two todo lists be compared and returns a new list with all elements of both lists.
+     * It is used to sync the local todo list with the online todo list.
+     * @param listOld The old todo list.
+     * @param listNew The new todo list.
+     * @returns A new todo list with all elements of both lists.
+     */
     const compareTodoList = (listOld: ITodoGroup[], listNew: ITodoGroup[]): ITodoGroup[] => {
         var res: ITodoGroup[] = listNew;
         listOld.forEach((e) => {
@@ -76,6 +99,10 @@ export const useTodoStorage = () => {
         return res;
     }
 
+    /**
+     * This method lets you retrieve the todo list from the global storage.
+     * @returns The todo list.
+     */
     const getTodoList = (): ITodoGroup[] => {
         if (storage.todoList as ITodoGroup) {
             return storage.todoList as ITodoGroup[]
@@ -84,6 +111,11 @@ export const useTodoStorage = () => {
         // TODO get from firebase
     }
 
+    /**
+     * This method lets you add a todo to the todo list in the global storage.
+     * @param todo The todo to be added.
+     * @returns The id of the todo.
+     */
     const addTodo = async (todo: ITodoGroup) => {
         // NotificationUtils.schedule(new Date(), todo.todoTitle.toString(), todo.todoDescription ?? "");
         try {
@@ -136,8 +168,16 @@ export const useTodoStorage = () => {
         NotificationUtils.scheduleAllTodos(getTodoList());
     }
 
+    /**
+     * This method lets you remove a todo from the todo list in the global storage.
+     * @param todo The todo to be removed.
+     */
     const removeTodo = async (todo: ITodo) => removeTodoById(todo.id);
 
+    /**
+     * This method lets you remove a todo from the todo list in the global storage.
+     * @param id The id of the todo to be removed.
+     */
     const removeTodoById = async (id: string) => {
         console.log(getUsersFromFirestore(), "users");
         try {
@@ -176,6 +216,10 @@ export const useTodoStorage = () => {
         NotificationUtils.scheduleAllTodos(getTodoList());
     }
 
+    /**
+     * This method lets you update a todo in the todo list in the global storage.
+     * @param todo The todo to be updated.
+     */
     const updateTodo = async (todo: ITodoGroup) => {
         try {
             var networkState = await Network.getStatus();
@@ -220,6 +264,9 @@ export const useTodoStorage = () => {
         NotificationUtils.scheduleAllTodos(getTodoList());
     }
 
+    /**
+     * This method lets you clear the entire global storage.
+     */
     const clearStorage = async () => await setStorage({
         todoList: [], username: null
     });

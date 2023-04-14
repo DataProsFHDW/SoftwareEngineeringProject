@@ -14,19 +14,23 @@ import {
   IonTitle,
   IonToolbar,
   ItemReorderEventDetail,
-  useIonModal,
+  useIonModal
 } from "@ionic/react";
-import { add } from "ionicons/icons";
-import { ToDoComponent } from "../components/ToDoComponent";
-import "./ToDoPage.css";
-import { ITodoGroup } from "../models/ITodo";
-import { useTodoStorage } from "../storage/StateManagementWrapper";
-import { TodoEditModal } from "../components/TodoEditModal";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
+import { add } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { TodoAddModal } from "../components/TodoAddModal";
-// Zu Erledigen: [] Ausgliederung Modal zu ToDo-Details (siehe Link Arbeitsrechner)
+import { ToDoComponent } from "../components/ToDoComponent";
+import { TodoEditModal } from "../components/TodoEditModal";
+import { ITodoGroup } from "../models/ITodo";
+import { useTodoStorage } from "../storage/StateManagementWrapper";
+import "./ToDoPage.css";
 
+/**
+ * CalendarPage Component to display the TodoList saved in storage that holds checked items
+ * @constructor
+ * @return {JSX.Element}
+ */
 export const ToDoPage: React.FC = () => {
   const todoStorage = useTodoStorage();
 
@@ -44,7 +48,7 @@ export const ToDoPage: React.FC = () => {
     todoStorage.refreshTodos();
   }, []); // [] => do on initial render of todoPageComponent
 
-  useEffect(() => { 
+  useEffect(() => {
     // console.log("TodoList Changed", todoStorage.getTodoList())
   }, [todoStorage.storage]); // [] => do on initial render of todoPageComponent
 
@@ -113,8 +117,8 @@ export const ToDoPage: React.FC = () => {
           onCheckboxClick={() => handleCheckboxClick(todo)}
         />
       );
-   }
-  }).filter( Boolean );
+    }
+  }).filter(Boolean);
 
   return (
     <IonPage>
