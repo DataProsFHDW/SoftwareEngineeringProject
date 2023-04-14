@@ -139,12 +139,10 @@ export const ArchivePage: React.FC = () => {
       </IonHeader>
 
       <IonContent className="ion-padding" fullscreen>
-        {/**String Todo Placeholder for Testing */}
         <IonList>
           <IonListHeader>
             <IonHeader>ToDos</IonHeader>
           </IonListHeader>
-          {/* The reorder gesture is disabled by default, enable it to drag and drop items */}
           <IonReorderGroup disabled={false} onIonItemReorder={handleReorder}>
             {toDoRender}
           </IonReorderGroup>

@@ -21,7 +21,6 @@
     "@ionic/react": "6.7.3",
     "@ionic/react-router": "6.7.3",
     "@reduxjs/toolkit": "^1.9.3",
-    "@types/fullcalendar": "^3.8.0",
     "@types/jest": "^26.0.20",
     "@types/node": "^12.19.15",
     "@types/react": "18.0.35",
