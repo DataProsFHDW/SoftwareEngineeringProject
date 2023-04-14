@@ -178,7 +178,7 @@ const App: React.FC = () => {
 
 
   return (
-    <IonApp>
+    <IonApp >
       <IonReactRouter>
         <IonSplitPane contentId="main">
           {routerJsx}
