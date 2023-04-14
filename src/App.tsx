@@ -1,7 +1,12 @@
 import {
   IonApp,
+  IonContent,
+  IonHeader,
+  IonPage,
   IonRouterOutlet,
   IonSplitPane,
+  IonTitle,
+  IonToolbar,
   setupIonicReact,
   useIonToast
 } from "@ionic/react";
@@ -118,14 +123,15 @@ const App: React.FC = () => {
       routerJsx = (
         <>
           <IonRouterOutlet id="main">
-            <Redirect from="*" to="/username" />
+            <Redirect exact from="*" to="/username" />
+            <Redirect exact path="/" to ="/username" />
             {/* Default Landing Page */}
-            <Route path="/username">
+            <Route exact path="/username">
               <UsernamePage />
             </Route>
             <Redirect exact from="/" to="/username" />
             <Redirect exact from="/Dashboard" to="/username" />
-            <Redirect to="/username" />
+            <Redirect exact to="/username" />
           </IonRouterOutlet>
         </>)
 
@@ -137,25 +143,25 @@ const App: React.FC = () => {
           <Menu />
           <IonRouterOutlet id="main">
             {/* Default Landing Page */}
-            <Redirect from="/username" to="/" />
+            <Redirect exact from="/username" to="/" />
             <Redirect exact from="/" to="/dashboard" />
-            <Redirect from="/login" to="/dashboard" />
-            <Route path="/dashboard">
+            <Redirect exact from="/login" to="/dashboard" />
+            <Route exact path="/dashboard">
               <LandingPage />
             </Route>
-            <Route path="/todo" exact={false}>
+            <Route path="/todo" exact={true}>
               <ToDoPage />
             </Route>
-            <Route path="/archive" exact={false}>
+            <Route path="/archive" exact={true}>
               <ArchivePage />
             </Route>
-            <Route path="/page/statsPage" exact={false}>
+            <Route path="/page/statsPage" exact={true}>
               <StatsPage />
             </Route>
-            <Route path="/logout" exact={false}>
+            <Route path="/logout" exact={true}>
               <Logout />
             </Route>
-            <Route path="/calendar" exact={false}>
+            <Route path="/calendar" exact={true}>
               <CalendarPage />
             </Route>
           </IonRouterOutlet>
@@ -169,13 +175,13 @@ const App: React.FC = () => {
         <IonRouterOutlet id="main">
           {/* Default Landing Page */}
           <Redirect exact from="*" to="/login" />
-          <Route path="/login">
+          <Redirect exact path="/" to ="/login" />
+          <Route exact path="/login">
             <LoginPage />
           </Route>
         </IonRouterOutlet>
       </>)
   }
-
 
   return (
     <IonApp >

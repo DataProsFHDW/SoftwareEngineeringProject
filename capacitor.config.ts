@@ -8,7 +8,6 @@ const config: CapacitorConfig = {
   hideLogs: false,
   loggingBehavior: "production",
   server: {
-    hostname: '127.0.0.1',
     cleartext: true,
     allowNavigation: ['*'],
   },
