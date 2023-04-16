@@ -1,5 +1,4 @@
 import {
-  IonButton,
   IonButtons,
   IonContent,
   IonFab,
@@ -15,9 +14,11 @@ import {
   IonToolbar,
   ItemReorderEventDetail,
   useIonModal,
+  useIonViewDidEnter,
+  useIonViewWillLeave,
 } from "@ionic/react";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
-import { add, refreshCircleOutline, refreshOutline } from "ionicons/icons";
+import { add, refreshOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { TodoAddModal } from "../components/TodoAddModal";
 import { ToDoComponent } from "../components/ToDoComponent";
@@ -43,14 +44,21 @@ export const ToDoPage: React.FC = () => {
   const [presentAdd, dismissAdd] = useIonModal(TodoAddModal, {
     onDismiss: (data: ITodoGroup, role: string) => dismissAdd(data, role),
   });
-
+/*
   useEffect(() => {
     todoStorage.refreshTodos();
   }, []); // [] => do on initial render of todoPageComponent
-
   useEffect(() => {
     // console.log("TodoList Changed", todoStorage.getTodoList())
   }, [todoStorage.storage]); // [] => do on initial render of todoPageComponent
+*/
+  useIonViewDidEnter(() => {
+    todoStorage.refreshTodos();
+  });
+
+  useIonViewWillLeave(()=> {
+    todoStorage.refreshTodos();
+  })
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
   useEffect(() => {
