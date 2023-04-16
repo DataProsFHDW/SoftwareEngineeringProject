@@ -65,6 +65,7 @@ class NotificationUtils {
             // Request check permissions
             if (!(await LocalNotifications.requestPermissions()).display) return;
 
+            date ??= new Date();
             var diff = date.getTime() - new Date().getTime();
             if (diff < 0) {
                 return;
