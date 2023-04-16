@@ -16,7 +16,7 @@ import {
   ItemReorderEventDetail,
   useIonModal,
 } from "@ionic/react";
-import { add } from "ionicons/icons";
+import { add, refreshOutline } from "ionicons/icons";
 import { ToDoComponent } from "../components/ToDoComponent";
 import "./ToDoPage.css";
 import { ITodo, ITodoGroup } from "../models/ITodo";
@@ -150,6 +150,13 @@ export const ArchivePage: React.FC = () => {
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
           <IonFabButton onClick={() => handleAddClick()}>
             <IonIcon icon={add}></IonIcon>
+          </IonFabButton>
+          <IonFabButton
+            onClick={() => {
+              todoStorage.refreshTodos();
+            }}
+          >
+            <IonIcon icon={refreshOutline}></IonIcon>
           </IonFabButton>
         </IonFab>
       </IonContent>

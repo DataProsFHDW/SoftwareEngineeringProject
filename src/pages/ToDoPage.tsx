@@ -14,10 +14,10 @@ import {
   IonTitle,
   IonToolbar,
   ItemReorderEventDetail,
-  useIonModal
+  useIonModal,
 } from "@ionic/react";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
-import { add } from "ionicons/icons";
+import { add, refreshCircleOutline, refreshOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { TodoAddModal } from "../components/TodoAddModal";
 import { ToDoComponent } from "../components/ToDoComponent";
@@ -56,7 +56,7 @@ export const ToDoPage: React.FC = () => {
   useEffect(() => {
     console.log("Effect on current TodoItem" + JSON.stringify(selectedTodo));
     if (selectedTodo) {
-      todoStorage.updateTodo(selectedTodo)
+      todoStorage.updateTodo(selectedTodo);
     }
   }, [selectedTodo]);
 
@@ -66,7 +66,7 @@ export const ToDoPage: React.FC = () => {
       onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
         if (ev.detail.role === "confirm") {
           console.log("Confirmed Input: " + JSON.stringify(ev.detail.data));
-          setSelectedTodo(ev.detail.data as ITodoGroup)
+          setSelectedTodo(ev.detail.data as ITodoGroup);
           todoStorage.refreshTodos();
           console.log(selectedTodo);
         }
@@ -85,14 +85,14 @@ export const ToDoPage: React.FC = () => {
   };
 
   function handleCheckboxClick(todo: ITodoGroup) {
-    console.log("Checkbox Clicked")
+    console.log("Checkbox Clicked");
     todoStorage.updateTodo({
       todoType: todo.todoType,
       todoTitle: todo.todoTitle,
       todoDescription: todo.todoDescription,
       id: todo.id,
       isOpen: !todo.isOpen,
-    } as ITodoGroup)
+    } as ITodoGroup);
   }
 
   function deleteTodo(index: number) {
@@ -106,19 +106,22 @@ export const ToDoPage: React.FC = () => {
     event.detail.complete();
   }
 
-  let todoRender = todoStorage.getTodoList().map((todo, index) => {
-    if (todo.isOpen) {
-      return (
-        <ToDoComponent
-          key={"Todo-" + index}
-          todo={todo}
-          onEditClick={() => handleEditClick(todo)}
-          onDeleteClick={() => deleteTodo(index)}
-          onCheckboxClick={() => handleCheckboxClick(todo)}
-        />
-      );
-    }
-  }).filter(Boolean);
+  let todoRender = todoStorage
+    .getTodoList()
+    .map((todo, index) => {
+      if (todo.isOpen) {
+        return (
+          <ToDoComponent
+            key={"Todo-" + index}
+            todo={todo}
+            onEditClick={() => handleEditClick(todo)}
+            onDeleteClick={() => deleteTodo(index)}
+            onCheckboxClick={() => handleCheckboxClick(todo)}
+          />
+        );
+      }
+    })
+    .filter(Boolean);
 
   return (
     <IonPage>
@@ -128,13 +131,6 @@ export const ToDoPage: React.FC = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle className="ion-text-center">Your To Dos</IonTitle>
-          <IonButton
-            onClick={() => {
-              todoStorage.refreshTodos();
-            }}
-          >
-            Refresh
-          </IonButton>
         </IonToolbar>
       </IonHeader>
 
@@ -142,7 +138,7 @@ export const ToDoPage: React.FC = () => {
         {/**String Todo Placeholder for Testing */}
         <IonList>
           <IonListHeader>
-            <IonHeader>ToDos</IonHeader>
+            <IonHeader></IonHeader>
           </IonListHeader>
           {/* The reorder gesture is disabled by default, enable it to drag and drop items */}
           <IonReorderGroup disabled={false} onIonItemReorder={handleReorder}>
@@ -152,6 +148,13 @@ export const ToDoPage: React.FC = () => {
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
           <IonFabButton onClick={() => handleAddClick()}>
             <IonIcon icon={add}></IonIcon>
+          </IonFabButton>
+          <IonFabButton
+            onClick={() => {
+              todoStorage.refreshTodos();
+            }}
+          >
+            <IonIcon icon={refreshOutline}></IonIcon>
           </IonFabButton>
         </IonFab>
       </IonContent>
