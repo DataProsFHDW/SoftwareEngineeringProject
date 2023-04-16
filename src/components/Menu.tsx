@@ -32,12 +32,6 @@ interface AppPage {
 
 const appPages: AppPage[] = [
   {
-    title: 'Dashboard',
-    url: '/Dashboard',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp
-  },
-  {
     title: 'To-Dos',
     url: '/ToDo',
     iosIcon: paperPlaneOutline,
@@ -50,16 +44,10 @@ const appPages: AppPage[] = [
     mdIcon: heartSharp
   },
   {
-    title: 'Archived',
-    url: '/archive',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp
-  },
-  {
-    title: 'Trash',
-    url: '/page/Trash',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp
+    title: 'Calendar',
+    url: '/Calendar',
+    iosIcon: calendarNumberOutline,
+    mdIcon: calendarNumberOutline
   },
   {
     title: 'Statistics',
@@ -68,10 +56,10 @@ const appPages: AppPage[] = [
     mdIcon: statsChartSharp
   },
   {
-    title: 'Calendar',
-    url: '/Calendar',
-    iosIcon: calendarNumberOutline,
-    mdIcon: calendarNumberOutline
+    title: 'Archived',
+    url: '/archive',
+    iosIcon: archiveOutline,
+    mdIcon: archiveSharp
   },
   {
     title: 'Logout',
@@ -96,7 +84,7 @@ const Menu: React.FC = () => {
       <IonContent>
         {/* Render a list of links to app pages */}
         <IonList id="inbox-list">
-          <IonListHeader>Inbox</IonListHeader>
+          <IonListHeader>Checkbox-Menu</IonListHeader>
           <IonNote>Hi {auth.currentUser?.displayName} </IonNote>
           {appPages.map((appPage, index) => {
             return (

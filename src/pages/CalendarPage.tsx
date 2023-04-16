@@ -2,7 +2,10 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
+  IonIcon,
   IonMenuButton,
   IonPage,
   IonTitle,
@@ -20,6 +23,7 @@ import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-com
 import { TodoEditModal } from "../components/TodoEditModal";
 import { ITodoGroup } from "../models/ITodo";
 import { createEventId } from "../utils/calendar/calendarEventUtils";
+import { refreshOutline } from "ionicons/icons";
 
 /**
  * CalendarPage Component to display the TodoList saved in storage that holds checked items
@@ -90,13 +94,6 @@ export const CalendarPage: React.FC = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Calendar View</IonTitle>
-          <IonButton
-            onClick={() => {
-              //this.todoStorage.refreshTodos();
-            }}
-          >
-            Refresh
-          </IonButton>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -120,7 +117,17 @@ export const CalendarPage: React.FC = () => {
           eventClick={handleEventClick}
         />
       </IonContent>
+      <IonFab slot="fixed" vertical="bottom" horizontal="end">
+      <IonFabButton
+            onClick={() => {
+              todoStorage.refreshTodos();
+            }}
+          >
+            <IonIcon icon={refreshOutline}></IonIcon>
+          </IonFabButton>
+      </IonFab>
     </IonPage>
+    
   );
 
   function handleDateSelect(selectInfo: any) {

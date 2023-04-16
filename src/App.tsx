@@ -137,8 +137,6 @@ const App: React.FC = () => {
               <UsernamePage />
             </Route>
             <Redirect exact from="/" to="/username" />
-            <Redirect exact from="/dashboard" to="/username" />
-            <Redirect exact from="/Dashboard" to="/username" />
             <Redirect exact to="/username" />
           </IonRouterOutlet>
         </>)
@@ -152,11 +150,8 @@ const App: React.FC = () => {
           <IonRouterOutlet id="main">
             {/* Default Landing Page */}
             <Redirect exact from="/username" to="/" />
-            <Redirect exact from="/" to="/dashboard" />
-            <Redirect exact from="/login" to="/dashboard" />
-            <Route exact path="/dashboard">
-              <LandingPage />
-            </Route>
+            <Redirect exact from="/" to="/todo" />
+            <Redirect exact from="/login" to="/todo" />
             <Route path="/todo" exact={true}>
               <ToDoPage />
             </Route>
