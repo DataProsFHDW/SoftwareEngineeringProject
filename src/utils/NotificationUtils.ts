@@ -60,16 +60,41 @@ class NotificationUtils {
      * @param title The title of the notification
      * @param body The body of the notification
      */
-    public async schedule(date: Date = new Date(), title: string = "Title", body: string = "Notification") {
+    public async schedule(date: Date | null = null, title: string = "Title", body: string = "Notification") {
         try {
             // Request check permissions
             if (!(await LocalNotifications.requestPermissions()).display) return;
 
-            date ??= new Date();
-            var diff = date.getTime() - new Date().getTime();
-            if (diff < 0) {
-                return;
+            // check if date is in the past)
+            if(date == null) return;
+            var isPast = new Date(date).getTime() < new Date().getTime();
+            if(isPast) return;
+            console.log(title, "isPast", isPast, new Date(date).getTime() - new Date().getTime(), new Date(date), new Date());
+ 
+            try { 
+                await LocalNotifications.schedule({
+                    notifications: [{
+                        title: title,
+                        body: body,
+                        id: this.notificationCount++,
+                        schedule: {
+                            at: new Date(date), 
+                            allowWhileIdle: true,
+                        }
+                    }]
+                });
+                console.log("Scheduled Notification for", title, date);
+            } catch (ex) {
+                console.log("Error scheduling notification", title, ex);
             }
+
+            /*if (!date || date == null) return;
+
+            var tempDate = new Date(date);
+
+            // check if date is in the past
+            var diff = tempDate.getTime() - new Date().getTime();
+            if (diff < 0) return;
 
             LocalNotifications.schedule({
                 notifications: [{
@@ -77,13 +102,14 @@ class NotificationUtils {
                     body: body,
                     id: this.notificationCount++,
                     schedule: {
-                        at: date,
+                        at: tempDate,
                         allowWhileIdle: true,
                     }
                 }]
+            }).then((result) => {
+                console.log('Scheduled notification', result.notifications);
             });
-
-            console.log('Scheduled notification', title, date);
+            console.log("Scheduled Notification for", title, tempDate);*/
         } catch (error) {
             console.error(error);
         }
