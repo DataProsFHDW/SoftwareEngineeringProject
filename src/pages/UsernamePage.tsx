@@ -65,7 +65,7 @@ export const UsernamePage: React.FC = () => {
                         return;
                     }
 
-                    const refDocUser = doc(firestore, FirestoreCollections.USERS, auth.currentUser?.uid!);
+                    const refDocUser = doc(firestore, FirestoreCollections.USERS, auth.currentUser?.uid! ?? "asdfasdfasdfasdfasdf");
                     await setDoc(refDocUser,
                         { username: usernameInput }
                     ).then(() => {
@@ -76,6 +76,7 @@ export const UsernamePage: React.FC = () => {
                         });
                         // history.goBack();
                         history.push("/dashboard");
+                        window.location.reload();
 
                     }).catch((error) => {
                         present({
