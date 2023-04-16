@@ -47,6 +47,7 @@ import { fetchUsername, UsernamePage } from "./pages/UsernamePage";
 import { useTodoStorage } from "./storage/StateManagementWrapper";
 import "./theme/variables.css";
 import { auth } from "./utils/firebase/Database-function";
+import NotificationUtils from "./utils/NotificationUtils";
 
 setupIonicReact();
 
@@ -66,6 +67,7 @@ const App: React.FC = () => {
       setUsername(await todoStorage.getUsername())
     }
     init();
+    NotificationUtils.scheduleAllTodos(todoStorage.getTodoList());
   });
 
   // auth state changed
