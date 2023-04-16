@@ -57,11 +57,11 @@ export const CalendarPage: React.FC = () => {
   useIonViewDidEnter(() => {
     todoStorage.refreshTodos();
   });
-
+/*
   useIonViewWillLeave(()=> {
     todoStorage.refreshTodos();
   })
-
+*/
   useEffect(() => {
     let timedTodoList = todoStorage.getTodoList().map((todo, index) => {
       console.log("Date Value; " + todo.todoDate);

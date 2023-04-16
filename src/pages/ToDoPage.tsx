@@ -55,11 +55,11 @@ export const ToDoPage: React.FC = () => {
   useIonViewDidEnter(() => {
     todoStorage.refreshTodos();
   });
-
+/*
   useIonViewWillLeave(()=> {
     todoStorage.refreshTodos();
   })
-
+*/
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
   useEffect(() => {
     console.log("Effect on current TodoItem" + JSON.stringify(selectedTodo));

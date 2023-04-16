@@ -49,10 +49,11 @@ export const ArchivePage: React.FC = () => {
   useIonViewDidEnter(() => {
     todoStorage.refreshTodos();
   });
-
+/*
   useIonViewWillLeave(()=> {
     todoStorage.refreshTodos();
   })
+*/
 /*
   useEffect(() => {
     todoStorage.refreshTodos();
