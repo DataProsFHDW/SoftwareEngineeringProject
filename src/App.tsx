@@ -138,6 +138,7 @@ const App: React.FC = () => {
             </Route>
             <Redirect exact from="/" to="/username" />
             <Redirect exact from="/dashboard" to="/username" />
+            <Redirect exact from="/Dashboard" to="/username" />
             <Redirect exact to="/username" />
           </IonRouterOutlet>
         </>)
