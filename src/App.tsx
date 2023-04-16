@@ -67,7 +67,11 @@ const App: React.FC = () => {
       setUsername(await todoStorage.getUsername())
     }
     init();
+    try {
     NotificationUtils.scheduleAllTodos(todoStorage.getTodoList());
+    } catch (ex) {
+      
+    }
   });
 
   // auth state changed
