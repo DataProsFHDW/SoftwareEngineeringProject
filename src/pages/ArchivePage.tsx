@@ -7,7 +7,6 @@ import {
   IonHeader,
   IonIcon,
   IonList,
-  IonListHeader,
   IonMenuButton,
   IonPage,
   IonReorderGroup,
@@ -15,11 +14,13 @@ import {
   IonToolbar,
   ItemReorderEventDetail,
   useIonModal,
+  useIonViewDidEnter,
+  useIonViewWillLeave,
 } from "@ionic/react";
 import { add, refreshOutline } from "ionicons/icons";
 import { ToDoComponent } from "../components/ToDoComponent";
 import "./ToDoPage.css";
-import { ITodo, ITodoGroup } from "../models/ITodo";
+import { ITodoGroup } from "../models/ITodo";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
 import { TodoEditModal } from "../components/TodoEditModal";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
@@ -45,14 +46,22 @@ export const ArchivePage: React.FC = () => {
     onDismiss: (data: ITodoGroup, role: string) => dismissAdd(data, role),
   });
 
+  useIonViewDidEnter(() => {
+    todoStorage.refreshTodos();
+  });
+
+  useIonViewWillLeave(()=> {
+    todoStorage.refreshTodos();
+  })
+/*
   useEffect(() => {
     todoStorage.refreshTodos();
   }, []); // [] => do on initial render of todoPageComponent
 
   useEffect(() => {
     // console.log("TodoList Changed", todoStorage.getTodoList())
-  }, [todoStorage.storage]); // [] => do on initial render of todoPageComponent
-
+  }, [todoStorage.storage]);
+*/
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
   useEffect(() => {
     console.log("Effect on current LineItem" + JSON.stringify(selectedTodo));
@@ -140,9 +149,6 @@ export const ArchivePage: React.FC = () => {
 
       <IonContent className="ion-padding" fullscreen>
         <IonList>
-          <IonListHeader>
-            <IonHeader>ToDos</IonHeader>
-          </IonListHeader>
           <IonReorderGroup disabled={false} onIonItemReorder={handleReorder}>
             {toDoRender}
           </IonReorderGroup>

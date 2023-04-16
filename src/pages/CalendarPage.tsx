@@ -10,7 +10,9 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  useIonModal
+  useIonModal,
+  useIonViewDidEnter,
+  useIonViewWillLeave
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
@@ -52,20 +54,23 @@ export const CalendarPage: React.FC = () => {
     onDismiss: (data: ITodoGroup, role: string) => dismissEdit(data, role),
   });
 
-  useEffect(() => {
+  useIonViewDidEnter(() => {
     todoStorage.refreshTodos();
+  });
 
-  }, []);
+  useIonViewWillLeave(()=> {
+    todoStorage.refreshTodos();
+  })
 
   useEffect(() => {
     let timedTodoList = todoStorage.getTodoList().map((todo, index) => {
       console.log("Date Value; " + todo.todoDate);
       if (todo.todoDate) {
         return {
-          "id": todo.id,
-          "title": todo.todoTitle.toString(),
-          "start": todo.todoDate,
-          "extendedProps": { "todoData": todo },
+          id: todo.id,
+          title: todo.todoTitle.toString(),
+          start: todo.todoDate,
+          extendedProps: { todoData: todo },
         };
       }
     });
