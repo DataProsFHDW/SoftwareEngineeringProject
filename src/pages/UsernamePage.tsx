@@ -79,6 +79,7 @@ export const UsernamePage: React.FC = () => {
                         window.location.reload();
 
                     }).catch((error) => {
+                        console.log("error", error);
                         present({
                             message: 'Please try again soon',
                             color: "danger",
