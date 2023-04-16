@@ -123,7 +123,7 @@ const App: React.FC = () => {
     if (username === undefined) {
       /* Data fetch from firestore is still loading */
       console.log("Route", "username undefined")
-      routerJsx = (<></>);
+      routerJsx = (<></>); 
     } else if (username === null) {
       console.log("Route", "username null")
       /* No username set in firestore */
@@ -137,7 +137,7 @@ const App: React.FC = () => {
               <UsernamePage />
             </Route>
             <Redirect exact from="/" to="/username" />
-            <Redirect exact from="/Dashboard" to="/username" />
+            <Redirect exact from="/dashboard" to="/username" />
             <Redirect exact to="/username" />
           </IonRouterOutlet>
         </>)

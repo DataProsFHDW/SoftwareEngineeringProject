@@ -74,7 +74,7 @@ export const UsernamePage: React.FC = () => {
                             duration: 1500,
                             position: "bottom"
                         });
-                        history.goBack();
+                        // history.goBack();
                         history.push("/dashboard");
 
                     }).catch((error) => {

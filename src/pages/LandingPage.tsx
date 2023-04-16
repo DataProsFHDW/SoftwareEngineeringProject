@@ -27,7 +27,7 @@ export const LandingPage: React.FC = () => {
     }
   });
 
-  useEffect(() => {
+  useEffect(() => { 
     /* Listen on storage value changes */
     console.log("TodoStorage init value", todoStorage.getTodoList())
   }, [todoStorage.storage]);
