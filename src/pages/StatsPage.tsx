@@ -5,6 +5,8 @@ import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { AreaChart, Area } from 'recharts';
 import { useTodoStorage } from '../storage/StateManagementWrapper';
+import { useEffect, useState } from "react";
+
 
 
 
@@ -67,7 +69,8 @@ const Card: React.FC<CardProps> = ({ value1, value2 }) => {
 };
 
 const StatsPage: React.FC = () => {
-
+  
+  const todoStorage = useTodoStorage();
   const { getTodoList } = useTodoStorage();
   const todos = getTodoList();
   const todoCount = todos.length;
@@ -85,6 +88,10 @@ const StatsPage: React.FC = () => {
   console.log(TodosDate);
   console.log(todos);
 
+  useEffect(() => {
+    todoStorage.refreshTodos();
+  }, [TodosDate]);
+
   return (
     <IonPage>
       <IonHeader>
@@ -98,8 +105,8 @@ const StatsPage: React.FC = () => {
       <IonContent>
         <p className="grey">Here you find Statistics about your Todos.</p>      
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Card value1={value1A} value2={value2A} />
-              <Card value1={value1B} value2={value2B} />
+            <Card value1={value1A} value2={value2A} />
+            <Card value1={value1B} value2={value2B} />
           </div>
           <AreaChart
             width={window.innerWidth}
