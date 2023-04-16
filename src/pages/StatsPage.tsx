@@ -1,11 +1,12 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonMenuButton } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonMenuButton, IonFab,  IonFabButton, IonIcon } from '@ionic/react';
 import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { AreaChart, Area } from 'recharts';
 import { useTodoStorage } from '../storage/StateManagementWrapper';
 import { useEffect, useState } from "react";
+import { refreshOutline } from "ionicons/icons";
+import { ITodoGroup } from '../models/ITodo';
 
 
 
@@ -13,34 +14,23 @@ import { useEffect, useState } from "react";
 // Testen der Charts -> richtige Daten müssen noch eingepflegt werden
 const dataArea = [
   {
-      name: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+      name: "2023-04-12",
       uv: 4000,
   },
   {
-      name: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+      name: "2023-04-15",
       uv: 3000,
   },
   {
-      name: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+      name: "2023-04-22",
       uv: 2000,
   },
-  {
-      name: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+  /*{
+  /    name: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toLocaleDateString(),
       uv: 2780,
-  },
-  {
-      name: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-      uv: 1890,
-  },
-  {
-      name: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-      uv: 2390,
-  },
-  {
-      name: new Date().toLocaleDateString(),
-      uv: 3490,
-  },
+  }*/
 ];
+
 
 type CardProps = {
   value1: string; 
@@ -71,26 +61,31 @@ const Card: React.FC<CardProps> = ({ value1, value2 }) => {
 const StatsPage: React.FC = () => {
   
   const todoStorage = useTodoStorage();
-  const { getTodoList } = useTodoStorage();
-  const todos = getTodoList();
-  const todoCount = todos.length;
-  const SingleTodoCount = todos.filter(todo => todo.todoType.includes("Single")).length;
-  const GroupTodoCount = todoCount - SingleTodoCount;
-  const TodoOpenCount = todos.filter(todo => todo.isOpen === true).length;
-  const TodoClosedCount = todos.filter(todo => todo.isOpen === false).length;
-  const TodoOpenString = TodoOpenCount.toString()
-  const TodoClosedString = TodoClosedCount.toString()
-  const value1A = 'Anzahl offene Todos';
-  const value2A = TodoOpenString;
-  const value1B = 'Anzahl geschlossene Todos';
-  const value2B = TodoClosedString;
-  const TodosDate = todos.filter(todo => todo.todoDate);
-  console.log(TodosDate);
-  console.log(todos);
+  const todoList = todoStorage.getTodoList();
+  const [todoListCopy, setTodoListCopy] = useState<ITodoGroup[]| null| undefined>([...todoList])
 
-  useEffect(() => {
-    todoStorage.refreshTodos();
-  }, [TodosDate]);
+  //const todoCount= todoListCopy?.length;
+  //const SingleTodoCount = todoListCopy?.filter(todo => todo.todoType.includes("Single")).length;
+  //const GroupTodoCount = todoCount - SingleTodoCount;
+
+  const todoCount = todoListCopy?.length;
+  const SingleTodoCount = todoListCopy?.filter(todo => todo.todoType.includes("Single")).length;
+  const GroupTodoCount = todoCount !== undefined ? todoCount - (SingleTodoCount ?? 0) : 0;
+  
+  const TodoOpenCount = todoListCopy?.filter(todoListCopy => todoListCopy.isOpen === true).length;
+  const TodoClosedCount = todoListCopy?.filter(todoListCopy => todoListCopy.isOpen === false).length;
+  const TodoOpenString = TodoOpenCount?.toString()
+  const TodoClosedString = TodoClosedCount?.toString()
+  const value1A = 'Anzahl offene Todos';
+  const value2A = TodoOpenString || '';
+  const value1B = 'Anzahl geschlossene Todos';
+  const value2B = TodoClosedString || '';
+  const TodosDate = todoListCopy?.filter(todoListCopy => todoListCopy.todoDate);
+  //console.log(TodosDate);
+  //console.log(todos);
+
+  useEffect(() => {}, [todoListCopy]);
+
 
   return (
     <IonPage>
@@ -139,36 +134,20 @@ const StatsPage: React.FC = () => {
                   label
                 />              
                 <Tooltip />
-                <Legend verticalAlign="bottom" height={36} />
-              </PieChart>
-            </ResponsiveContainer>
-
-        <div> 
-          <ul>
-            <p>Anzahl: {todoCount}</p>
-            {todos.map((todo, index) => (
-              <React.Fragment key={index}>
-                <li>{todo.todoTitle}</li>
-                <li>{todo.id}</li>
-                
-              </React.Fragment>
-            ))}
-          </ul>
-        </div>
-        <div>
-          {TodosDate.map((data, index) => (
-            <div key={index}>
-              {data ? (
-                <div>
-                  <div>Name: {data.todoDate ? data.todoDate.toLocaleString() : 'N/A'}</div>
-                </div>
-              ) : (
-                <p>No data available</p>
-              )}
-            </div>
-          ))}
-        </div>  
-      </IonContent>
+              <Legend verticalAlign="bottom" height={36} />
+            </PieChart>
+          </ResponsiveContainer>
+        </IonContent>
+      <IonFab slot="fixed" vertical="bottom" horizontal="end">
+          <IonFabButton
+            onClick={() => {
+              todoStorage.refreshTodos();
+              window.location.reload();
+            }}
+          >
+            <IonIcon icon={refreshOutline}></IonIcon>
+          </IonFabButton>
+        </IonFab>
     </IonPage>
   );
 };
