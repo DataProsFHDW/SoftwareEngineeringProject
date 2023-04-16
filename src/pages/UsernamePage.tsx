@@ -75,7 +75,8 @@ export const UsernamePage: React.FC = () => {
                             position: "bottom"
                         });
                         // history.goBack();
-                        history.push("/dashboard");
+                        history.push("/todo");
+                        window.location.reload();
 
                     }).catch((error) => {
                         present({

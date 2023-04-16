@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@capacitor/android": "4.6.2",
+    "@capacitor/android": "4.7.3",
     "@capacitor/app": "4.1.1",
     "@capacitor/core": "4.7.3",
     "@capacitor/haptics": "4.1.0",
