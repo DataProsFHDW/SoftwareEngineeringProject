@@ -68,9 +68,9 @@ const App: React.FC = () => {
     }
     init();
     try {
-    NotificationUtils.scheduleAllTodos(todoStorage.getTodoList());
+      NotificationUtils.scheduleAllTodos(todoStorage.getTodoList());
     } catch (ex) {
-      
+
     }
   });
 
@@ -131,7 +131,7 @@ const App: React.FC = () => {
         <>
           <IonRouterOutlet id="main">
             <Redirect exact from="*" to="/username" />
-            <Redirect exact path="/" to ="/username" />
+            <Redirect exact path="/" to="/username" />
             {/* Default Landing Page */}
             <Route exact path="/username">
               <UsernamePage />
@@ -182,7 +182,7 @@ const App: React.FC = () => {
         <IonRouterOutlet id="main">
           {/* Default Landing Page */}
           <Redirect exact from="*" to="/login" />
-          <Redirect exact path="/" to ="/login" />
+          <Redirect exact path="/" to="/login" />
           <Route exact path="/login">
             <LoginPage />
           </Route>

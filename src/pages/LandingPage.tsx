@@ -6,6 +6,7 @@ import { TodoType } from '../models/TodoType';
 import useGlobalStorage from '../storage/StateManagement';
 import { useTodoStorage } from '../storage/StateManagementWrapper';
 import './Page.css';
+import NotificationUtils from "../utils/NotificationUtils";
 
 /**
  * LandingPage Component to display the TodoList saved in storage that holds checked items
@@ -16,6 +17,15 @@ export const LandingPage: React.FC = () => {
   const [state, setState] = useStorage("todostorage");
 
   const todoStorage = useTodoStorage();
+
+  // init
+  useEffect(() => {
+    try {
+      NotificationUtils.scheduleAllTodos(todoStorage.getTodoList());
+    } catch (ex) {
+
+    }
+  });
 
   useEffect(() => {
     /* Listen on storage value changes */
