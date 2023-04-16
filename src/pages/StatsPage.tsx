@@ -1,146 +1,172 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React from 'react';
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, Legend, Pie, PieChart, Tooltip, XAxis, YAxis } from 'recharts';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonMenuButton, IonFab,  IonFabButton, IonIcon } from '@ionic/react';
+import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { AreaChart, Area } from 'recharts';
 import { useTodoStorage } from '../storage/StateManagementWrapper';
-import './Page.css';
+import { useEffect, useState } from "react";
+import { refreshOutline } from "ionicons/icons";
+import { ITodoGroup } from '../models/ITodo';
 
 
-// TODO Test charts => Real data has to be inserted
-const dataPieTest = [
-  { name: "Facebook", value: 2000 },
-  { name: "Instagram", value: 1500 },
-  { name: "Twitter", value: 1000 },
-  { name: "Telegram", value: 500 },
-];
-const dataBar = [
+const dataArea = [
   {
-    name: 'Page A',
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
+      name: "2023-04-12",
+      uv: 1,
   },
   {
-    name: 'Page B',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
+      name: "2023-04-15",
+      uv: 1,
   },
   {
-    name: 'Page C',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
+      name: "2023-04-22",
+      uv: 1,
   },
-  {
-    name: 'Page D',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: 'Page E',
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: 'Page F',
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: 'Page G',
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
+  /*{
+  /    name: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+      uv: 2780,
+  }*/
 ];
 
 /**
- * Page Component to display the TodoList saved in storage that holds checked items
- * @returns React.FC
+ * 
  */
+
+
+type CardProps = {
+  value1: string; 
+  value2: string; 
+}; 
+
+
+/**
+ * 
+ * @param param0 
+ * @returns 
+ */
+const Card: React.FC<CardProps> = ({ value1, value2 }) => {
+  return (
+    <div style={{ 
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '1rem',
+      backgroundColor: 'lightgray',
+      borderRadius: '8px',
+      width: '100%',
+      margin: '0.5rem',
+      boxSizing: 'border-box'
+    }}>
+      <div style={{ display: 'flex',flexDirection: 'column', alignItems: 'center' }}>
+        <h1 style={{ fontSize: '24px', marginRight: '1rem' }}>{value1}</h1>
+        <h1 style={{ fontSize: '24px' }}>{value2}</h1>
+      </div>
+    </div>
+  );
+};
+
 const StatsPage: React.FC = () => {
-  const { getTodoList } = useTodoStorage();
-  const todos = getTodoList();
-  const todoCount = todos.length;
+  
+  const todoStorage = useTodoStorage();
+  const todoList = todoStorage.getTodoList();
+  const [todoListCopy, setTodoListCopy] = useState<any[]| null| undefined>(dataArea)
+  //const [todoListCopy, setTodoListCopy] = useState<ITodoGroup[]| null| undefined>([...todoList])
 
-  const SingleTodoCount = todos.filter(todo => todo.todoType.includes("Single")).length;
-  const GroupTodoCount = todoCount - SingleTodoCount;
+  //const todoCount= todoListCopy?.length;
+  //const SingleTodoCount = todoListCopy?.filter(todo => todo.todoType.includes("Single")).length;
+  //const GroupTodoCount = todoCount - SingleTodoCount;
 
+  //Für die Statistiken werden folgende Daten erhoben:
+  const todoCount = todoListCopy?.length;
+  const SingleTodoCount = todoListCopy?.filter(todo => todo.todoType.includes("Single")).length;
+  const GroupTodoCount = todoCount !== undefined ? todoCount - (SingleTodoCount ?? 0) : 0;
+  
+  const TodoOpenCount = todoListCopy?.filter(todoListCopy => todoListCopy.isOpen === true).length;
+  const TodoClosedCount = todoListCopy?.filter(todoListCopy => todoListCopy.isOpen === false).length;
+  const TodoOpenString = TodoOpenCount?.toString()
+  const TodoClosedString = TodoClosedCount?.toString()
+  const value1A = 'Anzahl offene Todos';
+  const value2A = TodoOpenString || '';
+  const value1B = 'Anzahl geschlossene Todos';
+  const value2B = TodoClosedString || '';
+  const TodosDate = todoListCopy?.filter(todoListCopy => todoListCopy.todoDate);
+  //console.log(TodosDate);
+  //console.log(todos);
+
+  useEffect(() => {todoStorage.refreshTodos();
+    setTodoListCopy(todoStorage.getTodoList)}, []);
+
+  /**
+   *  Im Folgenden wird ein Areachart, dass die Anzahl ToDos pro Tag wieder
+   *  
+   */
+ 
+  
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <IonButtons slot="start">
+            <IonMenuButton />
+          </IonButtons>
           <IonTitle>Statistics</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <p>This is the Statistics page.</p>
-        <PieChart width={400} height={400}>
-          <Pie
-            dataKey="value"
-            isAnimationActive={false}
-            data={[{ name: 'Single', value: SingleTodoCount }, { name: 'Group', value: GroupTodoCount }]}
-            cx="50%"
-            cy="50%"
-            outerRadius={80}
-            fill="#8884d8"
-            label
-          />
-          <Tooltip />
-        </PieChart>
-        <BarChart
-          width={500}
-          height={300}
-          data={dataBar}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="pv" fill="#8884d8" />
-          <Bar dataKey="uv" fill="#82ca9d" />
-        </BarChart>
-        <AreaChart
-          width={500}
-          height={400}
-          data={dataBar}
-          margin={{
-            top: 10,
-            right: 30,
-            left: 0,
-            bottom: 0,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Area type="monotone" dataKey="uv" stroke="#8884d8" fill="#8884d8" />
-        </AreaChart>
-        <div>
-          <ul>
-            <p>Anzahl: {todoCount}</p>
-            {todos.map((todo, index) => (
-              <React.Fragment key={index}>
-                <li>{todo.todoTitle}</li>
-                <li>{todo.id}</li>
-              </React.Fragment>
-            ))}
-          </ul>
-        </div>
-      </IonContent>
+        <p className="grey">Here you find Statistics about your Todos.</p>      
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Card value1={value1A} value2={value2A} />
+            <Card value1={value1B} value2={value2B} />
+          </div>
+          <AreaChart
+            width={window.innerWidth}
+            height={400}
+            data={dataArea}
+            margin={{
+              top: 10,
+              right: 30,
+              left: 0,
+              bottom: 0,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Area type="monotone" dataKey="uv" stroke="#8884d8" fill="#8884d8" />
+          </AreaChart>
+
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+                <Pie
+                  dataKey="value"
+                  isAnimationActive={false}
+                  data={[{ name: 'Single', value: SingleTodoCount }, { name: 'Group', value: GroupTodoCount }]}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#8884d8"
+                  label
+                />              
+                <Tooltip />
+              <Legend verticalAlign="bottom" height={36} />
+            </PieChart>
+          </ResponsiveContainer>
+        </IonContent>
+      <IonFab slot="fixed" vertical="bottom" horizontal="end">
+          <IonFabButton
+            onClick={() => {
+              todoStorage.refreshTodos();
+              window.location.reload();
+            }}
+          >
+            <IonIcon icon={refreshOutline}></IonIcon>
+          </IonFabButton>
+        </IonFab>
     </IonPage>
   );
 };
 
 export default StatsPage;
+
+

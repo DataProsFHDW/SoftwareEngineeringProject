@@ -158,8 +158,8 @@ const App: React.FC = () => {
             <Route path="/archive" exact={true}>
               <ArchivePage />
             </Route>
-            <Route path="/page/statsPage" exact={true}>
-              <StatsPage />
+            <Route path="/stats" exact={true}>
+              <StatsPage/>
             </Route>
             <Route path="/logout" exact={true}>
               <Logout />
