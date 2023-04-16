@@ -9,21 +9,18 @@ import { refreshOutline } from "ionicons/icons";
 import { ITodoGroup } from '../models/ITodo';
 
 
-
-
-// Testen der Charts -> richtige Daten müssen noch eingepflegt werden
 const dataArea = [
   {
       name: "2023-04-12",
-      uv: 4000,
+      uv: 1,
   },
   {
       name: "2023-04-15",
-      uv: 3000,
+      uv: 1,
   },
   {
       name: "2023-04-22",
-      uv: 2000,
+      uv: 1,
   },
   /*{
   /    name: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toLocaleDateString(),
@@ -31,12 +28,22 @@ const dataArea = [
   }*/
 ];
 
+/**
+ * 
+ */
+
 
 type CardProps = {
   value1: string; 
   value2: string; 
 }; 
 
+
+/**
+ * 
+ * @param param0 
+ * @returns 
+ */
 const Card: React.FC<CardProps> = ({ value1, value2 }) => {
   return (
     <div style={{ 
@@ -62,12 +69,14 @@ const StatsPage: React.FC = () => {
   
   const todoStorage = useTodoStorage();
   const todoList = todoStorage.getTodoList();
-  const [todoListCopy, setTodoListCopy] = useState<ITodoGroup[]| null| undefined>([...todoList])
+  const [todoListCopy, setTodoListCopy] = useState<any[]| null| undefined>(dataArea)
+  //const [todoListCopy, setTodoListCopy] = useState<ITodoGroup[]| null| undefined>([...todoList])
 
   //const todoCount= todoListCopy?.length;
   //const SingleTodoCount = todoListCopy?.filter(todo => todo.todoType.includes("Single")).length;
   //const GroupTodoCount = todoCount - SingleTodoCount;
 
+  //Für die Statistiken werden folgende Daten erhoben:
   const todoCount = todoListCopy?.length;
   const SingleTodoCount = todoListCopy?.filter(todo => todo.todoType.includes("Single")).length;
   const GroupTodoCount = todoCount !== undefined ? todoCount - (SingleTodoCount ?? 0) : 0;
@@ -84,9 +93,15 @@ const StatsPage: React.FC = () => {
   //console.log(TodosDate);
   //console.log(todos);
 
-  useEffect(() => {}, [todoListCopy]);
+  useEffect(() => {todoStorage.refreshTodos();
+    setTodoListCopy(todoStorage.getTodoList)}, []);
 
-
+  /**
+   *  Im Folgenden wird ein Areachart, dass die Anzahl ToDos pro Tag wieder
+   *  
+   */
+ 
+  
   return (
     <IonPage>
       <IonHeader>
