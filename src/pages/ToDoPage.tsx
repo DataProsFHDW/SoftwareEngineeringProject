@@ -16,22 +16,25 @@ import {
   ItemReorderEventDetail,
   useIonModal,
 } from "@ionic/react";
-import { add } from "ionicons/icons";
-import { ToDoComponent } from "../components/ToDoComponent";
-import "./ToDoPage.css";
-import { ITodo, ITodoGroup } from "../models/ITodo";
-import { useTodoStorage } from "../storage/StateManagementWrapper";
-import { TodoEditModal } from "../components/TodoEditModal";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
+import { add, refreshCircleOutline, refreshOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { TodoAddModal } from "../components/TodoAddModal";
-// Zu Erledigen: [] Ausgliederung Modal zu ToDo-Details (siehe Link Arbeitsrechner)
+import { ToDoComponent } from "../components/ToDoComponent";
+import { TodoEditModal } from "../components/TodoEditModal";
+import { ITodoGroup } from "../models/ITodo";
+import { useTodoStorage } from "../storage/StateManagementWrapper";
+import "./ToDoPage.css";
 
+/**
+ * CalendarPage Component to display the TodoList saved in storage that holds checked items
+ * @constructor
+ * @return {JSX.Element}
+ */
 export const ToDoPage: React.FC = () => {
   const todoStorage = useTodoStorage();
 
   const [selectedTodo, setSelectedTodo] = useState<ITodoGroup>();
-
   const [presentEdit, dismissEdit] = useIonModal(TodoEditModal, {
     todoItem: selectedTodo,
     onDismiss: (data: ITodoGroup, role: string) => dismissEdit(data, role),
@@ -51,8 +54,8 @@ export const ToDoPage: React.FC = () => {
 
   /*const [todoList, setTodoList] = useState<string[]>([]);*/
   useEffect(() => {
-    console.log("Effect on current LineItem" + JSON.stringify(selectedTodo));
-    if (!!selectedTodo) {
+    console.log("Effect on current TodoItem" + JSON.stringify(selectedTodo));
+    if (selectedTodo) {
       todoStorage.updateTodo(selectedTodo);
     }
   }, [selectedTodo]);
@@ -64,6 +67,7 @@ export const ToDoPage: React.FC = () => {
         if (ev.detail.role === "confirm") {
           console.log("Confirmed Input: " + JSON.stringify(ev.detail.data));
           setSelectedTodo(ev.detail.data as ITodoGroup);
+          todoStorage.refreshTodos();
           console.log(selectedTodo);
         }
       },
@@ -81,14 +85,14 @@ export const ToDoPage: React.FC = () => {
   };
 
   function handleCheckboxClick(todo: ITodoGroup) {
-    console.log("Checkbox Clicked")
+    console.log("Checkbox Clicked");
     todoStorage.updateTodo({
       todoType: todo.todoType,
       todoTitle: todo.todoTitle,
       todoDescription: todo.todoDescription,
       id: todo.id,
       isOpen: !todo.isOpen,
-    } as ITodoGroup)
+    } as ITodoGroup);
   }
 
   function deleteTodo(index: number) {
@@ -102,19 +106,22 @@ export const ToDoPage: React.FC = () => {
     event.detail.complete();
   }
 
-  let toDoRender = todoStorage.getTodoList().map((todo, index) => {
-    if (todo.isOpen) {
-      return (
-        <ToDoComponent
-          key={"Todo-" + index}
-          todo={todo}
-          onEditClick={() => handleEditClick(todo)}
-          onDeleteClick={() => deleteTodo(index)}
-          onCheckboxClick={() => handleCheckboxClick(todo)}
-        />
-      );
-   }
-  }).filter( Boolean );
+  let todoRender = todoStorage
+    .getTodoList()
+    .map((todo, index) => {
+      if (todo.isOpen) {
+        return (
+          <ToDoComponent
+            key={"Todo-" + index}
+            todo={todo}
+            onEditClick={() => handleEditClick(todo)}
+            onDeleteClick={() => deleteTodo(index)}
+            onCheckboxClick={() => handleCheckboxClick(todo)}
+          />
+        );
+      }
+    })
+    .filter(Boolean);
 
   return (
     <IonPage>
@@ -124,13 +131,6 @@ export const ToDoPage: React.FC = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle className="ion-text-center">Your To Dos</IonTitle>
-          <IonButton
-            onClick={() => {
-              todoStorage.refreshTodos();
-            }}
-          >
-            Refresh
-          </IonButton>
         </IonToolbar>
       </IonHeader>
 
@@ -138,16 +138,23 @@ export const ToDoPage: React.FC = () => {
         {/**String Todo Placeholder for Testing */}
         <IonList>
           <IonListHeader>
-            <IonHeader>ToDos</IonHeader>
+            <IonHeader></IonHeader>
           </IonListHeader>
           {/* The reorder gesture is disabled by default, enable it to drag and drop items */}
           <IonReorderGroup disabled={false} onIonItemReorder={handleReorder}>
-            {toDoRender}
+            {todoRender}
           </IonReorderGroup>
         </IonList>
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
           <IonFabButton onClick={() => handleAddClick()}>
             <IonIcon icon={add}></IonIcon>
+          </IonFabButton>
+          <IonFabButton
+            onClick={() => {
+              todoStorage.refreshTodos();
+            }}
+          >
+            <IonIcon icon={refreshOutline}></IonIcon>
           </IonFabButton>
         </IonFab>
       </IonContent>

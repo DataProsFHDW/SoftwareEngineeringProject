@@ -14,9 +14,15 @@ import {
 } from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
-import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, logOutOutline, logOutSharp, statsChartOutline, statsChartSharp } from 'ionicons/icons';
+import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, logOutOutline, logOutSharp, statsChartOutline, statsChartSharp, calendarNumberOutline } from 'ionicons/icons';
 import './Menu.css';
+import { auth } from '../utils/firebase/Database-function';
 
+/**
+ * The AppPage interface defines the shape of an object that represents an app page.
+ *
+ * @interface AppPage
+ */
 interface AppPage {
   url: string;
   iosIcon: string;
@@ -25,12 +31,6 @@ interface AppPage {
 }
 
 const appPages: AppPage[] = [
-  {
-    title: 'Dashboard',
-    url: '/Dashboard',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp
-  },
   {
     title: 'To-Dos',
     url: '/ToDo',
@@ -44,22 +44,22 @@ const appPages: AppPage[] = [
     mdIcon: heartSharp
   },
   {
-    title: 'Archived',
-    url: '/archive',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp
-  },
-  {
-    title: 'Trash',
-    url: '/page/Trash',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp
+    title: 'Calendar',
+    url: '/Calendar',
+    iosIcon: calendarNumberOutline,
+    mdIcon: calendarNumberOutline
   },
   {
     title: 'Statistics',
     url: '/Stats',
     iosIcon: statsChartOutline,
     mdIcon: statsChartSharp
+  },
+  {
+    title: 'Archived',
+    url: '/archive',
+    iosIcon: archiveOutline,
+    mdIcon: archiveSharp
   },
   {
     title: 'Logout',
@@ -71,15 +71,21 @@ const appPages: AppPage[] = [
 
 const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
+/**
+ * The Menu component is a functional React component that renders an overlay menu with links to app pages and labels.
+ *
+ * @returns {JSX.Element} - A React element that renders an overlay menu with links to app pages and labels.
+ */
 const Menu: React.FC = () => {
   const location = useLocation();
 
   return (
     <IonMenu contentId="main" type="overlay">
       <IonContent>
+        {/* Render a list of links to app pages */}
         <IonList id="inbox-list">
-          <IonListHeader>Inbox</IonListHeader>
-          <IonNote>hi@ionicframework.com</IonNote>
+          <IonListHeader>Checkbox-Menu</IonListHeader>
+          <IonNote>Hi {auth.currentUser?.displayName} </IonNote>
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>

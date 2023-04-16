@@ -5,6 +5,10 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { auth } from "../utils/firebase/Database-function";
 
+/**
+ * LoginPage Component to login with Google or E-Mail
+ * @returns React.FC
+ */
 export const LoginPage = () => {
   const [isEmailHidden, setEmailHidden] = useState(true)
 
@@ -22,7 +26,6 @@ export const LoginPage = () => {
         <IonButton expand="block" onClick={async () => {
           try {
             const res = await signInWithPopup(auth, new GoogleAuthProvider());
-            // history.push("/");
           } catch (err) {
             console.error(err);
           }

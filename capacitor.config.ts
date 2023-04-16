@@ -5,11 +5,23 @@ const config: CapacitorConfig = {
   appName: 'Checkbox',
   webDir: 'build',
   bundledWebRuntime: false,
+  hideLogs: false,
+  loggingBehavior: "production",
+  server: {
+    cleartext: true,
+    allowNavigation: ['*'],
+  },
+  android: {
+    webContentsDebuggingEnabled: true,
+    hideLogs: false,
+    loggingBehavior: "production",
+    initialFocus: true,
+  },
   plugins: {
     PushNotifications: {
       presentationOptions: ["badge", "sound", "alert"],
     },
-    LocalNotifications: {
+    LocalNotifications: { 
       smallIcon: "ic_stat_icon_config_sample",
       iconColor: "#488AFF",
       sound: "beep.wav",

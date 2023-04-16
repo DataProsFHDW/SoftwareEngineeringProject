@@ -1,13 +1,17 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonMenuButton, IonPage, IonText, IonTitle, IonToolbar, useIonToast } from '@ionic/react';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
-import FirestoreCollections from '../models/FirestoreCollections';
-import FirestoreCollectionFields from '../models/FirestoreCollectionFields';
-import './Page.css';
+import { useState } from 'react';
 import { useHistory } from 'react-router';
+import FirestoreCollectionFields from '../models/FirestoreCollectionFields';
+import FirestoreCollections from '../models/FirestoreCollections';
 import { auth, firestore } from '../utils/firebase/Database-function';
-import { useTodoStorage } from '../storage/StateManagementWrapper';
+import './Page.css';
 
+/**
+ * UsernamePage Component to display the TodoList saved in storage that holds checked items
+ * @returns React.FC
+ * @param todoStorage any
+ */
 export async function fetchUsername(todoStorage: any): Promise<string | null | undefined> {
     const refDocUser = doc(firestore, FirestoreCollections.USERS, auth.currentUser?.uid!);
     var docUser = await getDoc(refDocUser);
@@ -61,8 +65,7 @@ export const UsernamePage: React.FC = () => {
                         return;
                     }
 
-                    const refDocUser = doc(firestore, FirestoreCollections.USERS, auth.currentUser?.uid!);
-                    var username = FirestoreCollectionFields.USERNAME;
+                    const refDocUser = doc(firestore, FirestoreCollections.USERS, auth.currentUser?.uid! ?? "asdfasdfasdfasdfasdf");
                     await setDoc(refDocUser,
                         { username: usernameInput }
                     ).then(() => {
@@ -71,9 +74,12 @@ export const UsernamePage: React.FC = () => {
                             duration: 1500,
                             position: "bottom"
                         });
-                        history.goBack();
+                        // history.goBack();
+                        history.push("/todo");
+                        window.location.reload();
 
                     }).catch((error) => {
+                        console.log("error", error);
                         present({
                             message: 'Please try again soon',
                             color: "danger",

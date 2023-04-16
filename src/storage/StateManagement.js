@@ -1,27 +1,32 @@
 import { useEffect, useState } from "react";
 import { Preferences } from '@capacitor/preferences';
 
+/**
+ * Component to manage the global state of the application
+ */
 export default function useGlobalStorage() {
-  const useStorage = (key, initialData) => {
+  /**
+   * Function to manage the state of the application
+   * @param {string} key - Key to store the data
+   * @param {any} initialData - Initial data to store
+   * @returns {array} - Array with the data and the function to update the data
+   */
+  const useStorage = (key, initialData = {
+    todoList: [], username: null
+  }) => {
     const [data, setState] = useState(initialData);
 
     useEffect(() => {
-      /*function handleStorageChange(data) {
-        setState(data);
-      }*/
+      // Initial load of the data
       Preferences.get({ key }).then(lastData => {
         if (lastData.value) {
           let value = JSON.parse(lastData.value);
           setState(value);
         }
       });
-
-      /*const subscription = storage.subscribe(key, handleStorageChange);
-      return () => {
-        subscription.unsubscribe();
-      };*/
     }, []);
 
+    // Function to update the data
     const setData = async (newData) => {
       let newValue;
       if (typeof newData === 'function') {

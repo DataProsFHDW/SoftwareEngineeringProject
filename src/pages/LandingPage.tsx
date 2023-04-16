@@ -6,14 +6,28 @@ import { TodoType } from '../models/TodoType';
 import useGlobalStorage from '../storage/StateManagement';
 import { useTodoStorage } from '../storage/StateManagementWrapper';
 import './Page.css';
+import NotificationUtils from "../utils/NotificationUtils";
 
+/**
+ * LandingPage Component to display the TodoList saved in storage that holds checked items
+ * @returns React.FC
+ */
 export const LandingPage: React.FC = () => {
   const useStorage = useGlobalStorage();
   const [state, setState] = useStorage("todostorage");
 
   const todoStorage = useTodoStorage();
 
+  // init
   useEffect(() => {
+    try {
+      NotificationUtils.scheduleAllTodos(todoStorage.getTodoList());
+    } catch (ex) {
+
+    }
+  });
+
+  useEffect(() => { 
     /* Listen on storage value changes */
     console.log("TodoStorage init value", todoStorage.getTodoList())
   }, [todoStorage.storage]);
@@ -33,6 +47,10 @@ export const LandingPage: React.FC = () => {
                   todoType: TodoType.SIMPLE,
                   todoTitle: "Title",
                   todoDescription: "",
+                  todoDate: new Date(),
+                  users: [],
+                  isDeleted: false,
+                  isSynced: false,
                   isOpen: true,
                 });
             }}>
@@ -57,6 +75,7 @@ export const LandingPage: React.FC = () => {
             todoType: TodoType.SIMPLE,
             todoTitle: "Title",
             todoDescription: "",
+            todoDate: new Date(),
             isOpen: true,
           }}
           onEditClick={() => console.log("Trololol")}

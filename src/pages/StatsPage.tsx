@@ -1,4 +1,4 @@
-import './Page.css';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonMenuButton } from '@ionic/react';
 import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
@@ -147,7 +147,7 @@ const StatsPage: React.FC = () => {
           <ul>
             <p>Anzahl: {todoCount}</p>
             {todos.map((todo, index) => (
-              <React.Fragment key={index}>               
+              <React.Fragment key={index}>
                 <li>{todo.todoTitle}</li>
                 <li>{todo.id}</li>
                 
