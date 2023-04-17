@@ -2,13 +2,14 @@ import { IonButtons, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonMe
 import { refreshOutline } from "ionicons/icons";
 import React, { useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { ITodoGroup } from '../models/ITodo';
 import { useTodoStorage } from '../storage/StateManagementWrapper';
 
 
 const dataArea = [
   {
     name: "2023-04-12",
-    uv: 1,
+    uv: 2,
   },
   {
     name: "2023-04-15",
@@ -16,11 +17,20 @@ const dataArea = [
   },
   {
     name: "2023-04-22",
-    uv: 1,
+    uv: 3,
+  },
+  {
+    name: "2023-04-23",
+    uv: 4,
+  },
+  {
+    name: "2023-04-26",
+    uv: 2,
   },
 ];
 
 
+// CardProps interface to define the props for the Card component
 type CardProps = {
   value1: string;
   value2: string;
@@ -56,8 +66,8 @@ const Card: React.FC<CardProps> = ({ value1, value2 }) => {
 
 const StatsPage: React.FC = () => {
 
-  const todoStorage = useTodoStorage();
-  const [todoListCopy, setTodoListCopy] = useState<any[] | null | undefined>(dataArea)
+  //const todoStorage = useTodoStorage();
+  const [todoListCopy, setTodoListCopy] = useState<any[] | null | undefined>([dataArea])
 
   // Für die Statistiken werden folgende Daten erhoben:
   var todoCount = todoListCopy?.length;
@@ -68,17 +78,17 @@ const StatsPage: React.FC = () => {
   var TodoClosedCount = todoListCopy?.filter(todoListCopy => todoListCopy.isOpen === false).length;
   var TodoOpenString = "3"
   var TodoClosedString = "4"
+  var SingleCount = 2
+  var GroupCount = 1
   const value1A = 'Anzahl offene Todos';
-  var value2A = TodoOpenString || '';
+  var value2A = TodoOpenString;
   const value1B = 'Anzahl geschlossene Todos';
-  var value2B = TodoClosedString || '';
-  //console.log(TodosDate);
-  //console.log(todos);
+  var value2B = TodoClosedString;
 
   useEffect(() => {
     // initial hook
-    todoStorage.refreshTodos();
-    setTodoListCopy(todoStorage.getTodoList())
+    //todoStorage.refreshTodos();
+    //setTodoListCopy(todoStorage.getTodoList())
   }, []);
 
   useEffect(() => {
@@ -91,16 +101,14 @@ const StatsPage: React.FC = () => {
       TodoOpenCount = todoListCopy?.filter(todoListCopy => todoListCopy.isOpen).length;
       TodoClosedCount = todoListCopy?.filter(todoListCopy => !todoListCopy.isOpen).length;
       console.log(TodoClosedCount);
-      TodoOpenString = TodoOpenCount?.toString() 
-      TodoClosedString = TodoClosedCount?.toString()
-      value2A = TodoOpenString || '';
-      value2B = TodoClosedString || '';
+      TodoOpenString = TodoOpenCount?.toString(); 
+      TodoClosedString = TodoClosedCount?.toString();
+      value2A = TodoOpenCount?.toString();
+      value2B = TodoClosedCount?.toString();
     }
   }, [todoListCopy]);
 
-  /**
-   *  Im Folgenden wird ein AreaChart returned, dass die Anzahl ToDos pro Tag wiederspiegelt
-   */
+  // Render die StatsPage component
   return (
     <IonPage>
       <IonHeader>
@@ -112,11 +120,13 @@ const StatsPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
+         {/* Zeige statistics mit Card component */}
         <p className="grey">Here you find Statistics about your Todos.</p>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Card value1={value1A} value2={value2A} />
-          <Card value1={value1B} value2={value2B} />
+          <Card value1={value1A} value2={value2A ?? 'keine Todos' }  />
+          <Card value1={value1B} value2={value2B ?? 'keine Todos'} />
         </div>
+        {/* Render des AreaCharts */}
         <AreaChart
           width={window.innerWidth}
           height={400}
@@ -136,11 +146,12 @@ const StatsPage: React.FC = () => {
         </AreaChart>
 
         <ResponsiveContainer width="100%" height={300}>
+          {/* Render des PieCharts */}
           <PieChart>
             <Pie
               dataKey="value"
               isAnimationActive={false}
-              data={[{ name: 'Single', value: SingleTodoCount }, { name: 'Group', value: GroupTodoCount }]}
+              data={[{ name: 'Single', value: SingleCount }, { name: 'Group', value: GroupCount }]}
               cx="50%"
               cy="50%"
               outerRadius={80}
@@ -155,8 +166,8 @@ const StatsPage: React.FC = () => {
       <IonFab slot="fixed" vertical="bottom" horizontal="end">
         <IonFabButton
           onClick={() => {
-            todoStorage.refreshTodos();
-            window.location.reload();
+            //todoStorage.refreshTodos();
+            //window.location.reload();
           }}
         >
           <IonIcon icon={refreshOutline}></IonIcon>
