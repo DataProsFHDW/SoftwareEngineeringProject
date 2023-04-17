@@ -138,13 +138,6 @@ export const ArchivePage: React.FC = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle className="ion-text-center">Your Archived To Dos</IonTitle>
-          <IonButton
-            onClick={() => {
-              todoStorage.refreshTodos();
-            }}
-          >
-            Refresh
-          </IonButton>
         </IonToolbar>
       </IonHeader>
 
