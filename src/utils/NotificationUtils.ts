@@ -66,50 +66,30 @@ class NotificationUtils {
             if (!(await LocalNotifications.requestPermissions()).display) return;
 
             // check if date is in the past)
-            if(date == null) return;
+            if (date == null) return;
+            var tempDate = new Date(date);
+            tempDate.setHours(tempDate.getHours() - 2);
+            date = tempDate;
+
             var isPast = new Date(date).getTime() < new Date().getTime();
-            if(isPast) return;
-            console.log(title, "isPast", isPast, new Date(date).getTime() - new Date().getTime(), new Date(date), new Date());
- 
-            try { 
+            if (isPast) return;
+            
+            try {
                 await LocalNotifications.schedule({
                     notifications: [{
                         title: title,
                         body: body,
                         id: this.notificationCount++,
                         schedule: {
-                            at: new Date(date), 
+                            at: date,
                             allowWhileIdle: true,
                         }
                     }]
                 });
-                console.log("Scheduled Notification for", title, date);
+                console.log("Scheduled Notification for", title, (date));
             } catch (ex) {
                 console.log("Error scheduling notification", title, ex);
             }
-
-            /*if (!date || date == null) return;
-
-            var tempDate = new Date(date);
-
-            // check if date is in the past
-            var diff = tempDate.getTime() - new Date().getTime();
-            if (diff < 0) return;
-
-            LocalNotifications.schedule({
-                notifications: [{
-                    title: title,
-                    body: body,
-                    id: this.notificationCount++,
-                    schedule: {
-                        at: tempDate,
-                        allowWhileIdle: true,
-                    }
-                }]
-            }).then((result) => {
-                console.log('Scheduled notification', result.notifications);
-            });
-            console.log("Scheduled Notification for", title, tempDate);*/
         } catch (error) {
             console.error(error);
         }

@@ -33,19 +33,18 @@ import "@ionic/react/css/text-transformation.css";
 
 /* Theme variables */
 import { Network } from "@capacitor/network";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { ArchivePage } from "./pages/ArchivePage";
 import { CalendarPage } from "./pages/CalendarPage";
-import { LandingPage } from "./pages/LandingPage";
 import { LoginPage } from "./pages/Login";
 import { Logout } from "./pages/Logout";
 import StatsPage from "./pages/StatsPage";
 import { ToDoPage } from "./pages/ToDoPage";
 import { fetchUsername, UsernamePage } from "./pages/UsernamePage";
 import { useTodoStorage } from "./storage/StateManagementWrapper";
-import "./theme/variables.css";
+import "./theme/variables.css"; 
 import { auth } from "./utils/firebase/Database-function";
 import NotificationUtils from "./utils/NotificationUtils";
 

@@ -6,6 +6,7 @@ import FirestoreCollectionFields from '../models/FirestoreCollectionFields';
 import FirestoreCollections from '../models/FirestoreCollections';
 import { auth, firestore } from '../utils/firebase/Database-function';
 import './Page.css';
+import { useTodoStorage } from '../storage/StateManagementWrapper';
 
 /**
  * UsernamePage Component to display the TodoList saved in storage that holds checked items
@@ -26,6 +27,8 @@ export async function fetchUsername(todoStorage: any): Promise<string | null | u
 export const UsernamePage: React.FC = () => {
     const [usernameInput, setUsernameInput] = useState<string | null | undefined>("second")
     const [present] = useIonToast();
+
+    const todoStorage = useTodoStorage();
 
     const history = useHistory();
 
@@ -75,7 +78,8 @@ export const UsernamePage: React.FC = () => {
                             position: "bottom"
                         });
                         // history.goBack();
-                        history.push("/todo");
+                        todoStorage.setUsername(usernameInput);
+                        history.push("/todo"); 
                         window.location.reload();
 
                     }).catch((error) => {
