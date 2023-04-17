@@ -41,12 +41,12 @@ import { CalendarPage } from "./pages/CalendarPage";
 import { LoginPage } from "./pages/Login";
 import { Logout } from "./pages/Logout";
 import StatsPage from "./pages/StatsPage";
-import { ToDoPage } from "./pages/ToDoPage";
 import { fetchUsername, UsernamePage } from "./pages/UsernamePage";
 import { useTodoStorage } from "./storage/StateManagementWrapper";
 import "./theme/variables.css"; 
 import { auth } from "./utils/firebase/Database-function";
 import NotificationUtils from "./utils/NotificationUtils";
+import { TodoPage } from "./pages/ToDoPage";
 
 setupIonicReact();
 
@@ -152,7 +152,7 @@ const App: React.FC = () => {
             <Redirect exact from="/" to="/todo" />
             <Redirect exact from="/login" to="/todo" />
             <Route path="/todo" exact={true}>
-              <ToDoPage />
+              <TodoPage />
             </Route>
             <Route path="/archive" exact={true}>
               <ArchivePage />

@@ -18,7 +18,6 @@ import {
   useIonViewWillLeave,
 } from "@ionic/react";
 import { add, refreshOutline } from "ionicons/icons";
-import { ToDoComponent } from "../components/ToDoComponent";
 import "./ToDoPage.css";
 import { ITodoGroup } from "../models/ITodo";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
@@ -26,6 +25,7 @@ import { TodoEditModal } from "../components/TodoEditModal";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 import { useEffect, useState } from "react";
 import { TodoAddModal } from "../components/TodoAddModal";
+import { TodoComponent } from "../components/TodoComponent";
 
 
 /**
@@ -119,7 +119,7 @@ export const ArchivePage: React.FC = () => {
   let toDoRender = todoStorage.getTodoList().map((todo, index) => {
     if (!todo.isOpen) {
       return (
-        <ToDoComponent
+        <TodoComponent
           key={"Todo-" + index}
           todo={todo}
           onEditClick={() => handleEditClick(todo)}

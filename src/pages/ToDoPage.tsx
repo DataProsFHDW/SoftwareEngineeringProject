@@ -21,7 +21,7 @@ import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-com
 import { add, refreshOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { TodoAddModal } from "../components/TodoAddModal";
-import { ToDoComponent } from "../components/ToDoComponent";
+import { TodoComponent } from "../components/TodoComponent";
 import { TodoEditModal } from "../components/TodoEditModal";
 import { ITodoGroup } from "../models/ITodo";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
@@ -32,7 +32,7 @@ import "./ToDoPage.css";
  * @constructor
  * @return {JSX.Element}
  */
-export const ToDoPage: React.FC = () => {
+export const TodoPage: React.FC = () => {
   const todoStorage = useTodoStorage();
 
   const [selectedTodo, setSelectedTodo] = useState<ITodoGroup>();
@@ -119,7 +119,7 @@ export const ToDoPage: React.FC = () => {
     .map((todo, index) => {
       if (todo.isOpen) {
         return (
-          <ToDoComponent
+          <TodoComponent
             key={"Todo-" + index}
             todo={todo}
             onEditClick={() => handleEditClick(todo)}

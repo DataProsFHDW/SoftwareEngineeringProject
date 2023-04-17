@@ -31,7 +31,7 @@ interface ToDoComponentProps {
  * @param {any} onCheckboxClick - a callback function to be called when the checkbox is clicked.
  * @returns {JSX.Element} - a JSX element representing the ToDo component.
 */
-export const ToDoComponent: React.FC<ToDoComponentProps> = ({
+export const TodoComponent: React.FC<ToDoComponentProps> = ({
   todo,
   onEditClick,
   onDeleteClick,
