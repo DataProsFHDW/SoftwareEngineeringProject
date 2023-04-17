@@ -18,7 +18,7 @@ import {
   useIonViewWillLeave,
 } from "@ionic/react";
 import { add, refreshOutline } from "ionicons/icons";
-import "./ToDoPage.css";
+import "./TodoPage.css";
 import { ITodoGroup } from "../models/ITodo";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
 import { TodoEditModal } from "../components/TodoEditModal";

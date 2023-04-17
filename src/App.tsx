@@ -46,7 +46,8 @@ import { useTodoStorage } from "./storage/StateManagementWrapper";
 import "./theme/variables.css"; 
 import { auth } from "./utils/firebase/Database-function";
 import NotificationUtils from "./utils/NotificationUtils";
-import { TodoPage } from "./pages/ToDoPage";
+import { TodoPage } from "./pages/TodoPage";
+import { FavoritesPage } from "./pages/FavoritesPage";
 
 setupIonicReact();
 
@@ -153,6 +154,9 @@ const App: React.FC = () => {
             <Redirect exact from="/login" to="/todo" />
             <Route path="/todo" exact={true}>
               <TodoPage />
+            </Route>
+            <Route path="/favorites" exact={true}>
+              <FavoritesPage />
             </Route>
             <Route path="/archive" exact={true}>
               <ArchivePage />

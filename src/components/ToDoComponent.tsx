@@ -11,7 +11,7 @@ import {
   IonCheckbox,
 } from "@ionic/react";
 import { ITodo } from "../models/ITodo";
-import "./ToDoComponent.css";
+import "./TodoComponent.css";
 import { Timestamp } from "firebase/firestore";
 
 /**

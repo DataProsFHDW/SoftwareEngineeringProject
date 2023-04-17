@@ -25,7 +25,7 @@ import { TodoComponent } from "../components/TodoComponent";
 import { TodoEditModal } from "../components/TodoEditModal";
 import { ITodoGroup } from "../models/ITodo";
 import { useTodoStorage } from "../storage/StateManagementWrapper";
-import "./ToDoPage.css";
+import "./TodoPage.css";
 
 /**
  * CalendarPage Component to display the TodoList saved in storage that holds checked items
