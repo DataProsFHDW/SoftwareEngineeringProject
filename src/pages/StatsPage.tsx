@@ -83,6 +83,7 @@ const StatsPage: React.FC = () => {
 
   useEffect(() => {
     if (todoListCopy) {
+      console.log(todoListCopy)
       todoCount = todoListCopy?.length;
       SingleTodoCount = todoListCopy?.filter(todo => (todo.todoType != null && todo.todoType.includes("Single")) || (todo.users != null && todo.users.length <= 1)).length;
       GroupTodoCount = todoCount !== undefined ? todoCount - (SingleTodoCount ?? 0) : 0;
